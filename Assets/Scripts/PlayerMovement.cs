@@ -4,38 +4,42 @@ using UnityEngine;
 using TMPro;
 
 public class PlayerMovementAdvanced : MonoBehaviour {
+    [Header("State")]
+    [SerializeField] public MovementState state;
+
     [Header("Movement")]
-    private float moveSpeed;
-    public float walkSpeed;
-    public float sprintSpeed;
-    public float groundDrag;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float currentDrag;
+    [SerializeField] private float walkSpeed;
+    [SerializeField] private float sprintSpeed;
+    [SerializeField] private float groundDrag;
 
     [Header("Jumping")]
-    public float airDrag;
-    public float jumpForce;
-    public float jumpCooldown;
-    public float airMultiplier;
+    [SerializeField] private float airDrag;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private float extraSpaceToJump;
+    [SerializeField] private float jumpCooldown;
+    [SerializeField] private float airMultiplier;
     bool readyToJump;
 
     [Header("Crouching")]
-    public float crouchSpeed;
-    public float crouchYScale;
-    private float startYScale;
+    [SerializeField] private float crouchSpeed;
+    [SerializeField] private float crouchYScale;
+    [SerializeField] private float startYScale;
 
     [Header("Keybinds")]
-    public KeyCode jumpKey = KeyCode.Space;
-    public KeyCode sprintKey = KeyCode.LeftShift;
-    public KeyCode crouchKey = KeyCode.LeftControl;
+    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
+    [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
+    [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Ground Check")]
-    public float playerHeight;
+    [SerializeField] private float playerHeight;
     bool grounded;
 
     [Header("Slope Handling")]
-    public float maxSlopeAngle;
-    private RaycastHit slopeHit;
+    [SerializeField] private float maxSlopeAngle;
+    [SerializeField] private RaycastHit slopeHit;
     private bool exitingSlope;
-
 
     public Transform orientation;
 
@@ -44,42 +48,46 @@ public class PlayerMovementAdvanced : MonoBehaviour {
 
     Vector3 moveDirection;
 
+    [SerializeField] private Collider waterCollider;
+
     Rigidbody rb;
 
-    public MovementState state;
     public enum MovementState {
         walking,
         sprinting,
         crouching,
-        air
+        air,
+        swimming
     }
 
     private void Start() {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-
         readyToJump = true;
-
         startYScale = transform.localScale.y;
     }
 
     private void Update() {
         // ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + extraSpaceToJump);
 
         MyInput();
-        SpeedControl();
         StateHandler();
 
         // handle drag
-        if (grounded)
+        if (grounded){
             rb.drag = groundDrag;
-        else
+            currentDrag = groundDrag;
+        }
+        else{
             rb.drag = airDrag;
+            currentDrag = airDrag;
+        }
     }
 
     private void FixedUpdate() {
         MovePlayer();
+        SpeedControl();
     }
 
     private void MyInput() {
@@ -108,6 +116,8 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     }
 
     private void StateHandler() {
+        //Mode - Swimming
+
         // Mode - Crouching
         if (Input.GetKey(crouchKey)) {
             state = MovementState.crouching;
