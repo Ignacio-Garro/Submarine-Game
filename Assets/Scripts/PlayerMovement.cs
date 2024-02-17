@@ -8,15 +8,19 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     [SerializeField] public MovementState state;
 
     [Header("Movement")]
-    [SerializeField] private float moveSpeed;
+    [SerializeField] private float currentSpeed;
     [SerializeField] private float currentDrag;
+    [SerializeField] private float swimSpeed;
     [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintSpeed;
     [SerializeField] private float groundDrag;
+    [SerializeField] private float waterDrag;
 
     [Header("Jumping")]
     [SerializeField] private float airDrag;
     [SerializeField] private float jumpForce;
+    [SerializeField] private float swimUpForce;
+    [SerializeField] private float swimDownForce;
     [SerializeField] private float extraSpaceToJump;
     [SerializeField] private float jumpCooldown;
     [SerializeField] private float airMultiplier;
@@ -32,9 +36,12 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
 
-    [Header("Ground Check")]
+    [Header("Terrain Check")]
     [SerializeField] private float playerHeight;
-    bool grounded;
+    [SerializeField] private bool grounded;
+    [SerializeField] private bool inWater;
+    [SerializeField] private LayerMask whatIsGround;
+
 
     [Header("Slope Handling")]
     [SerializeField] private float maxSlopeAngle;
@@ -47,8 +54,6 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     float verticalInput;
 
     Vector3 moveDirection;
-
-    [SerializeField] private Collider waterCollider;
 
     Rigidbody rb;
 
@@ -69,13 +74,17 @@ public class PlayerMovementAdvanced : MonoBehaviour {
 
     private void Update() {
         // ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + extraSpaceToJump);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + extraSpaceToJump, whatIsGround);
 
         MyInput();
         StateHandler();
 
         // handle drag
-        if (grounded){
+        if(inWater){
+            rb.drag = waterDrag;
+            currentDrag = waterDrag;
+        }
+        else if (grounded){
             rb.drag = groundDrag;
             currentDrag = groundDrag;
         }
@@ -94,98 +103,128 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        // when to jump
-        if (Input.GetKey(jumpKey) && readyToJump && grounded) {
-            readyToJump = false;
-
-            Jump();
-
-            Invoke(nameof(ResetJump), jumpCooldown);
+        // In water
+        if(inWater){
+            if (Input.GetKey(jumpKey)) {
+                rb.AddForce(transform.up * swimUpForce);
+            }
+            if (Input.GetKey(crouchKey)) {
+                rb.AddForce(-transform.up * swimDownForce);
+            }
         }
+        //in ground
+        else{
+            // when to jump
+            if (Input.GetKey(jumpKey) && readyToJump && grounded && !inWater) {
+                readyToJump = false;
 
-        // start crouch
-        if (Input.GetKeyDown(crouchKey)) {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-        }
+                Jump();
 
-        // stop crouch
-        if (Input.GetKeyUp(crouchKey)) {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+                Invoke(nameof(ResetJump), jumpCooldown);
+            }
+
+            // start crouch
+            if (Input.GetKeyDown(crouchKey)) {
+                transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+                rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+            }
+
+            // stop crouch
+            if (Input.GetKeyUp(crouchKey)) {
+                transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+            }
         }
     }
 
     private void StateHandler() {
         //Mode - Swimming
-
-        // Mode - Crouching
-        if (Input.GetKey(crouchKey)) {
-            state = MovementState.crouching;
-            moveSpeed = crouchSpeed;
+        if(inWater){
+            state = MovementState.swimming;
+            currentSpeed = swimSpeed;
         }
+        else{
+            // Mode - Crouching
+            if (Input.GetKey(crouchKey)) {
+                state = MovementState.crouching;
+                currentSpeed = crouchSpeed;
+            }
 
-        // Mode - Sprinting
-        else if (grounded && Input.GetKey(sprintKey)) {
-            state = MovementState.sprinting;
-            moveSpeed = sprintSpeed;
-        }
+            // Mode - Sprinting
+            else if (grounded && Input.GetKey(sprintKey)) {
+                state = MovementState.sprinting;
+                currentSpeed = sprintSpeed;
+            }
 
-        // Mode - Walking
-        else if (grounded) {
-            state = MovementState.walking;
-            moveSpeed = walkSpeed;
-        }
+            // Mode - Walking
+            else if (grounded) {
+                state = MovementState.walking;
+                currentSpeed = walkSpeed;
+            }
 
-        // Mode - Air
-        else {
-            state = MovementState.air;
+            // Mode - Air
+            else {
+                state = MovementState.air;
+            }
         }
     }
 
     private void MovePlayer() {
-        // calculate movement direction
-        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        // on slope
-        if (OnSlope() && !exitingSlope) {
-            rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
+        //IN GROUND
+        if(!inWater){
+            // calculate movement direction
+            moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-            if (rb.velocity.y > 0)
-                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            // on slope
+            if (OnSlope() && !exitingSlope) {
+                rb.AddForce(GetSlopeMoveDirection() * currentSpeed * 20f, ForceMode.Force);
+
+                if (rb.velocity.y > 0)
+                    rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+            }
+
+            // on ground
+            else if (grounded)
+                rb.AddForce(moveDirection.normalized * currentSpeed * 10f, ForceMode.Force);
+
+            // in air
+            else if (!grounded)
+                rb.AddForce(moveDirection.normalized * currentSpeed * 10f * airMultiplier, ForceMode.Force);
+
+            // turn gravity off while on slope
+            rb.useGravity = !OnSlope();
         }
 
-        // on ground
-        else if (grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+        //IN WATER
+        else{
+            // calculate movement direction
+            moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        // in air
-        else if (!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
-
-        // turn gravity off while on slope
-        rb.useGravity = !OnSlope();
+            rb.AddForce(moveDirection.normalized * currentSpeed * 5f, ForceMode.Force);
+        }
     }
 
     private void SpeedControl() {
+
         // limiting speed on slope
         if (OnSlope() && !exitingSlope) {
-            if (rb.velocity.magnitude > moveSpeed)
-                rb.velocity = rb.velocity.normalized * moveSpeed;
+            if (rb.velocity.magnitude > currentSpeed)
+                rb.velocity = rb.velocity.normalized * currentSpeed;
         }
 
-        // limiting speed on ground or in air
+        // limiting speed on ground or in air or water
         else {
             Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
             // limit velocity if needed
-            if (flatVel.magnitude > moveSpeed) {
-                Vector3 limitedVel = flatVel.normalized * moveSpeed;
+            if (flatVel.magnitude > currentSpeed) {
+                Vector3 limitedVel = flatVel.normalized * currentSpeed;
                 rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
             }
         }
     }
 
-    private void Jump() {
+    private void Jump() {       
         exitingSlope = true;
 
         // reset y velocity
@@ -211,4 +250,9 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     private Vector3 GetSlopeMoveDirection() {
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
+
+    public void IsInWater(bool water){
+        inWater = water;
+    }
+
 }

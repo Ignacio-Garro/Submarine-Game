@@ -1,34 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Water : MonoBehaviour
 {
-    [SerializeField] private PlayerMovementAdvanced playerMovement;
+    [SerializeField] private string tagFilter;
+    [SerializeField] private UnityEvent onTriggerEnter;
+    [SerializeField] private UnityEvent onTriggerExit;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "WaterTrigger")
-        {
-            // Change state to swimming
-            if (playerMovement != null)
-            {
-                playerMovement.state = PlayerMovementAdvanced.MovementState.swimming;
-                // You can add additional logic specific to entering water
-            }
+        if (!String.IsNullOrEmpty(tagFilter) && other.gameObject.CompareTag(tagFilter)){
+            onTriggerEnter.Invoke();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "WaterTrigger")
-        {
-            // Change state to walking
-            if (playerMovement != null)
-            {
-                playerMovement.state = PlayerMovementAdvanced.MovementState.walking;
-                // You can add additional logic specific to exiting water
-            }
+        if (!String.IsNullOrEmpty(tagFilter) && other.gameObject.CompareTag(tagFilter)){
+            onTriggerExit.Invoke();
         }
     }
 }
