@@ -839,7 +839,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 1765327206}
-  mouseSensitivity: 10
+  mouseSensitivity: 0.1
   orientation: {fileID: 2008883070}
 --- !u!1 &347162536
 GameObject:

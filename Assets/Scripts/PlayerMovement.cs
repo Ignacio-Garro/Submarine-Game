@@ -122,13 +122,12 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         //horizontalInput = Input.GetAxisRaw("Horizontal");
         //verticalInput = Input.GetAxisRaw("Vertical");
         moveInput = moveAction.ReadValue<Vector2>();
-        var jumpInput = jumpAction.ReadValue<float>();
 
         //var moveIn
 
         // In water
         if(inWater){
-            if (jumpInput > 0) {
+            if (Input.GetKey(jumpKey)) {
                 rb.AddForce(transform.up * swimUpForce);
             }
             if (Input.GetKey(crouchKey)) {
@@ -138,7 +137,7 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         //in ground
         else{
             // when to jump
-            if (jumpInput > 0 && readyToJump && grounded && !inWater) {
+            if (Input.GetKey(jumpKey) && readyToJump && grounded && !inWater) {
                 readyToJump = false;
 
                 Jump();
