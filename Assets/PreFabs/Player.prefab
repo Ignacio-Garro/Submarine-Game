@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8459054002366813660}
   - component: {fileID: 7690281076762244077}
   - component: {fileID: 3071796567106786126}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -77,13 +77,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  moveSpeed: 0
+  currentSpeed: 0
   currentDrag: 0
+  swimSpeed: 0
   walkSpeed: 7
   sprintSpeed: 10
   groundDrag: 8
+  waterDrag: 0
   airDrag: 0
   jumpForce: 12
+  swimUpForce: 0
+  swimDownForce: 0
   extraSpaceToJump: 0.1
   jumpCooldown: 0.25
   airMultiplier: 0.4
@@ -94,9 +98,13 @@ MonoBehaviour:
   sprintKey: 304
   crouchKey: 306
   playerHeight: 2
+  grounded: 0
+  inWater: 0
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 0
   maxSlopeAngle: 45
   orientation: {fileID: 8209149019879000448}
-  waterCollider: {fileID: 0}
 --- !u!1 &4961880758235556399
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,7 +117,7 @@ GameObject:
   - component: {fileID: 2202764305174782745}
   - component: {fileID: 19196040303250572}
   - component: {fileID: 8902554246317104936}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: PlayerCapsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -213,7 +221,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 37751618809899324}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CameraPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,7 +252,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8209149019879000448}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Orientation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -276,7 +284,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6079095338543419262}
   - component: {fileID: 3637310885811247351}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: WaterTrigger
   m_TagString: WaterTrigger
   m_Icon: {fileID: 0}
