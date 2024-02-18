@@ -2,8 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class PlayerMovementAdvanced : MonoBehaviour {
+
+    PlayerInput playerInput;
+    InputAction moveAction;
+    InputAction lookAction;
+    InputAction jumpAction;
+
+
     [Header("State")]
     [SerializeField] public MovementState state;
 
@@ -15,6 +23,7 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     [SerializeField] private float sprintSpeed;
     [SerializeField] private float groundDrag;
     [SerializeField] private float waterDrag;
+    [SerializeField] private float stillDrag;
 
     [Header("Jumping")]
     [SerializeField] private float airDrag;
@@ -50,14 +59,14 @@ public class PlayerMovementAdvanced : MonoBehaviour {
 
     public Transform orientation;
 
-    float horizontalInput;
-    float verticalInput;
-
     Vector3 moveDirection;
 
     Rigidbody rb;
 
+    static Vector2 moveInput;
+
     public enum MovementState {
+        still,
         walking,
         sprinting,
         crouching,
@@ -70,12 +79,18 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         rb.freezeRotation = true;
         readyToJump = true;
         startYScale = transform.localScale.y;
+
+
+        //inputsystem
+        playerInput = GetComponent<PlayerInput>();
+        moveAction = playerInput.actions["move"];
+        lookAction = playerInput.actions["look"];
+        jumpAction = playerInput.actions["jump"];
     }
 
     private void Update() {
         // ground check
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + extraSpaceToJump, whatIsGround);
-
         MyInput();
         StateHandler();
 
@@ -83,6 +98,10 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         if(inWater){
             rb.drag = waterDrag;
             currentDrag = waterDrag;
+        }
+        else if (state == MovementState.still){
+            rb.drag = stillDrag;
+            currentDrag = stillDrag;
         }
         else if (grounded){
             rb.drag = groundDrag;
@@ -94,18 +113,22 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         }
     }
 
-    private void FixedUpdate() {
+    private void FixedUpdate() { // fisicas
         MovePlayer();
         SpeedControl();
     }
 
     private void MyInput() {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        //horizontalInput = Input.GetAxisRaw("Horizontal");
+        //verticalInput = Input.GetAxisRaw("Vertical");
+        moveInput = moveAction.ReadValue<Vector2>();
+        var jumpInput = jumpAction.ReadValue<float>();
+
+        //var moveIn
 
         // In water
         if(inWater){
-            if (Input.GetKey(jumpKey)) {
+            if (jumpInput > 0) {
                 rb.AddForce(transform.up * swimUpForce);
             }
             if (Input.GetKey(crouchKey)) {
@@ -115,7 +138,7 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         //in ground
         else{
             // when to jump
-            if (Input.GetKey(jumpKey) && readyToJump && grounded && !inWater) {
+            if (jumpInput > 0 && readyToJump && grounded && !inWater) {
                 readyToJump = false;
 
                 Jump();
@@ -143,8 +166,12 @@ public class PlayerMovementAdvanced : MonoBehaviour {
             currentSpeed = swimSpeed;
         }
         else{
+            //Still
+            if(grounded && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)){
+                state = MovementState.still;
+            }
             // Mode - Crouching
-            if (Input.GetKey(crouchKey)) {
+            else if (Input.GetKey(crouchKey)) {
                 state = MovementState.crouching;
                 currentSpeed = crouchSpeed;
             }
@@ -162,7 +189,7 @@ public class PlayerMovementAdvanced : MonoBehaviour {
             }
 
             // Mode - Air
-            else {
+            else if(!grounded){
                 state = MovementState.air;
             }
         }
@@ -173,7 +200,7 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         //IN GROUND
         if(!inWater){
             // calculate movement direction
-            moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+            moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
 
             // on slope
             if (OnSlope() && !exitingSlope) {
@@ -198,7 +225,7 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         //IN WATER
         else{
             // calculate movement direction
-            moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+            moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
 
             rb.AddForce(moveDirection.normalized * currentSpeed * 5f, ForceMode.Force);
         }

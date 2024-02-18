@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerCam : MonoBehaviour
 {
+    InputAction lookAction;
+    InputAction moveAction;
+
+    [SerializeField] private PlayerInput playerInput;
     [SerializeField] private float mouseSensitivity;
     [SerializeField] Transform orientation;
     float xRotation;
@@ -13,6 +18,10 @@ public class PlayerCam : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        //input system
+        lookAction = playerInput.actions["look"];
+        moveAction  = playerInput.actions["move"];
     }
     void Update()
     {
@@ -20,11 +29,13 @@ public class PlayerCam : MonoBehaviour
     }
 
     private void UpdateLook() {
-        float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity * Time.deltaTime;
-        float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;
+        //float mouseX = Input.GetAxisRaw("Mouse X") * mouseSensitivity * Time.deltaTime;
+        //float mouseY = Input.GetAxisRaw("Mouse Y") * mouseSensitivity * Time.deltaTime;
 
-        yRotation += mouseX;
-        xRotation -= mouseY;
+        Vector2 lookInput = lookAction.ReadValue<Vector2>();
+
+        yRotation += lookInput.x * mouseSensitivity;
+        xRotation -= lookInput.y * mouseSensitivity;
 
         xRotation = Mathf.Clamp(xRotation, -89f, 89f);
 
