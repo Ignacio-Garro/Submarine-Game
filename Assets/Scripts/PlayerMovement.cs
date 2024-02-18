@@ -10,6 +10,8 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     InputAction moveAction;
     InputAction lookAction;
     InputAction jumpAction;
+    InputAction crouchAction;
+    InputAction sprintAction;
 
 
     [Header("State")]
@@ -24,8 +26,10 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     [SerializeField] private float groundDrag;
     [SerializeField] private float waterDrag;
     [SerializeField] private float stillDrag;
+    [SerializeField] private bool isSprinting;
 
     [Header("Jumping")]
+    [SerializeField] private bool isJumping;
     [SerializeField] private float airDrag;
     [SerializeField] private float jumpForce;
     [SerializeField] private float swimUpForce;
@@ -36,14 +40,10 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     bool readyToJump;
 
     [Header("Crouching")]
+    [SerializeField] private bool isCrouching;
     [SerializeField] private float crouchSpeed;
     [SerializeField] private float crouchYScale;
     [SerializeField] private float startYScale;
-
-    [Header("Keybinds")]
-    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
-    [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
-    [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
 
     [Header("Terrain Check")]
     [SerializeField] private float playerHeight;
@@ -86,6 +86,17 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         moveAction = playerInput.actions["move"];
         lookAction = playerInput.actions["look"];
         jumpAction = playerInput.actions["jump"];
+        crouchAction = playerInput.actions["crouch"];
+        sprintAction = playerInput.actions["sprint"];
+
+        jumpAction.started += OnJumpStarted;
+        jumpAction.canceled += OnJumpCanceled;
+
+        crouchAction.started += OnCrouchStarted;
+        crouchAction.canceled += OnCrouchCanceled;
+
+        sprintAction.started += OnSprintStarted;
+        sprintAction.canceled += OnSprintCanceled;
     }
 
     private void Update() {
@@ -125,35 +136,24 @@ public class PlayerMovementAdvanced : MonoBehaviour {
 
         //var moveIn
 
-        // In water
+        // In water SWIMMING MOVEMENT
         if(inWater){
-            if (Input.GetKey(jumpKey)) {
+            if (isJumping) {
                 rb.AddForce(transform.up * swimUpForce);
             }
-            if (Input.GetKey(crouchKey)) {
+            if (isCrouching) {
                 rb.AddForce(-transform.up * swimDownForce);
             }
         }
         //in ground
         else{
             // when to jump
-            if (Input.GetKey(jumpKey) && readyToJump && grounded && !inWater) {
+            if (isJumping && readyToJump && grounded && !inWater) {
                 readyToJump = false;
 
                 Jump();
 
                 Invoke(nameof(ResetJump), jumpCooldown);
-            }
-
-            // start crouch
-            if (Input.GetKeyDown(crouchKey)) {
-                transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-                rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
-            }
-
-            // stop crouch
-            if (Input.GetKeyUp(crouchKey)) {
-                transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
             }
         }
     }
@@ -166,17 +166,17 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         }
         else{
             //Still
-            if(grounded && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D)){
+            if(grounded && moveInput.x == 0 && moveInput.y == 0){
                 state = MovementState.still;
             }
             // Mode - Crouching
-            else if (Input.GetKey(crouchKey)) {
+            else if (isCrouching) {
                 state = MovementState.crouching;
                 currentSpeed = crouchSpeed;
             }
 
             // Mode - Sprinting
-            else if (grounded && Input.GetKey(sprintKey)) {
+            else if (isSprinting) {
                 state = MovementState.sprinting;
                 currentSpeed = sprintSpeed;
             }
@@ -279,6 +279,48 @@ public class PlayerMovementAdvanced : MonoBehaviour {
 
     public void IsInWater(bool water){
         inWater = water;
+    }
+
+
+    private void OnJumpStarted(InputAction.CallbackContext context) {
+        isJumping = true;
+    }
+
+    private void OnJumpCanceled(InputAction.CallbackContext context) {
+        isJumping = false;
+    }
+
+    private void OnCrouchStarted(InputAction.CallbackContext context) {
+        isCrouching = true;
+    }
+
+    private void OnCrouchCanceled(InputAction.CallbackContext context){
+        transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+        isCrouching = false;
+    }
+
+    private void OnSprintStarted(InputAction.CallbackContext context){
+        isSprinting = true;
+    }
+
+    private void OnSprintCanceled(InputAction.CallbackContext context){
+        isSprinting = false;
+    }
+
+    private void OnJump(){
+        // when to jump
+        if (readyToJump && grounded && !inWater) {
+            readyToJump = false;
+
+            Jump();
+
+            Invoke(nameof(ResetJump), jumpCooldown);
+        }
+    }
+
+    private void OnCrouch(){
+        transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
     }
 
 }
