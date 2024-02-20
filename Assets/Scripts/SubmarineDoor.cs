@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SubmarineDoor : MonoBehaviour, IClickableObject
+public class SubmarineDoor : MonoBehaviour, IInteractuableObject
 {
 
     [SerializeField] private Transform InsidePosition;
     [SerializeField] private Transform Submarine;
-    public void OnClick(MonoBehaviour playerThatClicked)
+    public void OnInteract(MonoBehaviour playerThatInteracted)
     {
-        playerThatClicked.gameObject.transform.position = InsidePosition.position;
+        playerThatInteracted.gameObject.transform.position = InsidePosition.position;
     }
 
     // Start is called before the first frame update

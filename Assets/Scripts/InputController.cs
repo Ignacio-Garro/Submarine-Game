@@ -9,6 +9,7 @@ public class InputController : MonoBehaviour
     [SerializeField] private MonoBehaviour actualPlayer;
     [SerializeField] private float interactionRange = 5.0f;
 
+    IClickableObject clickedObject = null;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +36,21 @@ public class InputController : MonoBehaviour
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionRange))
         {
             GameObject actorChocado = hit.collider.gameObject;
-            actorChocado.GetComponent<IClickableObject>()?.OnClick(actualPlayer);
+            actorChocado.GetComponent<IInteractuableObject>()?.OnInteract(actualPlayer);
         }
+    }
+    private void OnNewClickPressed()
+    {
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionRange))
+        {
+            GameObject actorChocado = hit.collider.gameObject;
+            actorChocado.GetComponent<IClickableObject>()?.OnClick(actualPlayer);
+            clickedObject = actorChocado.GetComponent<IClickableObject>();
+        }
+    }
+
+    private void OnNewClickRelease()
+    {
+        clickedObject?.OnClickRelease();
     }
 }
