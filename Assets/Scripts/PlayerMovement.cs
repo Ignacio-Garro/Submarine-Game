@@ -307,6 +307,7 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         isSprinting = false;
     }
 
+
     private void OnJump(){
         // when to jump
         if (readyToJump && grounded && !inWater) {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
-
+    [Header("info")]
     [SerializeField] private MonoBehaviour playerCamera;
     [SerializeField] private MonoBehaviour actualPlayer;
     [SerializeField] private float interactionRange = 5.0f;
@@ -13,6 +13,13 @@ public class InputController : MonoBehaviour
     IClickableObject clickedObject = null;
     GameObject viewedActor = null;
     Material previousMaterial = null;
+
+    [Header("GrabItems")]
+    [SerializeField] private Transform objectGrabPointTransform;
+    [SerializeField] private LayerMask pickUpLayerMask;
+
+    private ObjectGrabbable objectGrabbable;
+
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +56,24 @@ public class InputController : MonoBehaviour
         {
             GameObject actorChocado = hit.collider.gameObject;
             actorChocado.GetComponent<IInteractuableObject>()?.OnInteract(actualPlayer);
+        }
+
+        //PARA AGARRAR OBJECTO
+        if(objectGrabbable == null){
+            Debug.Log("object1");
+            //not carrying an object, try to grab
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit raycastHit, interactionRange)){
+                Debug.Log("object2");
+                if(raycastHit.transform.TryGetComponent(out ObjectGrabbable objectGrabbable)){
+                    objectGrabbable.Grab(objectGrabPointTransform);
+                    Debug.Log("object3");
+                }
+            }
+        }
+        else{
+            //currently carrying somehting, drop
+            objectGrabbable.Drop();
+            objectGrabbable = null;
         }
     }
     private void OnNewClickPressed()
