@@ -8,8 +8,11 @@ public class InputController : MonoBehaviour
     [SerializeField] private MonoBehaviour playerCamera;
     [SerializeField] private MonoBehaviour actualPlayer;
     [SerializeField] private float interactionRange = 5.0f;
+    [SerializeField] private Material interactMaterial = null;
 
     IClickableObject clickedObject = null;
+    GameObject viewedActor = null;
+    Material previousMaterial = null;
 
     // Start is called before the first frame update
     void Start()
@@ -23,9 +26,18 @@ public class InputController : MonoBehaviour
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionRange))
         {
             GameObject actorChocado = hit.collider.gameObject;
-            if(actorChocado.GetComponent<IClickableObject>() != null)
+            if((actorChocado == null || actorChocado != viewedActor) && viewedActor != null)
             {
-                Debug.Log("Pulsa click para interactuar con: " + actorChocado.name);
+                viewedActor.GetComponent<Renderer>().material = previousMaterial;
+            }
+            if(actorChocado.GetComponent<IClickableObject>() != null || actorChocado.GetComponent<IInteractuableObject>() != null)
+            {
+                if (viewedActor != actorChocado)
+                {
+                    viewedActor = actorChocado;
+                    previousMaterial = actorChocado.GetComponent<Renderer>().material;
+                }
+                actorChocado.GetComponent<Renderer>().material = interactMaterial;
             }
         }
     }

@@ -6,28 +6,20 @@ using UnityEngine;
 
 
 
-public class ForwardButton : MonoBehaviour, IClickableObject
+public class LeftButton : MonoBehaviour, IClickableObject
 {
     [SerializeField] SubmarineMovement mobileSubmarine; 
 
 
-    bool pressed = false;
+    
     public void OnClick(MonoBehaviour playerThatClicked)
     {
-        if(pressed)
-        {
-            mobileSubmarine.SetForwardMovement(false);
-        }
-        else
-        {
-            mobileSubmarine.SetForwardMovement(true);
-        }
-        pressed = !pressed;
+        mobileSubmarine.SetLeftMovement(true);
     }
 
     public void OnClickRelease()
     {
-        
+        mobileSubmarine.SetLeftMovement(false);
     }
 
 

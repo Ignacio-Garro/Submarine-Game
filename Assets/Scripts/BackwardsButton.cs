@@ -6,7 +6,7 @@ using UnityEngine;
 
 
 
-public class ForwardButton : MonoBehaviour, IClickableObject
+public class BackwardsButton : MonoBehaviour, IClickableObject
 {
     [SerializeField] SubmarineMovement mobileSubmarine; 
 
@@ -16,11 +16,11 @@ public class ForwardButton : MonoBehaviour, IClickableObject
     {
         if(pressed)
         {
-            mobileSubmarine.SetForwardMovement(false);
+            mobileSubmarine.SetBackWardsMovement(false);
         }
         else
         {
-            mobileSubmarine.SetForwardMovement(true);
+            mobileSubmarine.SetBackWardsMovement(true);
         }
         pressed = !pressed;
     }
