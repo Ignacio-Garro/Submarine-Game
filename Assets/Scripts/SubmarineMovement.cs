@@ -28,13 +28,13 @@ public class SubmarineMovement : MonoBehaviour
         if (isMovingRight)
         {
             Vector3 rotacionActual = transform.eulerAngles;
-            rotacionActual.y += rotateVelocity * Time.deltaTime;
+            rotacionActual.y -= rotateVelocity * Time.deltaTime;
             transform.eulerAngles = rotacionActual;
         }
         if (isMovingLeft)
         {
             Vector3 rotacionActual = transform.eulerAngles;
-            rotacionActual.y -= rotateVelocity * Time.deltaTime;
+            rotacionActual.y += rotateVelocity * Time.deltaTime;
             transform.eulerAngles = rotacionActual;
         }
     }

@@ -195,12 +195,12 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     }
 
     private void MovePlayer() {
+        // calculate movement direction
+            moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
 
         //IN GROUND
         if(!inWater){
-            // calculate movement direction
-            moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
-
+            moveDirection.y = 0; // Set y-axis component to zero
             // on slope
             if (OnSlope() && !exitingSlope) {
                 rb.AddForce(GetSlopeMoveDirection() * currentSpeed * 20f, ForceMode.Force);
@@ -223,9 +223,6 @@ public class PlayerMovementAdvanced : MonoBehaviour {
 
         //IN WATER
         else{
-            // calculate movement direction
-            moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
-
             rb.AddForce(moveDirection.normalized * currentSpeed * 5f, ForceMode.Force);
         }
     }

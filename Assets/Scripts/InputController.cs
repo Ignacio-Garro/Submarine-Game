@@ -66,13 +66,14 @@ public class InputController : MonoBehaviour
                 Debug.Log("object2");
                 if(raycastHit.transform.TryGetComponent(out ObjectGrabbable objectGrabbable)){
                     objectGrabbable.Grab(objectGrabPointTransform);
+                    this.objectGrabbable = objectGrabbable;
                     Debug.Log("object3");
                 }
             }
         }
         else{
             //currently carrying somehting, drop
-            objectGrabbable.Drop();
+            objectGrabbable.Drop(objectGrabPointTransform);
             objectGrabbable = null;
         }
     }
