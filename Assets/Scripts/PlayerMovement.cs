@@ -57,6 +57,14 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     [SerializeField] private RaycastHit slopeHit;
     private bool exitingSlope;
 
+    [Header("Player Info")]
+    [SerializeField] private Transform objectGrabPointTransfrom;
+    public Transform ObjectGrabPointTransfrom
+    {
+        get{return objectGrabPointTransfrom;}
+        set{objectGrabPointTransfrom = value;}
+    }
+
     public Transform orientation;
 
     Vector3 moveDirection;

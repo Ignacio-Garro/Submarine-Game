@@ -4,15 +4,18 @@ using UnityEngine;
 
 
 
-public class ObjectGrabbable : MonoBehaviour
+public class ObjectGrabbable : MonoBehaviour, IGrabbableObject
 {
     private Rigidbody objectRigidbody;
-    private Transform objectGrabPointTransfrom;
+   
+    
 
     // Store previous position for velocity calculation
     private Vector3 previousPosition;
     [SerializeField]private Vector3 momentum;
     [SerializeField]private Vector3 finalMomentum;
+
+    private Transform objectGrabPointTransfrom;
 
 
     private void Awake(){
@@ -53,6 +56,18 @@ public class ObjectGrabbable : MonoBehaviour
             Vector3 newPosition = Vector3.Lerp(transform.position, objectGrabPointTransfrom.position, Time.deltaTime * lerpSpeed);
             objectRigidbody.MovePosition(newPosition);
         }
+    }
+
+   
+
+    public void OnGrab(MonoBehaviour playerThatInteracted)
+    {
+        Grab(playerThatInteracted.GetComponent<PlayerMovementAdvanced>().ObjectGrabPointTransfrom);
+    }
+
+    public void OnDrop(MonoBehaviour playerThatInteracted)
+    {
+       Drop(playerThatInteracted.GetComponent<PlayerMovementAdvanced>().ObjectGrabPointTransfrom);
     }
 }
 

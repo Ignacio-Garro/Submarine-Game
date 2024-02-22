@@ -14,3 +14,10 @@ public interface IInteractuableObject
 
 }
 
+public interface IGrabbableObject
+{
+    void OnGrab(MonoBehaviour playerThatInteracted);
+    void OnDrop(MonoBehaviour playerThatInteracted);
+
+}
+

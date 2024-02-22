@@ -18,8 +18,8 @@ public class InputController : MonoBehaviour
     [SerializeField] private Transform objectGrabPointTransform;
     [SerializeField] private LayerMask pickUpLayerMask;
 
-    private ObjectGrabbable objectGrabbable;
 
+    private IGrabbableObject grabbedObject = null;
 
     // Start is called before the first frame update
     void Start()
@@ -52,33 +52,39 @@ public class InputController : MonoBehaviour
 
     private void OnInteract()
     {
+        if (grabbedObject != null)
+        {
+            grabbedObject.OnDrop(actualPlayer);
+            grabbedObject = null;
+            return;
+        }
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionRange))
         {
             GameObject actorChocado = hit.collider.gameObject;
-            actorChocado.GetComponent<IInteractuableObject>()?.OnInteract(actualPlayer);
-        }
-
-        //PARA AGARRAR OBJECTO
-        if(objectGrabbable == null){
-            Debug.Log("object1");
-            //not carrying an object, try to grab
-            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit raycastHit, interactionRange)){
-                Debug.Log("object2");
-                if(raycastHit.transform.TryGetComponent(out ObjectGrabbable objectGrabbable)){
-                    objectGrabbable.Grab(objectGrabPointTransform);
-                    this.objectGrabbable = objectGrabbable;
-                    Debug.Log("object3");
-                }
+            IInteractuableObject interactuableObject = actorChocado.GetComponent<IInteractuableObject>();
+            IGrabbableObject grabbableObject = actorChocado.GetComponent<IGrabbableObject>();
+            if (interactuableObject != null)
+            {
+                interactuableObject.OnInteract(actualPlayer);
+            }
+            else if(actorChocado.GetComponent<IGrabbableObject>() != null)
+            {
+                grabbableObject.OnGrab(actualPlayer);
+                grabbedObject = grabbableObject;
             }
         }
-        else{
-            //currently carrying somehting, drop
-            objectGrabbable.Drop(objectGrabPointTransform);
-            objectGrabbable = null;
-        }
     }
+
+    
+
+
+
     private void OnNewClickPressed()
     {
+        if (grabbedObject != null)
+        {
+            return;
+        }
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionRange))
         {
             GameObject actorChocado = hit.collider.gameObject;

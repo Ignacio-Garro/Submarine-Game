@@ -355,7 +355,7 @@
                 {
                     "name": "",
                     "id": "e0d9d783-f23e-4b37-b35e-95a457cca65b",
-                    "path": "<Keyboard>/k",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "Press(behavior=1)",
                     "processors": "",
                     "groups": "",
@@ -366,7 +366,7 @@
                 {
                     "name": "",
                     "id": "3f54fcf2-94aa-4610-81e2-31191f0f55fc",
-                    "path": "<Keyboard>/k",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "Press",
                     "processors": "",
                     "groups": "",
