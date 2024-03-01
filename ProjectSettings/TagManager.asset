@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Water
   - WaterTrigger
+  - Ladder
+  - LadderTrigger
   layers:
   - Default
   - TransparentFX

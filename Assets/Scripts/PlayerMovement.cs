@@ -20,20 +20,29 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     [Header("Movement")]
     [SerializeField] private float currentSpeed;
     [SerializeField] private float currentDrag;
-    [SerializeField] private float swimSpeed;
     [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintSpeed;
+    [SerializeField] private bool isSprinting;
+
+    [Header("Drag")]
     [SerializeField] private float groundDrag;
     [SerializeField] private float waterDrag;
     [SerializeField] private float stillDrag;
-    [SerializeField] private bool isSprinting;
+    [SerializeField] private float airDrag;
+    [SerializeField] private float ladderDrag;
+
+    [Header("Swimming")]
+    [SerializeField] private float swimSpeed;
+    [SerializeField] private float swimUpForce;
+    [SerializeField] private float swimDownForce;
+
+
+    [Header("Ladders")]
+    [SerializeField] private float ladderSpeed;
 
     [Header("Jumping")]
     [SerializeField] private bool isJumping;
-    [SerializeField] private float airDrag;
     [SerializeField] private float jumpForce;
-    [SerializeField] private float swimUpForce;
-    [SerializeField] private float swimDownForce;
     [SerializeField] private float extraSpaceToJump;
     [SerializeField] private float jumpCooldown;
     [SerializeField] private float airMultiplier;
@@ -49,13 +58,8 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     [SerializeField] private float playerHeight;
     [SerializeField] private bool grounded;
     [SerializeField] private bool inWater;
+    [SerializeField] private bool inLadder;
     [SerializeField] private LayerMask whatIsGround;
-
-
-    [Header("Slope Handling")]
-    [SerializeField] private float maxSlopeAngle;
-    [SerializeField] private RaycastHit slopeHit;
-    private bool exitingSlope;
 
     [Header("Player Info")]
     [SerializeField] private Transform objectGrabPointTransfrom;
@@ -79,15 +83,17 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         sprinting,
         crouching,
         air,
-        swimming
+        swimming,
+        ladder
     }
 
     private void Start() {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         readyToJump = true;
+        inLadder = false;
+        inWater = false;
         startYScale = transform.localScale.y;
-
 
         //inputsystem
         playerInput = GetComponent<PlayerInput>();
@@ -117,6 +123,10 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         if(inWater){
             rb.drag = waterDrag;
             currentDrag = waterDrag;
+        }
+        else if (inLadder){
+            rb.drag = ladderDrag;
+            currentDrag = ladderDrag;
         }
         else if (state == MovementState.still){
             rb.drag = stillDrag;
@@ -167,8 +177,13 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     }
 
     private void StateHandler() {
+        if(inLadder){
+            Debug.Log("YESSSS");
+            state = MovementState.ladder;
+            currentSpeed = ladderSpeed;
+        }
         //Mode - Swimming
-        if(inWater){
+        else if(inWater){
             state = MovementState.swimming;
             currentSpeed = swimSpeed;
         }
@@ -206,58 +221,44 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         // calculate movement direction
             moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
 
-        //IN GROUND
-        if(!inWater){
-            moveDirection.y = 0; // Set y-axis component to zero
-            // on slope
-            if (OnSlope() && !exitingSlope) {
-                rb.AddForce(GetSlopeMoveDirection() * currentSpeed * 20f, ForceMode.Force);
+        //IN WATER
+        if(inWater){
+            rb.AddForce(moveDirection.normalized * currentSpeed * 5f, ForceMode.Force);
+        }
 
-                if (rb.velocity.y > 0)
-                    rb.AddForce(Vector3.down * 80f, ForceMode.Force);
-            }
+        //IN LADDER
+        else if(inLadder){
+            rb.AddForce(moveDirection.normalized * currentSpeed * 5f, ForceMode.Force);
+            
+        }
+         //IN GROUND
+        else{
+            moveDirection.y = 0; // Set y-axis component to zero
 
             // on ground
-            else if (grounded)
+            if (grounded){
                 rb.AddForce(moveDirection.normalized * currentSpeed * 10f, ForceMode.Force);
+            }
 
             // in air
             else if (!grounded)
                 rb.AddForce(moveDirection.normalized * currentSpeed * 10f * airMultiplier, ForceMode.Force);
-
-            // turn gravity off while on slope
-            rb.useGravity = !OnSlope();
-        }
-
-        //IN WATER
-        else{
-            rb.AddForce(moveDirection.normalized * currentSpeed * 5f, ForceMode.Force);
         }
     }
 
     private void SpeedControl() {
 
-        // limiting speed on slope
-        if (OnSlope() && !exitingSlope) {
-            if (rb.velocity.magnitude > currentSpeed)
-                rb.velocity = rb.velocity.normalized * currentSpeed;
-        }
+        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
-        // limiting speed on ground or in air or water
-        else {
-            Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
-            // limit velocity if needed
-            if (flatVel.magnitude > currentSpeed) {
-                Vector3 limitedVel = flatVel.normalized * currentSpeed;
-                rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
-            }
+        // limit velocity if needed
+        if (flatVel.magnitude > currentSpeed) {
+            Vector3 limitedVel = flatVel.normalized * currentSpeed;
+            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
         }
+        
     }
 
     private void Jump() {       
-        exitingSlope = true;
-
         // reset y velocity
         rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
 
@@ -265,27 +266,14 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     }
     private void ResetJump() {
         readyToJump = true;
-
-        exitingSlope = false;
-    }
-
-    private bool OnSlope() {
-        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f)) {
-            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
-            return angle < maxSlopeAngle && angle != 0;
-        }
-
-        return false;
-    }
-
-    private Vector3 GetSlopeMoveDirection() {
-        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
     }
 
     public void IsInWater(bool water){
         inWater = water;
     }
-
+    public void IsInLadder(bool ladder){
+        inLadder = ladder;
+    }
 
     private void OnJumpStarted(InputAction.CallbackContext context) {
         isJumping = true;
