@@ -63,6 +63,11 @@ public class PlayerMovementAdvanced : MonoBehaviour {
 
     [Header("Player Info")]
     [SerializeField] private Transform objectGrabPointTransfrom;
+    [SerializeField] private float interactionRange = 5.0f;
+    [SerializeField] private Transform playerCamera;
+
+    private Vector3 flatVel;
+
     public Transform ObjectGrabPointTransfrom
     {
         get{return objectGrabPointTransfrom;}
@@ -178,7 +183,6 @@ public class PlayerMovementAdvanced : MonoBehaviour {
 
     private void StateHandler() {
         if(inLadder){
-            Debug.Log("YESSSS");
             state = MovementState.ladder;
             currentSpeed = ladderSpeed;
         }
@@ -219,7 +223,7 @@ public class PlayerMovementAdvanced : MonoBehaviour {
 
     private void MovePlayer() {
         // calculate movement direction
-            moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
+        moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
 
         //IN WATER
         if(inWater){
@@ -227,9 +231,27 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         }
 
         //IN LADDER
-        else if(inLadder){
-            rb.AddForce(moveDirection.normalized * currentSpeed * 5f, ForceMode.Force);
-            
+        else if(inLadder && (!grounded || moveInput.y > 0)){
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionRange)){
+                string targetTag = "Ladder";
+                //LOOKING AT LADDER
+                if (hit.collider.CompareTag(targetTag)){
+                    moveDirection.y = moveDirection.x;
+                    moveDirection.x = 0f;
+
+                    rb.velocity = moveDirection.normalized * currentSpeed;
+                }
+                //ON LADDER BUT NO LOOKING AT LADDER
+                else{
+                    moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
+                    rb.AddForce(moveDirection.normalized * currentSpeed * 10f, ForceMode.Force);
+                }
+            }
+            //ON LADDER BUT NO LOOKING AT ANYTHING
+            else{
+                    moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
+                    rb.AddForce(moveDirection.normalized * currentSpeed * 10f, ForceMode.Force);
+                }
         }
          //IN GROUND
         else{
@@ -248,7 +270,9 @@ public class PlayerMovementAdvanced : MonoBehaviour {
 
     private void SpeedControl() {
 
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        flatVel.x = rb.velocity.x;
+        flatVel.y = 0f;
+        flatVel.z = rb.velocity.z;
 
         // limit velocity if needed
         if (flatVel.magnitude > currentSpeed) {

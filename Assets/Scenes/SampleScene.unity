@@ -4864,7 +4864,7 @@ PrefabInstance:
     - target: {fileID: 6211054042511621940, guid: aac8c25fc808db64dae0f8e3e8216f7f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.299
+      value: -2.026
       objectReference: {fileID: 0}
     - target: {fileID: 6211054042511621940, guid: aac8c25fc808db64dae0f8e3e8216f7f,
         type: 3}
@@ -6281,7 +6281,7 @@ Transform:
   m_GameObject: {fileID: 1765327202}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 105.6, y: 7.45, z: -3.2}
+  m_LocalPosition: {x: 105.6, y: 7.45, z: -14.08}
   m_LocalScale: {x: 0.8, y: 1, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6314,11 +6314,11 @@ MonoBehaviour:
   waterDrag: 3
   stillDrag: 20
   airDrag: 0
-  ladderDrag: 3
+  ladderDrag: 5
   swimSpeed: 3
   swimUpForce: 5
   swimDownForce: 4
-  ladderSpeed: 4
+  ladderSpeed: 3
   isJumping: 0
   jumpForce: 10
   extraSpaceToJump: 0.05
@@ -7281,8 +7281,8 @@ Transform:
   m_GameObject: {fileID: 1996610617}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7065936, y: -0, z: -0, w: 0.70761967}
-  m_LocalPosition: {x: -0.026, y: 0.038, z: -0.00124}
-  m_LocalScale: {x: 0.19144942, y: 0.017234495, z: 0.10059085}
+  m_LocalPosition: {x: 0.0629, y: 0.0381, z: -0.00494}
+  m_LocalScale: {x: 0.19144942, y: 0.012238587, z: 0.10059085}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 635366653}
@@ -7315,6 +7315,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 1765327203}
+        m_TargetAssemblyTypeName: UnityEngine.Rigidbody, UnityEngine
+        m_MethodName: set_useGravity
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onTriggerExit:
     m_PersistentCalls:
       m_Calls:
@@ -7329,6 +7341,18 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1765327203}
+        m_TargetAssemblyTypeName: UnityEngine.Rigidbody, UnityEngine
+        m_MethodName: set_useGravity
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!64 &1996610620
 MeshCollider:
