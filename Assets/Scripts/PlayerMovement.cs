@@ -62,6 +62,7 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     [SerializeField] private LayerMask whatIsGround;
 
     [Header("Player Info")]
+    [SerializeField] private Transform orientation;
     [SerializeField] private Transform objectGrabPointTransfrom;
     [SerializeField] private float interactionRange = 5.0f;
     [SerializeField] private Transform playerCamera;
@@ -73,8 +74,6 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         get{return objectGrabPointTransfrom;}
         set{objectGrabPointTransfrom = value;}
     }
-
-    public Transform orientation;
 
     Vector3 moveDirection;
 
@@ -123,6 +122,14 @@ public class PlayerMovementAdvanced : MonoBehaviour {
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + extraSpaceToJump, whatIsGround);
         MyInput();
         StateHandler();
+
+        // calculate movement direction
+        moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
+
+        //LINEAS DEBUG EN SCENE
+        drawDebugLine(moveDirection,Color.yellow);
+        //drawDebugLine(orientation.forward,Color.green);
+        //drawDebugLine(rb.velocity,Color.red);
 
         // handle drag
         if(inWater){
@@ -222,9 +229,7 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     }
 
     private void MovePlayer() {
-        // calculate movement direction
-        moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
-
+    
         //IN WATER
         if(inWater){
             rb.AddForce(moveDirection.normalized * currentSpeed * 5f, ForceMode.Force);
@@ -236,20 +241,24 @@ public class PlayerMovementAdvanced : MonoBehaviour {
                 string targetTag = "Ladder";
                 //LOOKING AT LADDER
                 if (hit.collider.CompareTag(targetTag)){
+                    // calculate movement direction
+                    moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
+                    
+                    Debug.Log("yes");
                     moveDirection.y = moveDirection.x;
                     moveDirection.x = 0f;
+                    drawDebugLine(moveDirection, Color.cyan);
 
                     rb.velocity = moveDirection.normalized * currentSpeed;
                 }
                 //ON LADDER BUT NO LOOKING AT LADDER
                 else{
-                    moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
                     rb.AddForce(moveDirection.normalized * currentSpeed * 10f, ForceMode.Force);
+                    Debug.Log("no");
                 }
             }
             //ON LADDER BUT NO LOOKING AT ANYTHING
             else{
-                    moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
                     rb.AddForce(moveDirection.normalized * currentSpeed * 10f, ForceMode.Force);
                 }
         }
@@ -260,11 +269,13 @@ public class PlayerMovementAdvanced : MonoBehaviour {
             // on ground
             if (grounded){
                 rb.AddForce(moveDirection.normalized * currentSpeed * 10f, ForceMode.Force);
+                //rb.velocity = moveDirection.normalized * currentSpeed;
             }
 
             // in air
             else if (!grounded)
                 rb.AddForce(moveDirection.normalized * currentSpeed * 10f * airMultiplier, ForceMode.Force);
+                //rb.velocity = moveDirection.normalized * currentSpeed;
         }
     }
 
@@ -290,6 +301,21 @@ public class PlayerMovementAdvanced : MonoBehaviour {
     }
     private void ResetJump() {
         readyToJump = true;
+    }
+
+
+    private void drawDebugLine(Vector3 vector3, Color color) {
+        // Define the origin point of the ray (start position)
+        Vector3 origin = orientation.position;
+
+        // Define the direction of the ray based on the orientation's forward direction
+        Vector3 direction = vector3;
+
+        // Length of the ray
+        float rayLength = 10f; // Adjust this as needed
+
+        // Draw the ray
+        Debug.DrawRay(origin, direction * rayLength, color);
     }
 
     public void IsInWater(bool water){
