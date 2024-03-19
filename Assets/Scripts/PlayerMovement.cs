@@ -128,7 +128,7 @@ public class PlayerMovementAdvanced : MonoBehaviour {
 
         //LINEAS DEBUG EN SCENE
         drawDebugLine(moveDirection,Color.yellow);
-        //drawDebugLine(orientation.forward,Color.green);
+        drawDebugLine(orientation.forward,Color.green);
         //drawDebugLine(rb.velocity,Color.red);
 
         // handle drag

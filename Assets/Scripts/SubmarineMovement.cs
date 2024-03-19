@@ -18,8 +18,8 @@ public class SubmarineMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rigidBody = GetComponent<Rigidbody>();
-        rigidBody.maxLinearVelocity = maxVelocity;
+        //rigidBody = GetComponent<Rigidbody>();
+        //rigidBody.maxLinearVelocity = maxVelocity;
     }
 
     // Update is called once per frame
@@ -41,6 +41,7 @@ public class SubmarineMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        /*
         if (isMovingForward)
         {
             rigidBody.AddForce(gameObject.transform.forward * rigidBody.mass * forwardsAcceleration);
@@ -48,6 +49,13 @@ public class SubmarineMovement : MonoBehaviour
         if (isMovingBackWards)
         {
             rigidBody.AddForce(gameObject.transform.forward * rigidBody.mass * -backwardsAcceleration);
+        }
+        */
+        if (isMovingForward){
+            transform.position += transform.forward * forwardsAcceleration * forwardsAcceleration * Time.deltaTime;
+        }
+        if (isMovingBackWards){
+            transform.position += transform.forward * -backwardsAcceleration * -backwardsAcceleration * Time.deltaTime;
         }
     }
 
