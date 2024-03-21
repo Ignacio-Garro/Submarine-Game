@@ -244,7 +244,6 @@ public class PlayerMovementAdvanced : MonoBehaviour {
                     // calculate movement direction
                     moveDirection = orientation.forward * moveInput.y + orientation.right * moveInput.x;
                     
-                    Debug.Log("yes");
                     moveDirection.y = moveDirection.x;
                     moveDirection.x = 0f;
                     drawDebugLine(moveDirection, Color.cyan);
@@ -254,7 +253,6 @@ public class PlayerMovementAdvanced : MonoBehaviour {
                 //ON LADDER BUT NO LOOKING AT LADDER
                 else{
                     rb.AddForce(moveDirection.normalized * currentSpeed * 10f, ForceMode.Force);
-                    Debug.Log("no");
                 }
             }
             //ON LADDER BUT NO LOOKING AT ANYTHING

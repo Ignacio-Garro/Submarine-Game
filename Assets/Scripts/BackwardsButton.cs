@@ -9,6 +9,7 @@ using UnityEngine;
 public class BackwardsButton : MonoBehaviour, IClickableObject
 {
     [SerializeField] SubmarineMovement mobileSubmarine; 
+    [SerializeField] Engine engine;
 
 
     bool pressed = false;
@@ -17,28 +18,17 @@ public class BackwardsButton : MonoBehaviour, IClickableObject
         if(pressed)
         {
             mobileSubmarine.SetBackWardsMovement(false);
+            engine.ChangeEngineStatue(false);
         }
         else
         {
             mobileSubmarine.SetBackWardsMovement(true);
+            engine.ChangeEngineStatue(true);
         }
         pressed = !pressed;
     }
 
     public void OnClickRelease()
-    {
-        
-    }
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
     {
         
     }

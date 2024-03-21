@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters;
 using UnityEngine;
 
 public class SubmarineMovement : MonoBehaviour
@@ -8,6 +9,8 @@ public class SubmarineMovement : MonoBehaviour
     [SerializeField] float forwardsAcceleration = 10;
     [SerializeField] float backwardsAcceleration = 10;
     [SerializeField] float rotateVelocity = 25;
+    [SerializeField] bool workingEngine;
+
 
     Rigidbody rigidBody;
     bool isMovingForward = false;
@@ -25,18 +28,7 @@ public class SubmarineMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isMovingRight)
-        {
-            Vector3 rotacionActual = transform.eulerAngles;
-            rotacionActual.y -= rotateVelocity * Time.deltaTime;
-            transform.eulerAngles = rotacionActual;
-        }
-        if (isMovingLeft)
-        {
-            Vector3 rotacionActual = transform.eulerAngles;
-            rotacionActual.y += rotateVelocity * Time.deltaTime;
-            transform.eulerAngles = rotacionActual;
-        }
+
     }
 
     void FixedUpdate()
@@ -51,11 +43,24 @@ public class SubmarineMovement : MonoBehaviour
             rigidBody.AddForce(gameObject.transform.forward * rigidBody.mass * -backwardsAcceleration);
         }
         */
-        if (isMovingForward){
+        if (isMovingForward && workingEngine){
             transform.position += transform.forward * forwardsAcceleration * forwardsAcceleration * Time.deltaTime;
         }
-        if (isMovingBackWards){
+        if (isMovingBackWards && workingEngine){
             transform.position += transform.forward * -backwardsAcceleration * -backwardsAcceleration * Time.deltaTime;
+        }
+
+        if (isMovingRight && workingEngine)
+        {
+            Vector3 rotacionActual = transform.eulerAngles;
+            rotacionActual.y -= rotateVelocity * Time.deltaTime;
+            transform.eulerAngles = rotacionActual;
+        }
+        if (isMovingLeft && workingEngine)
+        {
+            Vector3 rotacionActual = transform.eulerAngles;
+            rotacionActual.y += rotateVelocity * Time.deltaTime;
+            transform.eulerAngles = rotacionActual;
         }
     }
 
@@ -76,6 +81,8 @@ public class SubmarineMovement : MonoBehaviour
         isMovingLeft = leftMovement;
     }
 
-
+    public void SetworkingEngine(bool engineState){
+        workingEngine = engineState;
+    }
 
 }

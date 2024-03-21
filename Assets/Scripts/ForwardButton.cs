@@ -9,6 +9,7 @@ using UnityEngine;
 public class ForwardButton : MonoBehaviour, IClickableObject
 {
     [SerializeField] SubmarineMovement mobileSubmarine; 
+    [SerializeField] Engine engine;
 
 
     bool pressed = false;
@@ -17,10 +18,12 @@ public class ForwardButton : MonoBehaviour, IClickableObject
         if(pressed)
         {
             mobileSubmarine.SetForwardMovement(false);
+            engine.ChangeEngineStatue(false);
         }
         else
         {
             mobileSubmarine.SetForwardMovement(true);
+            engine.ChangeEngineStatue(true);
         }
         pressed = !pressed;
     }
@@ -30,16 +33,4 @@ public class ForwardButton : MonoBehaviour, IClickableObject
         
     }
 
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
