@@ -12,7 +12,7 @@ public class BackwardsButton : MonoBehaviour, IClickableObject
     [SerializeField] Engine engine;
 
 
-    bool pressed = false;
+    private bool pressed = false;
     public void OnClick(MonoBehaviour playerThatClicked)
     {
         if(pressed)
@@ -31,5 +31,9 @@ public class BackwardsButton : MonoBehaviour, IClickableObject
     public void OnClickRelease()
     {
         
+    }
+
+    public void setPressed(bool set){
+        pressed = set;
     }
 }

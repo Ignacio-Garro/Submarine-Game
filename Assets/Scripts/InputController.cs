@@ -97,4 +97,8 @@ public class InputController : MonoBehaviour
     {
         clickedObject?.OnClickRelease();
     }
+
+    public void dropObject(){
+        grabbedObject = null;
+    }
 }

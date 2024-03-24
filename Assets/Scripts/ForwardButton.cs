@@ -12,7 +12,7 @@ public class ForwardButton : MonoBehaviour, IClickableObject
     [SerializeField] Engine engine;
 
 
-    bool pressed = false;
+    private bool pressed = false;
     public void OnClick(MonoBehaviour playerThatClicked)
     {
         if(pressed)
@@ -31,6 +31,10 @@ public class ForwardButton : MonoBehaviour, IClickableObject
     public void OnClickRelease()
     {
         
+    }
+
+    public void setPressed(bool set){
+        pressed = set;
     }
 
 }

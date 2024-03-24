@@ -5,18 +5,22 @@ using UnityEngine;
 
 public class SubmarineMovement : MonoBehaviour
 {
-    [SerializeField] float maxVelocity = 10;
-    [SerializeField] float forwardsAcceleration = 10;
-    [SerializeField] float backwardsAcceleration = 10;
-    [SerializeField] float rotateVelocity = 25;
+    [Header("sub nav controls")]
+    [SerializeField] float maxVelocity;
+    [SerializeField] float forwardsAcceleration;
+    [SerializeField] float backwardsAcceleration;
+    [SerializeField] float rotateVelocity;
     [SerializeField] bool workingEngine;
 
+    [Header("nav info")]
+    [SerializeField] bool isMovingForward;
+    [SerializeField] bool isMovingBackWards;
+    [SerializeField] bool isMovingRight;
+    [SerializeField] bool isMovingLeft;
 
-    Rigidbody rigidBody;
-    bool isMovingForward = false;
-    bool isMovingBackWards = false;
-    bool isMovingRight = false;
-    bool isMovingLeft = false;
+    [Header("buttons")]
+    [SerializeField] private ForwardButton forwardButton;
+    [SerializeField] private BackwardsButton backwardsButton;
 
     // Start is called before the first frame update
     void Start()
@@ -87,11 +91,11 @@ public class SubmarineMovement : MonoBehaviour
             isMovingBackWards = false;
             isMovingRight = false;
             isMovingLeft = false;
+
+            forwardButton.setPressed(false);
+            backwardsButton.setPressed(false);
         }
-        else{
-            workingEngine = engineState;
-        }
- 
+        workingEngine = engineState;
     }
 
 }

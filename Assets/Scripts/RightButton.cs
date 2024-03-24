@@ -21,4 +21,5 @@ public class LeftButton : MonoBehaviour, IClickableObject
     {
         mobileSubmarine.SetLeftMovement(false);
     }
+    
 }
