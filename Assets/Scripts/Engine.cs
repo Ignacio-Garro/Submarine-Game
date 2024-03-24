@@ -13,7 +13,8 @@ public class Engine : MonoBehaviour
     [SerializeField] private int fuelSpending;
     [SerializeField] private bool engineRunning;
     [SerializeField] private EngineState engineState;
-    [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private TextMeshProUGUI textBox;
+    [SerializeField] private TextMeshProUGUI textUI;
     [SerializeField] private SubmarineMovement submarineMovement;
 
     public enum EngineState {
@@ -30,7 +31,7 @@ public class Engine : MonoBehaviour
 
         UpdateText();
 
-        if(fuel <= 0 || engineState == EngineState.Destroyed){
+        if(engineState == EngineState.Destroyed || fuel <= 0){
             engineRunning = false;
             submarineMovement.SetworkingEngine(false);
         }
@@ -64,14 +65,25 @@ public class Engine : MonoBehaviour
 
 
     private void UpdateText(){
-        text.text = "Fuel: " + fuel + "\nPressure: " + pressure + "\nState: " + engineState ;
+        textBox.text = "Fuel: " + fuel + "\nPressure: " + pressure + "\nState: " + engineState + "\nengineRunning: " + engineRunning;
+        textUI.text = "Fuel: " + fuel + "\nPressure: " + pressure + "\nState: " + engineState + "\nengineRunning: " + engineRunning;
     }
 
     public void RefillEnginefuel(int amountrefueled){
         fuel = fuel + amountrefueled;
+        if(fuel > 0){
+            submarineMovement.SetworkingEngine(true);
+        }
     }
 
-    public void ChangeEngineStatue(bool engineState){
-        this.engineRunning = engineState;
+    public void ChangeEngineStatue(bool engineRunning){
+        if(engineRunning == true){
+            if(engineState != EngineState.Destroyed && fuel > 0){
+                this.engineRunning = engineRunning;
+            }
+        }
+        else{
+            this.engineRunning = engineRunning;
+        }
     }
 }

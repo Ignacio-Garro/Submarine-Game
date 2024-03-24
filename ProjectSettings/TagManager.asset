@@ -8,6 +8,7 @@ TagManager:
   - WaterTrigger
   - Ladder
   - LadderTrigger
+  - Coal
   layers:
   - Default
   - TransparentFX

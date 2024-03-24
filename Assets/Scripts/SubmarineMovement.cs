@@ -47,7 +47,7 @@ public class SubmarineMovement : MonoBehaviour
             transform.position += transform.forward * forwardsAcceleration * forwardsAcceleration * Time.deltaTime;
         }
         if (isMovingBackWards && workingEngine){
-            transform.position += transform.forward * -backwardsAcceleration * -backwardsAcceleration * Time.deltaTime;
+            transform.position += transform.forward * -backwardsAcceleration * backwardsAcceleration * Time.deltaTime;
         }
 
         if (isMovingRight && workingEngine)
@@ -82,7 +82,16 @@ public class SubmarineMovement : MonoBehaviour
     }
 
     public void SetworkingEngine(bool engineState){
-        workingEngine = engineState;
+        if(!engineState){
+            isMovingForward = false;
+            isMovingBackWards = false;
+            isMovingRight = false;
+            isMovingLeft = false;
+        }
+        else{
+            workingEngine = engineState;
+        }
+ 
     }
 
 }
