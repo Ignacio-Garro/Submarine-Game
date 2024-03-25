@@ -16,12 +16,22 @@ public class SubmarineSinking : MonoBehaviour
     [SerializeField] private Transform startPosition;
     [SerializeField] private Transform endPosition;
 
+    [Header("Holes")]
+    private SinkingHoles[] holes;
+    private SinkingHoles hole;
+    [SerializeField] private SinkingHoles Hole1;
+    [SerializeField] private SinkingHoles Hole2;
+    [SerializeField] private SinkingHoles Hole3;
+    [SerializeField] private SinkingHoles Hole4;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        // Store the holes in an array for easier access
+        holes = new SinkingHoles[] { Hole1, Hole2, Hole3, Hole4 };
+        // Start the coroutine to randomly choose a hole every 30 seconds
+        StartCoroutine(NewRandomLeak());
     }
 
     // Update is called once per frame
@@ -48,6 +58,35 @@ public class SubmarineSinking : MonoBehaviour
         Vector3 targetPosition = Vector3.Lerp(startPosition.position, endPosition.position, sinkingLevelOfWater);
 
         // Move the object to the target position
-        transform.position = targetPosition;
+        WaterMassThatRisses.transform.position = targetPosition;
     }
+
+    private IEnumerator NewRandomLeak()
+{
+    while (true)
+    {
+        bool closedHoleFound = false;
+
+        while (!closedHoleFound)
+        {
+            // Choose a random index between 0 and 3 
+            int randomHoleIndex = Random.Range(0, holes.Length);
+
+            hole = holes[randomHoleIndex];
+
+            // Check if the hole is not open
+            if (!hole.HoleIsOpen)
+            {
+                // Open the hole
+                hole.TurnOnParticleSystem();
+                closedHoleFound = true; // Set the flag to true to exit the loop
+                numberOfHolesSinking++;
+                Debug.Log("New Hole: " + (randomHoleIndex + 1) + " " + hole);
+            }
+        }
+        closedHoleFound = false;
+        // Wait for 30 seconds
+        yield return new WaitForSeconds(10f);
+    }
+}
 }

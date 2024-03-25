@@ -7,7 +7,8 @@ using UnityEngine;
 public class ObjectGrabbable : MonoBehaviour, IGrabbableObject
 {
     private Rigidbody objectRigidbody;
-   
+    private Transform objectParent;
+    private GameObject objectGrabPointTransfromParent;
     
 
     // Store previous position for velocity calculation
@@ -25,6 +26,14 @@ public class ObjectGrabbable : MonoBehaviour, IGrabbableObject
     }
 
     public void Grab(Transform objectGrabPointTransfrom){
+        objectParent = transform.parent; // Store the current parent
+
+        objectGrabPointTransfromParent = GameObject.Find("ObjectGrabPoint");
+
+        // Make childObject a child of parentObject
+        transform.parent = objectGrabPointTransfrom.transform;
+
+        Debug.Log("grab: " + objectRigidbody);
         this.objectGrabPointTransfrom = objectGrabPointTransfrom;
         objectRigidbody.useGravity = false;
         objectRigidbody.isKinematic = true;
@@ -32,6 +41,8 @@ public class ObjectGrabbable : MonoBehaviour, IGrabbableObject
     }
 
     public void Drop(Transform objectGrabPointTransfrom){
+        transform.parent = objectParent;
+
         this.objectGrabPointTransfrom = null;
         objectRigidbody.useGravity = true;
         objectRigidbody.isKinematic = false;
@@ -52,9 +63,15 @@ public class ObjectGrabbable : MonoBehaviour, IGrabbableObject
         */
         // Apply momentum to the dropped item
         objectRigidbody.velocity = momentum;
+
+
+        if (objectParent != null)
+        {
+            objectParent.position = objectGrabPointTransfrom.position;
+        }
     }
 
-    private void Update(){
+    private void FixedUpdate(){
         if(objectGrabPointTransfrom != null){
             // Store previous position for next frame
             previousPosition = objectRigidbody.position;
