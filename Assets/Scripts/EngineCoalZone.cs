@@ -13,10 +13,19 @@ public class EngineCoalZone : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!String.IsNullOrEmpty(tagFilter) && other.gameObject.CompareTag(tagFilter)){
-            onTriggerEnter.Invoke();
-            // coal is no more with us
-            other.gameObject.SetActive(false);
-            inputController.dropObject();
+            Coal coal = other.gameObject.GetComponent<Coal>(); // Get the Coal component
+
+            if (coal != null){
+                coal.AddFuelToEngineCoal(); // Call the function if Coal component exists
+                onTriggerEnter.Invoke();
+                other.gameObject.SetActive(false);
+                inputController.dropObject();
+            }
+        }
+        else
+        {
+            Debug.LogError("Coal component not found on object with tag: " + tagFilter);
+            return;
         }
     }
 }

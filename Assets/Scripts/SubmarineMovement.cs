@@ -114,13 +114,13 @@ public class SubmarineMovement : MonoBehaviour
 
     public void SetworkingEngine(bool engineState){
         if(!engineState){
-            //isMovingForward = false;
+            isMovingForward = false;
             isMovingBackWards = false;
             isMovingRight = false;
             isMovingLeft = false;
 
-            //forwardButton.setPressed(false);
-            //backwardsButton.setPressed(false);
+            forwardButton.setPressed(false);
+            backwardsButton.setPressed(false);
         }
         workingEngine = engineState;
     }

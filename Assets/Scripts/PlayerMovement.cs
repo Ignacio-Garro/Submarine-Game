@@ -293,8 +293,7 @@ public class PlayerMovementAdvanced : MonoBehaviour {
 
     private void Jump() {       
         // reset y velocity
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-
+        Debug.Log("Jump!");
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
     private void ResetJump() {
