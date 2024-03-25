@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization.Formatters;
 using UnityEngine;
 
 public class SubmarineMovement : MonoBehaviour
 {
     [Header("sub nav controls")]
-    [SerializeField] float maxVelocity;
-    [SerializeField] float forwardsAcceleration;
-    [SerializeField] float backwardsAcceleration;
-    [SerializeField] float rotateVelocity;
+    [SerializeField] float maxVelocity = 10;
+    [SerializeField] float forwardsAcceleration = 1;
+    [SerializeField] float backWardsAcceleration = 2;
+    [SerializeField] float rotateVelocity = 25;
+    [SerializeField] float acceptRange = 0.1f;
     [SerializeField] bool workingEngine;
 
     [Header("nav info")]
@@ -21,52 +23,77 @@ public class SubmarineMovement : MonoBehaviour
     [Header("buttons")]
     [SerializeField] private ForwardButton forwardButton;
     [SerializeField] private BackwardsButton backwardsButton;
+    [SerializeField] List<Transform> pathPoints;
+    
 
+    
+
+    float velocity;
+    Transform targetPoint;
+    Rigidbody rigidBody;
+    
     // Start is called before the first frame update
+    private void Awake()
+    {
+        
+    }
+
     void Start()
     {
-        //rigidBody = GetComponent<Rigidbody>();
-        //rigidBody.maxLinearVelocity = maxVelocity;
+        GetNextPoint();
+        Rigidbody rigidBody = gameObject.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
+       
+        if (isMovingForward)
+        {
+            velocity = Mathf.Min(velocity + forwardsAcceleration * Time.deltaTime, maxVelocity);
+        }
+        else
+        {
+            velocity = Mathf.Max(velocity - backWardsAcceleration * Time.deltaTime, 0);
+        }
+        if(targetPoint == null) { return; }
+        if((gameObject.transform.position - targetPoint.position).magnitude < acceptRange)
+        {
+            GetNextPoint();
+        }
+        
 
     }
 
     void FixedUpdate()
     {
-        /*
+        transform.position += transform.forward * velocity * Time.fixedDeltaTime;
+        if (targetPoint == null)
+        {
+            return;
+        }
         if (isMovingForward)
         {
-            rigidBody.AddForce(gameObject.transform.forward * rigidBody.mass * forwardsAcceleration);
+            Vector3 newDirection = Vector3.RotateTowards(gameObject.transform.forward, targetPoint.position-gameObject.transform.position, rotateVelocity*2*Mathf.PI/360 * Time.fixedDeltaTime , 0);
+            gameObject.transform.rotation = Quaternion.LookRotation(newDirection);
         }
-        if (isMovingBackWards)
-        {
-            rigidBody.AddForce(gameObject.transform.forward * rigidBody.mass * -backwardsAcceleration);
-        }
-        */
-        if (isMovingForward && workingEngine){
-            transform.position += transform.forward * forwardsAcceleration * forwardsAcceleration * Time.deltaTime;
-        }
-        if (isMovingBackWards && workingEngine){
-            transform.position += transform.forward * -backwardsAcceleration * backwardsAcceleration * Time.deltaTime;
-        }
+        
+    }
 
-        if (isMovingRight && workingEngine)
+    void GetNextPoint()
+    { 
+        if (pathPoints.Any())
         {
-            Vector3 rotacionActual = transform.eulerAngles;
-            rotacionActual.y -= rotateVelocity * Time.deltaTime;
-            transform.eulerAngles = rotacionActual;
+            targetPoint = pathPoints[0];
+            pathPoints.RemoveAt(0);
         }
-        if (isMovingLeft && workingEngine)
+        else
         {
-            Vector3 rotacionActual = transform.eulerAngles;
-            rotacionActual.y += rotateVelocity * Time.deltaTime;
-            transform.eulerAngles = rotacionActual;
+            targetPoint = null;
         }
     }
+
+    
 
     public void SetForwardMovement(bool forwardmovement)
     {
@@ -87,13 +114,13 @@ public class SubmarineMovement : MonoBehaviour
 
     public void SetworkingEngine(bool engineState){
         if(!engineState){
-            isMovingForward = false;
+            //isMovingForward = false;
             isMovingBackWards = false;
             isMovingRight = false;
             isMovingLeft = false;
 
-            forwardButton.setPressed(false);
-            backwardsButton.setPressed(false);
+            //forwardButton.setPressed(false);
+            //backwardsButton.setPressed(false);
         }
         workingEngine = engineState;
     }
