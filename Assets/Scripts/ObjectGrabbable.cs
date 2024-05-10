@@ -6,90 +6,85 @@ using UnityEngine;
 
 public class ObjectGrabbable : MonoBehaviour, IGrabbableObject
 {
-    private Rigidbody objectRigidbody;
+    private Rigidbody objectRigidBody;
+    private Transform objectGrabPointTransform;
+    private Collider objectCollider;
+
+    private Quaternion originalRotation; // Store the original rotation
+
     private Transform objectParent;
     private GameObject objectGrabPointTransfromParent;
-    
-
-    // Store previous position for velocity calculation
-    private Vector3 previousPosition;
-    [SerializeField]private Vector3 momentum;
-    [SerializeField]private Vector3 finalMomentum;
-
-    private Transform objectGrabPointTransfrom;
-    private Collider targetCollider;
+    private Rigidbody newRigidbody;
+    private GameObject obj;
 
 
-    private void Awake(){
-        objectRigidbody = GetComponent<Rigidbody>();
-        targetCollider = GetComponent<Collider>();
+    private void Awake() {
+        objectRigidBody = GetComponent<Rigidbody>();
+        objectCollider = GetComponent<Collider>();
+        originalRotation = Quaternion.identity;
+        obj = gameObject;
+
     }
-
-    public void Grab(Transform objectGrabPointTransfrom){
+    private void Grab(Transform objectGrabPointTransform){
         objectParent = transform.parent; // Store the current parent
-
         objectGrabPointTransfromParent = GameObject.Find("ObjectGrabPoint");
+        transform.parent = objectGrabPointTransform.transform;// Make childObject a child of parentObject
 
-        // Make childObject a child of parentObject
-        transform.parent = objectGrabPointTransfrom.transform;
+        transform.position = objectGrabPointTransform.position;
 
-        Debug.Log("grab: " + objectRigidbody);
-        this.objectGrabPointTransfrom = objectGrabPointTransfrom;
-        objectRigidbody.useGravity = false;
-        objectRigidbody.isKinematic = true;
-        targetCollider.enabled = false;
+        this.objectGrabPointTransform = objectGrabPointTransform;
+
+        Rigidbody newRigidbody = objectRigidBody;
+        Destroy(obj.GetComponent<Rigidbody>());
+        /*
+        objectRigidBody.useGravity = false;
+        objectRigidBody.Sleep();
+        objectRigidBody.detectCollisions = false;
+        objectRigidBody.isKinematic = true;
+        objectCollider.enabled = false;
+        */
     }
-
-    public void Drop(Transform objectGrabPointTransfrom){
+    private void Drop(Transform objectGrabPointTransform){
         transform.parent = objectParent;
 
-        this.objectGrabPointTransfrom = null;
-        objectRigidbody.useGravity = true;
-        objectRigidbody.isKinematic = false;
-        targetCollider.enabled = true;
+        this.objectGrabPointTransform = null;
 
-        // Calculate momentum TO THROW THE OBJECT
-        momentum = (objectRigidbody.position - previousPosition) / Time.deltaTime;
-
-        // Decrease momentum based on the mass of the object
-        momentum /= objectRigidbody.mass;
+        obj.AddComponent<Rigidbody>();
+        //then copy the values from newRigidbody
 
         /*
-        //average out the momentum for it to be more smooth
-        float weight1 = 0.5f;  // Weight for vector1
-        float weight2 = 0.5f;  // Weight for vector2
-
-        finalMomentum = finalMomentum * weight1 + momentum * weight2;
+        objectRigidBody.useGravity = true;
+        objectRigidBody.WakeUp();
+        objectRigidBody.detectCollisions = true;
+        objectRigidBody.isKinematic = false;
+        objectCollider.enabled = true;
         */
-        // Apply momentum to the dropped item
-        objectRigidbody.velocity = momentum;
-
-
-        if (objectParent != null)
-        {
-            objectParent.position = objectGrabPointTransfrom.position;
-        }
     }
 
-    private void FixedUpdate(){
-        if(objectGrabPointTransfrom != null){
-            // Store previous position for next frame
-            previousPosition = objectRigidbody.position;
-            
-            objectRigidbody.MovePosition(objectGrabPointTransfrom.position);
+    private void Update() {
+        /*
+        if(objectGrabPointTransform != null){
+            float lerpSpeed = 20f;
+            Vector3 newPosition = Vector3.Lerp(transform.position, objectGrabPointTransform.position, Time.deltaTime * lerpSpeed);
+            objectRigidBody.MovePosition(newPosition);
+
+            objectRigidBody.MoveRotation(Quaternion.Lerp(transform.rotation, originalRotation, Time.deltaTime * 5f)); // Adjust the speed as needed
+        }
+        */
+        if(objectGrabPointTransform != null){
+            objectRigidBody.position = objectGrabPointTransform.position;
         }
     }
-
    
 
     public void OnGrab(MonoBehaviour playerThatInteracted)
     {
-        Grab(playerThatInteracted.GetComponent<PlayerMovementAdvanced>().ObjectGrabPointTransfrom);
+        Grab(playerThatInteracted.GetComponent<PlayerMovement>().ObjectGrabPointTransfrom);
     }
 
     public void OnDrop(MonoBehaviour playerThatInteracted)
     {
-       Drop(playerThatInteracted.GetComponent<PlayerMovementAdvanced>().ObjectGrabPointTransfrom);
+       Drop(playerThatInteracted.GetComponent<PlayerMovement>().ObjectGrabPointTransfrom);
     }
 }
 

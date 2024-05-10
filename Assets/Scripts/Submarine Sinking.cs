@@ -8,6 +8,7 @@ public class SubmarineSinking : MonoBehaviour
 
     [SerializeField] private bool submarineSinking;
     [SerializeField] private bool waterBeingDrained;
+    [SerializeField] private bool automaticTimedSinking;
     [SerializeField] private float drainageSpeed;
     [SerializeField] private float sinkingLevelOfWater;
     [SerializeField] private int numberOfHolesSinking;
@@ -17,21 +18,17 @@ public class SubmarineSinking : MonoBehaviour
     [SerializeField] private Transform endPosition;
 
     [Header("Holes")]
+    [SerializeField] private float timerNewHole;
     private SinkingHoles[] holes;
     private SinkingHoles hole;
-    [SerializeField] private SinkingHoles Hole1;
-    [SerializeField] private SinkingHoles Hole2;
-    [SerializeField] private SinkingHoles Hole3;
-    [SerializeField] private SinkingHoles Hole4;
-
 
     // Start is called before the first frame update
     void Start()
     {
         // Store the holes in an array for easier access
-        holes = new SinkingHoles[] { Hole1, Hole2, Hole3, Hole4 };
+        holes = GameObject.FindObjectsOfType<SinkingHoles>();
         // Start the coroutine to randomly choose a hole every 30 seconds
-        StartCoroutine(NewRandomLeak());
+        StartCoroutine(StartRandomLeakAfterDelay());
     }
 
     // Update is called once per frame
@@ -61,32 +58,38 @@ public class SubmarineSinking : MonoBehaviour
         WaterMassThatRisses.transform.position = targetPosition;
     }
 
-    private IEnumerator NewRandomLeak()
+    private IEnumerator StartRandomLeakAfterDelay()
 {
-    while (true)
-    {
-        bool closedHoleFound = false;
+    // Wait for 7 seconds before starting the coroutine
+    yield return new WaitForSeconds(timerNewHole);
 
-        while (!closedHoleFound)
-        {
-            // Choose a random index between 0 and 3 
-            int randomHoleIndex = Random.Range(0, holes.Length);
-
-            hole = holes[randomHoleIndex];
-
-            // Check if the hole is not open
-            if (!hole.HoleIsOpen)
-            {
-                // Open the hole
-                hole.TurnOnParticleSystem();
-                closedHoleFound = true; // Set the flag to true to exit the loop
-                numberOfHolesSinking++;
-                Debug.Log("New Hole: " + (randomHoleIndex + 1) + " " + hole);
-            }
-        }
-        closedHoleFound = false;
-        // Wait for 30 seconds
-        yield return new WaitForSeconds(10f);
-    }
+    // Start the NewRandomLeak coroutine
+    StartCoroutine(NewRandomLeak());
 }
+    private IEnumerator NewRandomLeak(){
+        while (automaticTimedSinking){
+            bool closedHoleFound = false;
+
+            while (!closedHoleFound && numberOfHolesSinking < holes.Length){
+                // Choose a random index between 0 and 3 
+                int randomHoleIndex = Random.Range(0, holes.Length);
+                hole = holes[randomHoleIndex];
+
+                // Check if the hole is not openS
+                if (!hole.HoleIsOpen){
+                    hole.TurnOnParticleSystem();
+                    closedHoleFound = true; // Set the flag to true to exit the loop
+                }
+            }
+            // Wait for x seconds
+            yield return new WaitForSeconds(timerNewHole);
+        }
+    }
+
+    public void ChangeNumberOfHolesSinking(int change){
+        numberOfHolesSinking += change;
+        if(numberOfHolesSinking < 0){
+            numberOfHolesSinking = 0;
+        }
+    }
 }

@@ -9,6 +9,7 @@ TagManager:
   - Ladder
   - LadderTrigger
   - Coal
+  - GasTankGrab
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Water
   - UI
   - Ground
-  - 
+  - Post Processing
   - 
   - 
   - 

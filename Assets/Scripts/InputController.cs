@@ -9,6 +9,7 @@ public class InputController : MonoBehaviour
     [SerializeField] private MonoBehaviour actualPlayer;
     [SerializeField] private float interactionRange = 5.0f;
     [SerializeField] private Material interactMaterial = null;
+    [SerializeField] private PlayerStats playerStats;
 
     IClickableObject clickedObject = null;
     GameObject viewedActor = null;
@@ -52,14 +53,15 @@ public class InputController : MonoBehaviour
 
     private void OnInteract()
     {
-        if (grabbedObject != null)
-        {
+        Debug.Log("1");
+        if (grabbedObject != null){
             grabbedObject.OnDrop(actualPlayer);
             grabbedObject = null;
+            playerStats.setGrabbedObject(null);
             return;
         }
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionRange))
-        {
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionRange)){
+            Debug.Log("2");
             GameObject actorChocado = hit.collider.gameObject;
             IInteractuableObject interactuableObject = actorChocado.GetComponent<IInteractuableObject>();
             IGrabbableObject grabbableObject = actorChocado.GetComponent<IGrabbableObject>();
@@ -69,14 +71,14 @@ public class InputController : MonoBehaviour
             }
             else if(actorChocado.GetComponent<IGrabbableObject>() != null)
             {
+                Debug.Log("3");
                 grabbableObject.OnGrab(actualPlayer);
                 grabbedObject = grabbableObject;
+                playerStats.setGrabbedObject(grabbedObject);
+
             }
         }
     }
-
-    
-
 
 
     private void OnNewClickPressed()
@@ -88,6 +90,7 @@ public class InputController : MonoBehaviour
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionRange))
         {
             GameObject actorChocado = hit.collider.gameObject;
+            //Debug.Log(actorChocado);
             actorChocado.GetComponent<IClickableObject>()?.OnClick(actualPlayer);
             clickedObject = actorChocado.GetComponent<IClickableObject>();
         }
@@ -100,5 +103,6 @@ public class InputController : MonoBehaviour
 
     public void dropObject(){
         grabbedObject = null;
+        playerStats.setGrabbedObject(null);
     }
 }

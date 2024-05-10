@@ -59,7 +59,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
@@ -77,34 +77,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
-  currentSpeed: 0
+  isSprinting: 0
+  isJumping: 0
+  isCrouching: 0
+  inWater: 0
+  inLadder: 1
+  isGrounded: 0
+  currentSpeedXZ: 0
+  currentSpeedY: 0
+  targetSpeed: 0
   currentDrag: 0
-  swimSpeed: 0
+  accelRate: 0
+  speedText: {fileID: 0}
   walkSpeed: 7
   sprintSpeed: 10
+  swimSpeed: 0
+  ladderSpeed: 0
+  crouchSpeed: 4
+  dragXZ: 0
+  dragY: 0
   groundDrag: 8
   waterDrag: 0
+  stillDrag: 0
   airDrag: 0
-  jumpForce: 12
+  ladderDrag: 0
   swimUpForce: 0
   swimDownForce: 0
-  extraSpaceToJump: 0.1
+  jumpForce: 12
   jumpCooldown: 0.25
   airMultiplier: 0.4
-  crouchSpeed: 4
+  fallingGravityMultiplier: 0
+  lowJumpGravityMultiplier: 0
+  extraSpaceToJump: 0.1
   crouchYScale: 0.5
   startYScale: 0
-  jumpKey: 32
-  sprintKey: 304
-  crouchKey: 306
-  playerHeight: 2
-  grounded: 0
-  inWater: 0
+  canUncrouch: 0
+  extraSpaceToUncrouch: 0
   whatIsGround:
     serializedVersion: 2
     m_Bits: 0
-  maxSlopeAngle: 45
+  playerHeight: 2
   orientation: {fileID: 8209149019879000448}
+  objectGrabPointTransfrom: {fileID: 0}
+  interactionRange: 5
+  playerCamera: {fileID: 0}
 --- !u!1 &4961880758235556399
 GameObject:
   m_ObjectHideFlags: 0
