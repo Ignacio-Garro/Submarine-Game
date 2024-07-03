@@ -53,7 +53,7 @@ public class InputController : MonoBehaviour
 
     private void OnInteract()
     {
-        Debug.Log("1");
+        Debug.Log("fix input controller");
         if (grabbedObject != null){
             grabbedObject.OnDrop(actualPlayer);
             grabbedObject = null;
@@ -61,7 +61,6 @@ public class InputController : MonoBehaviour
             return;
         }
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionRange)){
-            Debug.Log("2");
             GameObject actorChocado = hit.collider.gameObject;
             IInteractuableObject interactuableObject = actorChocado.GetComponent<IInteractuableObject>();
             IGrabbableObject grabbableObject = actorChocado.GetComponent<IGrabbableObject>();
