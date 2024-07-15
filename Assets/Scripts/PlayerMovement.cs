@@ -157,7 +157,8 @@ public class PlayerMovement : MonoBehaviour {
         }
         
         // ground check
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + extraSpaceToJump, whatIsGround);
+        //isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + extraSpaceToJump, whatIsGround);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + extraSpaceToJump);
 
         //trying to uncrouch
         canUncrouch = !Physics.Raycast(transform.position, Vector3.up, playerHeight * 0.5f + extraSpaceToUncrouch);
@@ -175,7 +176,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void MyInput() {
-        moveInput = moveAction.ReadValue<Vector2>();        
+        moveInput = moveAction.ReadValue<Vector2>();      
     }
 
     private void StateHandler() {
@@ -220,6 +221,7 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void MovePlayer() {
+        //Debug.Log("moveDirection: " + moveDirection.z);
         //IN WATER
         if(inWater){
             rb.AddForce(moveDirection.normalized * targetSpeed * accelRate, ForceMode.Force);
@@ -230,7 +232,7 @@ public class PlayerMovement : MonoBehaviour {
 
             if(lookingAtLadder){
                     moveDirection.x = 0f;
-                    moveDirection.y = -moveDirection.z;
+                    moveDirection.y = moveInput.y;
                     moveDirection.z = 0f;
 
                     if(moveInput.y != 0){
