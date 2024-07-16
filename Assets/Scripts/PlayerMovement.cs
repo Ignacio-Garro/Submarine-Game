@@ -142,8 +142,8 @@ public class PlayerMovement : MonoBehaviour {
         LookatLadder();
 
         //current speeds
-        currentSpeedXZ = new Vector3(rb.velocity.x, 0f, rb.velocity.z).magnitude;
-        currentSpeedY = rb.velocity.y;
+        currentSpeedXZ = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude;
+        currentSpeedY = rb.linearVelocity.y;
 
         speedText.text = "Speed: " + currentSpeedXZ.ToString("F2");;
 
@@ -236,10 +236,10 @@ public class PlayerMovement : MonoBehaviour {
                     moveDirection.z = 0f;
 
                     if(moveInput.y != 0){
-                        rb.velocity = moveDirection.normalized * targetSpeed;
+                        rb.linearVelocity = moveDirection.normalized * targetSpeed;
                     }
                     else{
-                        rb.velocity = Vector3.zero;
+                        rb.linearVelocity = Vector3.zero;
                     }
             }
             else{
@@ -247,7 +247,7 @@ public class PlayerMovement : MonoBehaviour {
                         rb.AddForce(moveDirection.normalized * targetSpeed * accelRate, ForceMode.Force);
                     }
                     else{
-                        rb.velocity = Vector3.zero;
+                        rb.linearVelocity = Vector3.zero;
                     }
             }
         }
@@ -291,7 +291,7 @@ public class PlayerMovement : MonoBehaviour {
     }
     private void Jump() {       
         // reset y velocity
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
         rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
@@ -300,23 +300,23 @@ public class PlayerMovement : MonoBehaviour {
     }
     private void BetterJumping(){
         if(state == MovementState.air){
-            if(rb.velocity.y < 0f) {
-                rb.velocity += Vector3.up * Physics.gravity.y * (fallingGravityMultiplier - 1) * Time.deltaTime;
+            if(rb.linearVelocity.y < 0f) {
+                rb.linearVelocity += Vector3.up * Physics.gravity.y * (fallingGravityMultiplier - 1) * Time.deltaTime;
             }
-            else if( rb.velocity.y > 0f && !isJumping) {
-                rb.velocity += Vector3.up * Physics.gravity.y * (lowJumpGravityMultiplier - 1) * Time.deltaTime;
+            else if( rb.linearVelocity.y > 0f && !isJumping) {
+                rb.linearVelocity += Vector3.up * Physics.gravity.y * (lowJumpGravityMultiplier - 1) * Time.deltaTime;
             }
         }
     }
 
     private void SpeedLimitControl() {
-        Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
 
         // limit velocity if needed
         if(flatVel.magnitude > targetSpeed)
         {
             Vector3 limitedVel = flatVel.normalized * targetSpeed;
-            rb.velocity = new Vector3(limitedVel.x, rb.velocity.y, limitedVel.z);
+            rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
         }
         
     }
@@ -346,14 +346,14 @@ public class PlayerMovement : MonoBehaviour {
 
     private void ManualDrag(){
         if(state == MovementState.swimming){
-            rb.drag = waterDrag;
+            rb.linearDamping = waterDrag;
         }
         else{
             // Apply drag separately in each axis
-            Vector3 drag = new Vector3(rb.velocity.x * -dragXZ, rb.velocity.y * -dragY, rb.velocity.z * -dragXZ);
+            Vector3 drag = new Vector3(rb.linearVelocity.x * -dragXZ, rb.linearVelocity.y * -dragY, rb.linearVelocity.z * -dragXZ);
             rb.AddForce(drag, ForceMode.Force);
 
-            rb.drag = 0f;
+            rb.linearDamping = 0f;
         }
 
     }
