@@ -12,8 +12,6 @@ public class PlayerInventory : MonoBehaviour
     public float playerReach;
     public float throwForce;
     [SerializeField] Camera cam;
-    [SerializeField] GameObject PickUpTextHover;
-
     [SerializeField] GameObject throwItem_gameobjectPostion;
 
      [Header("Keys")]
@@ -33,6 +31,7 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] Image[] inventorySlotImage = new Image[3];
     [SerializeField] Image[] inventoryBackgroundImage = new Image[3];
     [SerializeField] Sprite emptySlotImage;
+    //[SerializeField] GameObject PickUpTextHover;
 
     
 
@@ -47,6 +46,7 @@ public class PlayerInventory : MonoBehaviour
         itemInstantiate.Add(itemType.redCan, RedCan_prefab);
         itemInstantiate.Add(itemType.blueCan, BlueCan_prefab);
 
+        emptySlotImage = null;
 
         newItemSelected();
     }
@@ -58,7 +58,7 @@ public class PlayerInventory : MonoBehaviour
         if(Physics.Raycast(ray, out hitInfo,playerReach)){
             IPickable item = hitInfo.collider.GetComponent<IPickable>();
             if(item != null){
-                PickUpTextHover.SetActive(true);
+                //PickUpTextHover.SetActive(true);
                 if(Input.GetKey(pickUpItemKey)){
                     inventoryList.Add(hitInfo.collider.GetComponent<ItemPickable>().ItemScriprableObject.item_type);
                     item.PickItem();
@@ -68,11 +68,11 @@ public class PlayerInventory : MonoBehaviour
                 }
             }
             else{
-                PickUpTextHover.SetActive(false);
+                //PickUpTextHover.SetActive(false);
             }
         }
         else{
-                PickUpTextHover.SetActive(false);
+                //PickUpTextHover.SetActive(false);
             }
         //throw item
         if(Input.GetKeyDown(throwItemKey) && inventoryList.Count > 0){
@@ -131,6 +131,7 @@ public class PlayerInventory : MonoBehaviour
         }
 
         //UI
+        /*
         for (int i = 0; i < 2; i++)
         {
             if (i < inventoryList.Count)
@@ -139,7 +140,7 @@ public class PlayerInventory : MonoBehaviour
             }
             else
             {
-                inventorySlotImage[i].sprite = emptySlotImage;
+                //inventorySlotImage[i].sprite = emptySlotImage;
             }
         }
 
@@ -157,6 +158,7 @@ public class PlayerInventory : MonoBehaviour
             }
             a++;
         }
+        */
 
         
     }

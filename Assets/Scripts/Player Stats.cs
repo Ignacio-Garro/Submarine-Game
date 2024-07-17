@@ -8,7 +8,6 @@ public class PlayerStats : MonoBehaviour
     [SerializeField] private bool Alive;
     [SerializeField] private int oxigenLevels;
     [SerializeField] private int breathingAmountOxigen;
-    [SerializeField] private TextMeshProUGUI textPlayerStats;
     [SerializeField] private IGrabbableObject grabbedIObject;
     [SerializeField] private GameObject grabbedGameObject;
     void Start()
@@ -20,8 +19,6 @@ public class PlayerStats : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateText();
-
         if(oxigenLevels <= 0){
             Alive = false;
         }
@@ -32,9 +29,6 @@ public class PlayerStats : MonoBehaviour
             oxigenLevels = oxigenLevels - breathingAmountOxigen;
             if(oxigenLevels < 0) oxigenLevels = 0;
         }
-    }
-    private void UpdateText(){
-        textPlayerStats.text = "Alive: " + Alive + "\nOxigenLevels: " + oxigenLevels;
     }
 
     public void setGrabbedObject(IGrabbableObject grabbedObject){

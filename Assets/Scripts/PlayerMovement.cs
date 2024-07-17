@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
+using Unity.Netcode;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : NetworkBehaviour {
 
     PlayerInput playerInput;
     InputAction moveAction;
@@ -12,6 +13,10 @@ public class PlayerMovement : MonoBehaviour {
     InputAction jumpAction;
     InputAction crouchAction;
     InputAction sprintAction;
+
+    [Header("Network")]
+
+    private NetworkVariable<int> randomNumber = new NetworkVariable<int>(1);
 
 
     [Header("State")]
@@ -30,7 +35,7 @@ public class PlayerMovement : MonoBehaviour {
     [SerializeField] private float targetSpeed;
     [SerializeField] private float currentDrag;
     [SerializeField] private float accelRate;
-    [SerializeField] private TextMeshProUGUI speedText;
+    [SerializeField] private float speedText;
 
     [Header("Speeds")]
     [SerializeField] private float walkSpeed;
@@ -133,6 +138,14 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void Update() {
+        Debug.Log(OwnerClientId + "; randomNumber: " + randomNumber.Value);
+        if(!IsOwner) return;
+
+
+        if(Input.GetKeyDown(KeyCode.T)){
+            randomNumber.Value = Random.Range(0, 100);
+        }
+
         MyInput();
         StateHandler();
         showDebugLines();
@@ -145,7 +158,7 @@ public class PlayerMovement : MonoBehaviour {
         currentSpeedXZ = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude;
         currentSpeedY = rb.linearVelocity.y;
 
-        speedText.text = "Speed: " + currentSpeedXZ.ToString("F2");;
+        speedText = currentSpeedXZ;
 
         // calculate movement direction
         if(!inWater){
@@ -170,9 +183,11 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     private void FixedUpdate() { // fisicas
+        if(!IsOwner) return;
+
         MovePlayer();
         ManualDrag();
-        SwimControl();
+        SwimControlUpDown();
     }
 
     private void MyInput() {
@@ -278,7 +293,7 @@ public class PlayerMovement : MonoBehaviour {
             lookingAtLadder = false;
         }
     }
-    private void SwimControl(){
+    private void SwimControlUpDown(){
         //in water
         if(inWater){
             if (isJumping) {

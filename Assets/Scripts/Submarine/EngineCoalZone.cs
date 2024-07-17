@@ -19,7 +19,7 @@ public class EngineCoalZone : MonoBehaviour
                 coal.AddFuelToEngineCoal(); // Call the function if Coal component exists
                 onTriggerEnter.Invoke();
                 other.gameObject.SetActive(false);
-                inputController.dropObject();
+                //inputController.dropObject();
             }
         }
         else

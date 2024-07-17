@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
+    /*
     [Header("info")]
     [SerializeField] private MonoBehaviour playerCamera;
     [SerializeField] private MonoBehaviour actualPlayer;
@@ -31,6 +32,7 @@ public class InputController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionRange))
         {
             GameObject actorChocado = hit.collider.gameObject;
@@ -48,6 +50,7 @@ public class InputController : MonoBehaviour
                 actorChocado.GetComponent<Renderer>().material = interactMaterial;
             }
         }
+        
     }
 
 
@@ -104,4 +107,5 @@ public class InputController : MonoBehaviour
         grabbedObject = null;
         playerStats.setGrabbedObject(null);
     }
+    */
 }
