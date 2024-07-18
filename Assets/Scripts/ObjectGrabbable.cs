@@ -77,12 +77,12 @@ public class ObjectGrabbable : MonoBehaviour, IGrabbableObject
     }
    
 
-    public void OnGrab(MonoBehaviour playerThatInteracted)
+    public void OnGrab(GameObject playerThatInteracted)
     {
         Grab(playerThatInteracted.GetComponent<PlayerMovement>().ObjectGrabPointTransfrom);
     }
 
-    public void OnDrop(MonoBehaviour playerThatInteracted)
+    public void OnDrop(GameObject playerThatInteracted)
     {
        Drop(playerThatInteracted.GetComponent<PlayerMovement>().ObjectGrabPointTransfrom);
     }

@@ -7,7 +7,7 @@ public class EngineCoalZone : MonoBehaviour
 {
     [SerializeField] private string tagFilter;
     [SerializeField] private UnityEvent onTriggerEnter;
-    [SerializeField] private InputController inputController;
+    
 
 
     private void OnTriggerEnter(Collider other)

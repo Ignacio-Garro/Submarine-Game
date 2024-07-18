@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerInventory : MonoBehaviour
+public class PlayerInventory : NetworkBehaviour
 {
     [Header("Gerneral")]
     public List<itemType> inventoryList;
@@ -49,63 +50,47 @@ public class PlayerInventory : MonoBehaviour
         emptySlotImage = null;
 
         newItemSelected();
+
+        if (IsOwner)
+        {
+            InputManager.Instance.onDropPressed += TryToDropCurrentObject;
+            InputManager.Instance.onOnePressed += (GameObject player, Camera camera) => ChangeSelectedInventoryObject(0);
+            InputManager.Instance.onTwoPressed += (GameObject player, Camera camera) => ChangeSelectedInventoryObject(1);
+            InputManager.Instance.onThreePressed += (GameObject player, Camera camera) => ChangeSelectedInventoryObject(2);
+
+        }
     }
+
+    public void PickupObject(ItemPickable item)
+    {
+        inventoryList.Add(item.ItemScriprableObject.item_type);
+        selectedItem = inventoryList.Count - 1;
+        newItemSelected();
+    }
+
+    public void TryToDropCurrentObject(GameObject player, Camera camera)
+    {
+        if (inventoryList.Count <= 0) return;
+        GameObject thrownItem = Instantiate(itemInstantiate[inventoryList[selectedItem]], position: throwItem_gameobjectPostion.transform.position, new Quaternion());
+        inventoryList.RemoveAt(selectedItem);
+
+        if (selectedItem != 0)
+        {
+            selectedItem -= 1;
+        }
+        newItemSelected();
+        Rigidbody rb = thrownItem.GetComponent<Rigidbody>();
+        rb.AddForce(throwItem_gameobjectPostion.transform.forward * throwForce, ForceMode.VelocityChange);
+    }
+
+    public void ChangeSelectedInventoryObject(int index)
+    {
+        if (inventoryList.Count <= index) return;
+        selectedItem = index;
+        newItemSelected();
+    }
+
     void Update(){  //THIS NEEDS TO BE OPTIMIZED
-        //grab item
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
-
-        if(Physics.Raycast(ray, out hitInfo,playerReach)){
-            IPickable item = hitInfo.collider.GetComponent<IPickable>();
-            if(item != null){
-                //PickUpTextHover.SetActive(true);
-                if(Input.GetKey(pickUpItemKey)){
-                    inventoryList.Add(hitInfo.collider.GetComponent<ItemPickable>().ItemScriprableObject.item_type);
-                    item.PickItem();
-
-                    selectedItem = inventoryList.Count -1;
-                    newItemSelected();
-                }
-            }
-            else{
-                //PickUpTextHover.SetActive(false);
-            }
-        }
-        else{
-                //PickUpTextHover.SetActive(false);
-            }
-        //throw item
-        if(Input.GetKeyDown(throwItemKey) && inventoryList.Count > 0){
-            GameObject thrownItem = Instantiate(itemInstantiate[inventoryList[selectedItem]], position: throwItem_gameobjectPostion.transform.position, new Quaternion());
-            inventoryList.RemoveAt(selectedItem);
-
-            if(selectedItem != 0){
-                selectedItem -=1;
-            }
-            newItemSelected();
-
-            Rigidbody rb = thrownItem.GetComponent<Rigidbody>();
-            rb.AddForce(throwItem_gameobjectPostion.transform.forward * throwForce, ForceMode.VelocityChange);
-        }
-
-
-        //Change selected item with numpad
-        if(Input.GetKeyDown(KeyCode.Alpha1) && inventoryList.Count > 0){
-            selectedItem = 0;
-            newItemSelected();
-        }
-        else if(Input.GetKeyDown(KeyCode.Alpha2) && inventoryList.Count > 1){
-            selectedItem = 1;
-            newItemSelected();
-        }
-        else if(Input.GetKeyDown(KeyCode.Alpha3) && inventoryList.Count > 2){
-            selectedItem = 2;
-            newItemSelected();
-        }
-        else if(Input.GetKeyDown(KeyCode.Alpha4) && inventoryList.Count > 3){
-            selectedItem = 3;
-            newItemSelected();
-        }
 
         // Change selected item with mouse scroll wheel
         float scroll = Input.GetAxis("Mouse ScrollWheel");
@@ -173,6 +158,4 @@ public class PlayerInventory : MonoBehaviour
     }
 }
 
-public interface IPickable{
-    void PickItem();
-}
+

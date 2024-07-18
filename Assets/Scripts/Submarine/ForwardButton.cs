@@ -13,7 +13,7 @@ public class ForwardButton : MonoBehaviour, IClickableObject
 
 
     private bool pressed = false;
-    public void OnClick(MonoBehaviour playerThatClicked)
+    public void OnClick(GameObject playerThatInteracted)
     {
         if(pressed)
         {

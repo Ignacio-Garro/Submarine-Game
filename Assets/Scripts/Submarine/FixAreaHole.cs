@@ -10,7 +10,8 @@ public class FixAreaHole : MonoBehaviour, IClickableObject
         sinkingHoles = GetComponentInParent<SinkingHoles>();
     }
 
-    public void OnClick(MonoBehaviour playerThatClicked){
+    public void OnClick(GameObject playerThatInteracted)
+    {
         Debug.Log("1");
         if(sinkingHoles.HoleIsOpen){
             Debug.Log("2");

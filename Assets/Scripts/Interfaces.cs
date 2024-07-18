@@ -4,20 +4,22 @@ using UnityEngine;
 
 public interface IClickableObject
 {
-    void OnClick(MonoBehaviour playerThatClicked);
+    void OnClick(GameObject playerThatInteracted);
     void OnClickRelease();
 }
 
 public interface IInteractuableObject
 {
-    void OnInteract(MonoBehaviour playerThatInteracted);
+    void OnInteract(GameObject playerThatInteracted);
 
 }
 
 public interface IGrabbableObject
 {
-    void OnGrab(MonoBehaviour playerThatInteracted);
-    void OnDrop(MonoBehaviour playerThatInteracted);
+    void OnGrab(GameObject playerThatInteracted);
+    void OnDrop(GameObject playerThatInteracted);
 
 }
+
+
 

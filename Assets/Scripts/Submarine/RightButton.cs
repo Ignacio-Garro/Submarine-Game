@@ -12,7 +12,7 @@ public class LeftButton : MonoBehaviour, IClickableObject
 
 
     
-    public void OnClick(MonoBehaviour playerThatClicked)
+    public void OnClick(GameObject playerThatInteracted)
     {
         mobileSubmarine.SetLeftMovement(true);
     }

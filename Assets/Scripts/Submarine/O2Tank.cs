@@ -7,7 +7,7 @@ public class O2Tank : MonoBehaviour, IClickableObject
     [SerializeField] private O2TankGrabbable o2TankGrabbable;
     [SerializeField] private PlayerStats playerStats;
     //GasTankGrab
-    public void OnClick(MonoBehaviour playerThatClicked)
+    public void OnClick(GameObject playerThatInteracted)
     {
         // If the grabbed object is an O2TankGrabbable
         if (playerStats.getGrabbedObject() != null && playerStats.getGrabbedObject().GetComponent<O2TankGrabbable>()){
