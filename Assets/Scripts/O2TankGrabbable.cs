@@ -8,6 +8,7 @@ public class O2TankGrabbable : MonoBehaviour
     [SerializeField] private int o2LevelsInTank;
     [SerializeField] private int o2InputSpeed;
     [SerializeField] private int o2OutputSpeed;
+    
 
     public void O2GoesInTank(){
         // Check if the tank is not already full

@@ -6,14 +6,13 @@ using UnityEngine;
 
 
 
-public class BackwardsButton : MonoBehaviour, IClickableObject
+public class BackwardsButton : MonoBehaviour, IInteractuableObject
 {
     [SerializeField] SubmarineMovement mobileSubmarine; 
     [SerializeField] Engine engine;
 
-
     private bool pressed = false;
-    public void OnClick(GameObject playerThatInteracted)
+    public void OnInteract(GameObject playerThatInteracted)
     {
         if(pressed)
         {

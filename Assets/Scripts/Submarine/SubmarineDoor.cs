@@ -6,7 +6,7 @@ public class SubmarineDoor : MonoBehaviour, IInteractuableObject
 {
 
     [SerializeField] private Transform InsidePosition;
-    [SerializeField] private Transform Submarine;
+    [SerializeField] private GameObject targetParent;
     public void OnInteract(GameObject playerThatInteracted)
     {
         Rigidbody rb = playerThatInteracted.GetComponent<Rigidbody>();
@@ -14,19 +14,8 @@ public class SubmarineDoor : MonoBehaviour, IInteractuableObject
         {
             rb.Sleep();
             rb.transform.position = InsidePosition.position;
-           
+
+             playerThatInteracted.transform.SetParent(targetParent.transform);
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

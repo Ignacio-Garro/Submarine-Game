@@ -10,8 +10,8 @@ public class SubmarineMovement : MonoBehaviour
     [SerializeField] float maxVelocity = 10;
     [SerializeField] float forwardsAcceleration = 1;
     [SerializeField] float backWardsAcceleration = 2;
+    [SerializeField] float Deceleration = 1;
     [SerializeField] float rotateVelocity = 25;
-    [SerializeField] float acceptRange = 0.1f;
     [SerializeField] bool workingEngine;
 
     [Header("nav info")]
@@ -23,15 +23,11 @@ public class SubmarineMovement : MonoBehaviour
     [Header("buttons")]
     [SerializeField] private ForwardButton forwardButton;
     [SerializeField] private BackwardsButton backwardsButton;
-    [SerializeField] List<Transform> pathPoints;
     
-
-    
-
     float velocity;
     Transform targetPoint;
-    Rigidbody rigidBody;
-    
+    private Vector3 rotation;
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -40,58 +36,47 @@ public class SubmarineMovement : MonoBehaviour
 
     void Start()
     {
-        GetNextPoint();
-        Rigidbody rigidBody = gameObject.GetComponent<Rigidbody>();
+        //Rigidbody rigidBody = gameObject.GetComponent<Rigidbody>();
+        rotation = new Vector3();
     }
 
     // Update is called once per frame
     void Update()
     {
        
-        if (isMovingForward)
+        if (isMovingForward && !isMovingBackWards)
         {
             velocity = Mathf.Min(velocity + forwardsAcceleration * Time.deltaTime, maxVelocity);
         }
-        else
+        else if (!isMovingForward && isMovingBackWards)
         {
-            velocity = Mathf.Max(velocity - backWardsAcceleration * Time.deltaTime, 0);
+            velocity = Mathf.Max(velocity - backWardsAcceleration * Time.deltaTime, -maxVelocity);
         }
-        if(targetPoint == null) { return; }
-        if((gameObject.transform.position - targetPoint.position).magnitude < acceptRange)
-        {
-            GetNextPoint();
+        else{
+            velocity = Mathf.MoveTowards(velocity, 0, Deceleration * Time.deltaTime);
         }
-        
-
     }
 
     void FixedUpdate()
     {
         transform.position += transform.forward * velocity * Time.fixedDeltaTime;
-        if (targetPoint == null)
+
+        // Reset rotation to zero every frame to accumulate rotation only when keys are pressed
+        Vector3 rotation = Vector3.zero;
+
+        if (isMovingRight)
         {
-            return;
+            rotation += Vector3.up * rotateVelocity * Time.fixedDeltaTime;
         }
-        if (isMovingForward)
+        else if (isMovingLeft)
         {
-            Vector3 newDirection = Vector3.RotateTowards(gameObject.transform.forward, targetPoint.position-gameObject.transform.position, rotateVelocity*2*Mathf.PI/360 * Time.fixedDeltaTime , 0);
-            gameObject.transform.rotation = Quaternion.LookRotation(newDirection);
+            rotation -= Vector3.up * rotateVelocity * Time.fixedDeltaTime;
         }
-        
+
+        // Apply rotation to the transform
+        transform.Rotate(rotation);
     }
 
-    void GetNextPoint()
-    { 
-        if (pathPoints.Any())
-        {
-            targetPoint = pathPoints[0];
-            pathPoints.RemoveAt(0);
-        }
-        else
-        {
-            targetPoint = null;
-        }
-    }
 
     
 

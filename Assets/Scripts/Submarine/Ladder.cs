@@ -5,20 +5,32 @@ using UnityEngine.Events;
 public class Ladder : MonoBehaviour
 {
     [SerializeField] private string tagFilter;
-    [SerializeField] private UnityEvent onTriggerEnter;
-    [SerializeField] private UnityEvent onTriggerExit;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!String.IsNullOrEmpty(tagFilter) && other.gameObject.CompareTag(tagFilter)){
-            onTriggerEnter.Invoke();
+        if (other.CompareTag(tagFilter))
+        {
+            Rigidbody playerRb = other.GetComponentInParent<Rigidbody>();
+            if (playerRb != null)
+            {
+                playerRb.useGravity = false; 
+                playerRb.linearVelocity = Vector3.zero;
+                other.GetComponentInParent<PlayerMovement>().IsInLadder(true);
+            }
         }
     }
 
+
     private void OnTriggerExit(Collider other)
     {
-        if (!String.IsNullOrEmpty(tagFilter) && other.gameObject.CompareTag(tagFilter)){
-            onTriggerExit.Invoke();
+        if (other.CompareTag(tagFilter))
+        {
+            Rigidbody playerRb = other.GetComponentInParent<Rigidbody>();
+            if (playerRb != null)
+            {
+                playerRb.useGravity = true; 
+                other.GetComponentInParent<PlayerMovement>().IsInLadder(false); 
+            }
         }
     }
 }
