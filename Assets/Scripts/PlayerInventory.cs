@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -24,9 +25,7 @@ public class PlayerInventory : NetworkBehaviour
     [SerializeField] GameObject RedCan_item;
     [SerializeField] GameObject BlueCan_item;
 
-    [Header("Item prefabs")]
-    [SerializeField] GameObject RedCan_prefab;
-    [SerializeField] GameObject BlueCan_prefab;
+    
 
     [Header("UI")]
     [SerializeField] Image[] inventorySlotImage = new Image[3];
@@ -38,14 +37,11 @@ public class PlayerInventory : NetworkBehaviour
 
 
     private Dictionary<itemType, GameObject> itemSetActive = new Dictionary<itemType, GameObject>(){};
-    private Dictionary<itemType, GameObject> itemInstantiate = new Dictionary<itemType, GameObject>(){};
+    private Dictionary<itemType, GameObject> itemInstantiate => InventoryInfoManager.Instance.SpawnableObjects;
     void Start()
     {
         itemSetActive.Add(itemType.redCan, RedCan_item);
         itemSetActive.Add(itemType.blueCan, BlueCan_item);
-
-        itemInstantiate.Add(itemType.redCan, RedCan_prefab);
-        itemInstantiate.Add(itemType.blueCan, BlueCan_prefab);
 
         emptySlotImage = null;
 
@@ -54,9 +50,9 @@ public class PlayerInventory : NetworkBehaviour
         if (IsOwner)
         {
             InputManager.Instance.onDropPressed += TryToDropCurrentObject;
-            InputManager.Instance.onOnePressed += (GameObject player, Camera camera) => ChangeSelectedInventoryObject(0);
-            InputManager.Instance.onTwoPressed += (GameObject player, Camera camera) => ChangeSelectedInventoryObject(1);
-            InputManager.Instance.onThreePressed += (GameObject player, Camera camera) => ChangeSelectedInventoryObject(2);
+            InputManager.Instance.onOnePressed += (_,_) => ChangeSelectedInventoryObject(0);
+            InputManager.Instance.onTwoPressed += (_,_) => ChangeSelectedInventoryObject(1);
+            InputManager.Instance.onThreePressed += (_,_) => ChangeSelectedInventoryObject(2);
 
         }
     }
@@ -71,7 +67,8 @@ public class PlayerInventory : NetworkBehaviour
     public void TryToDropCurrentObject(GameObject player, Camera camera)
     {
         if (inventoryList.Count <= 0) return;
-        GameObject thrownItem = Instantiate(itemInstantiate[inventoryList[selectedItem]], position: throwItem_gameobjectPostion.transform.position, new Quaternion());
+        NetworkCommunicationManager.Instance.SpawnNetworkWithForceObjectServerRpc(inventoryList[selectedItem], throwItem_gameobjectPostion.transform.position, throwItem_gameobjectPostion.transform.forward, throwForce);
+        //GameObject thrownItem = Instantiate(itemInstantiate[inventoryList[selectedItem]], position: throwItem_gameobjectPostion.transform.position, new Quaternion());
         inventoryList.RemoveAt(selectedItem);
 
         if (selectedItem != 0)
@@ -79,8 +76,13 @@ public class PlayerInventory : NetworkBehaviour
             selectedItem -= 1;
         }
         newItemSelected();
-        Rigidbody rb = thrownItem.GetComponent<Rigidbody>();
-        rb.AddForce(throwItem_gameobjectPostion.transform.forward * throwForce, ForceMode.VelocityChange);
+        /*Rigidbody rb = thrownItem.GetComponent<Rigidbody>();
+        if(rb != null)
+        {
+            rb.isKinematic = false;
+            rb.AddForce(throwItem_gameobjectPostion.transform.forward * throwForce, ForceMode.VelocityChange);
+        }*/
+        
     }
 
     public void ChangeSelectedInventoryObject(int index)
@@ -149,13 +151,36 @@ public class PlayerInventory : NetworkBehaviour
     }
 
     private void newItemSelected(){
-        RedCan_item.SetActive(false);
-        BlueCan_item.SetActive(false);
+        itemSetActive.Keys.ToList().ForEach(type => {
+            NetworkCommunicationManager.Instance.DeactivateItemServerRpc(GameManager.Instance.ActualPlayer, type);
+            HideItem(type);
+        });
         if(inventoryList.Count > 0){
-            GameObject selectedItemGameObject = itemSetActive[inventoryList[selectedItem]];
-            selectedItemGameObject.SetActive(true);
+            NetworkCommunicationManager.Instance.ActivateItemServerRpc(GameManager.Instance.ActualPlayer, inventoryList[selectedItem]);
+            ShowItem(inventoryList[selectedItem]);
+            //GameObject selectedItemGameObject = itemSetActive[inventoryList[selectedItem]];
+            //selectedItemGameObject.SetActive(true);
         }
     }
+
+    public void HideItem(itemType item)
+    {
+        itemSetActive.TryGetValue(item, out GameObject itemObject);
+        if(itemObject != null)
+        {
+            itemObject.SetActive(false);
+        }
+    }
+
+    public void ShowItem(itemType item)
+    {
+        itemSetActive.TryGetValue(item, out GameObject itemObject);
+        if (itemObject != null)
+        {
+            itemObject.SetActive(true);
+        }
+    }
+
 }
 
 

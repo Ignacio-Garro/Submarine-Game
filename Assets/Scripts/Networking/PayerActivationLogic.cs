@@ -10,8 +10,8 @@ public class PlayerActivationLogic : NetworkBehaviour
         if(IsOwner)
         {
             playerCamera.gameObject.SetActive(true);
-            InputManager.Instance.ActualPlayer = gameObject;
-            InputManager.Instance.PlayerCamera = playerCamera;
+            GameManager.Instance.ActualPlayer = gameObject;
+            GameManager.Instance.PlayerCamera = playerCamera;
         }
         else{
             playerCamera.gameObject.SetActive(false);

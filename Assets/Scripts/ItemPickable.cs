@@ -17,7 +17,8 @@ public class ItemPickable : MonoBehaviour, IInteractuableObject
         PlayerInventory inventory = playerThatInteracted.GetComponent<PlayerInventory>();
         if (inventory == null) return;
         inventory.PickupObject(this);
-        Destroy(gameObject);
+        NetworkCommunicationManager.Instance.DestroyNetworkObjectServerRpc(gameObject);
+        //Destroy(gameObject);
     }
 }
 

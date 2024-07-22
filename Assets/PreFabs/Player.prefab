@@ -163,7 +163,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4917647555438837733
 Transform:
   m_ObjectHideFlags: 0
@@ -352,7 +352,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1233737044258805569
 Transform:
   m_ObjectHideFlags: 0
@@ -865,10 +865,6 @@ MonoBehaviour:
   pickUpItemKey: 101
   RedCan_item: {fileID: 5788565917221873953}
   BlueCan_item: {fileID: 4756784238419627758}
-  RedCan_prefab: {fileID: 1072683769042990653, guid: b7de1055fcb3b3c4db1ae117f08ce86d,
-    type: 3}
-  BlueCan_prefab: {fileID: 7083586662525320133, guid: f4e5e859b6a592446b1c5cb1d4189991,
-    type: 3}
   inventorySlotImage:
   - {fileID: 0}
   - {fileID: 0}
