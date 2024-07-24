@@ -20,8 +20,6 @@ public class InputManager : MonoBehaviour
     public event DelgateWithPlayerParam onThreePressed = (_,_) => { };
 
     [Header("info")]
-    private Camera playerCamera;
-    private GameObject actualPlayer;
     [SerializeField] private float interactionRange = 5.0f;
     [SerializeField] private Material interactMaterial = null;
     [SerializeField] private PlayerStats playerStats;
@@ -37,8 +35,8 @@ public class InputManager : MonoBehaviour
 
     private IGrabbableObject grabbedObject = null;
 
-    public Camera PlayerCamera { get => playerCamera; set => playerCamera = value; }
-    public GameObject ActualPlayer { get => actualPlayer; set => actualPlayer = value; }
+    public Camera PlayerCamera => GameManager.Instance.PlayerCamera;
+    public GameObject ActualPlayer => GameManager.Instance.ActualPlayer;
 
     private void Awake()
     {
@@ -51,14 +49,11 @@ public class InputManager : MonoBehaviour
     }
 
 
-   
-
-
     // Update is called once per frame
     void Update()
     {
-        if (actualPlayer == null || playerCamera == null) return;
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionRange))
+        if (GameManager.Instance == null || ActualPlayer == null || PlayerCamera == null) return;
+        if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out RaycastHit hit, interactionRange))
         {
             GameObject actorChocado = hit.collider.gameObject;
             if((actorChocado == null || actorChocado != viewedActor) && viewedActor != null)
@@ -81,42 +76,42 @@ public class InputManager : MonoBehaviour
 
     private void OnInteract()
     {
-        if (actualPlayer == null || playerCamera == null) return;
+        if (ActualPlayer == null || PlayerCamera == null) return;
         TryToInteractWithObject();
-        onInteractPressed(actualPlayer, playerCamera);
+        onInteractPressed(ActualPlayer, PlayerCamera);
     }
 
     private void OnDrop()
     {
-        if (actualPlayer == null || playerCamera == null) return;
-        onDropPressed(actualPlayer, playerCamera);
+        if (ActualPlayer == null || PlayerCamera == null) return;
+        onDropPressed(ActualPlayer, PlayerCamera);
     }
 
     private void OnOne()
     {
-        if (actualPlayer == null || playerCamera == null) return;
-        onOnePressed(actualPlayer, playerCamera);
+        if (ActualPlayer == null || PlayerCamera == null) return;
+        onOnePressed(ActualPlayer, PlayerCamera);
     }
     private void OnTwo()
     {
-        if (actualPlayer == null || playerCamera == null) return;
-        onTwoPressed(actualPlayer, playerCamera);
+        if (ActualPlayer == null || PlayerCamera == null) return;
+        onTwoPressed(ActualPlayer, PlayerCamera);
     }
     private void OnThree()
     {
-        if (actualPlayer == null || playerCamera == null) return;
-        onThreePressed(actualPlayer, playerCamera);
+        if (ActualPlayer == null || PlayerCamera == null) return;
+        onThreePressed(ActualPlayer, PlayerCamera);
     }
 
     private void TryToInteractWithObject()
     {
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionRange))
+        if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out RaycastHit hit, interactionRange))
         {
             GameObject actorChocado = hit.collider.gameObject;
             IInteractuableObject interactuableObject = actorChocado.GetComponent<IInteractuableObject>();
             if (interactuableObject != null)
             {
-                interactuableObject.OnInteract(actualPlayer);
+                interactuableObject.OnInteract(ActualPlayer);
             }
         }
     }
@@ -125,8 +120,8 @@ public class InputManager : MonoBehaviour
 
     private void OnNewClickPressed()
     {
-        if (actualPlayer == null || playerCamera == null) return;
-        onClickPressed(actualPlayer, playerCamera);
+        if (ActualPlayer == null || PlayerCamera == null) return;
+        onClickPressed(ActualPlayer, PlayerCamera);
     }
 
     private void OnNewClickRelease()

@@ -81,7 +81,7 @@ PlayerSettings:
   androidApplicationEntry: 1
   defaultIsNativeResolution: 1
   macRetinaSupport: 1
-  runInBackground: 0
+  runInBackground: 1
   captureSingleScreen: 0
   muteOtherAudioSources: 0
   Prepare IOS For Recording: 0
@@ -942,11 +942,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: fe25af47-aeee-4f8c-9611-af4d299a258e
+  cloudProjectId: 9b9c9479-6623-43a9-a339-488f3feab7e9
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: Subgame
-  organizationId: nachete255
+  organizationId: rudaco
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

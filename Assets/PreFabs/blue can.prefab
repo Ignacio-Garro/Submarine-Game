@@ -15,9 +15,11 @@ GameObject:
   - component: {fileID: 5320473695596635396}
   - component: {fileID: 1156467487497045041}
   - component: {fileID: 240642161370450798}
-  - component: {fileID: 2323041211968922563}
-  - component: {fileID: -4878363136209503290}
-  - component: {fileID: 4969387123981185492}
+
+  - component: {fileID: 7140742456541799758}
+  - component: {fileID: -442598415885606911}
+  - component: {fileID: 7565310244025787290}
+
   m_Layer: 0
   m_Name: blue can
   m_TagString: Untagged
@@ -170,7 +172,9 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2534964839176971238, guid: b9a80e077920cc6418b644431841f512, type: 3}
---- !u!114 &2323041211968922563
+
+--- !u!114 &7140742456541799758
+
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -182,16 +186,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1025300375
+
+  GlobalObjectIdHash: 3517730465
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
+  ActiveSceneSynchronization: 1
+
   SceneMigrationSynchronization: 1
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &-4878363136209503290
+
+--- !u!114 &-442598415885606911
+
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -210,9 +218,11 @@ MonoBehaviour:
   SyncRotAngleX: 1
   SyncRotAngleY: 1
   SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
+
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
@@ -222,7 +232,9 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &4969387123981185492
+
+--- !u!114 &7565310244025787290
+
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

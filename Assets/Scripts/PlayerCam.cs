@@ -37,6 +37,11 @@ public class PlayerCam : MonoBehaviour
 
         xRotation = Mathf.Clamp(xRotation, -89f, 89f);
 
+        
+    }
+
+    private void FixedUpdate()
+    {
         //rotate camera
         transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
         //rotate player 
