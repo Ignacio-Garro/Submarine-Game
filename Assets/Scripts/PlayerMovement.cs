@@ -16,7 +16,9 @@ public class PlayerMovement : NetworkBehaviour {
 
     [Header("Network")]
 
-    private NetworkVariable<int> randomNumber = new NetworkVariable<int>(1);
+    //everone can read but only server writes
+    //private NetworkVariable<int> randomNumber = new NetworkVariable<int>(1);
+    private NetworkVariable<int> randomNumber = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
 
     [Header("State")]
@@ -107,7 +109,13 @@ public class PlayerMovement : NetworkBehaviour {
         swimming,
         ladder
     }
-
+    /*
+    public override void OnNetworkSpawn(){
+        randomNumber.OnValueChanged += (int previousValue, int NewValue) => {
+            Debug.Log(OwnerClientId + "; randomNumber: " + randomNumber.Value);
+        };
+    }
+    */
     private void Start() {
         rb = GetComponent<Rigidbody>();
         startYScale = transform.localScale.y;
@@ -138,7 +146,7 @@ public class PlayerMovement : NetworkBehaviour {
     }
 
     private void Update() {
-        Debug.Log(OwnerClientId + "; randomNumber: " + randomNumber.Value);
+        //Debug.Log(OwnerClientId + "; randomNumber: " + randomNumber.Value);
         if(!IsOwner) return;
 
 

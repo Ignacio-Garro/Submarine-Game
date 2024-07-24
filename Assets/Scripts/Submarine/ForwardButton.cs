@@ -6,14 +6,14 @@ using UnityEngine;
 
 
 
-public class ForwardButton : MonoBehaviour, IClickableObject
+public class ForwardButton : MonoBehaviour, IInteractuableObject
 {
     [SerializeField] SubmarineMovement mobileSubmarine; 
     [SerializeField] Engine engine;
 
-
     private bool pressed = false;
-    public void OnClick(GameObject playerThatInteracted)
+
+    public void OnInteract(GameObject playerThatInteracted)
     {
         if(pressed)
         {
@@ -26,11 +26,6 @@ public class ForwardButton : MonoBehaviour, IClickableObject
             engine.ChangeEngineStatue(true);
         }
         pressed = !pressed;
-    }
-
-    public void OnClickRelease()
-    {
-        
     }
 
     public void setPressed(bool set){

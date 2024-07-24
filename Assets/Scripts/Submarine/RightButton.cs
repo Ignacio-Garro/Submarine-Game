@@ -6,20 +6,27 @@ using UnityEngine;
 
 
 
-public class LeftButton : MonoBehaviour, IClickableObject
+public class LeftButton : MonoBehaviour, IInteractuableObject
 {
     [SerializeField] SubmarineMovement mobileSubmarine; 
 
+    private bool pressed = false;
 
-    
-    public void OnClick(GameObject playerThatInteracted)
+    public void OnInteract(GameObject playerThatInteracted)
     {
-        mobileSubmarine.SetLeftMovement(true);
+        if(pressed)
+        {
+            mobileSubmarine.SetRightMovement(false);
+        }
+        else
+        {
+            mobileSubmarine.SetRightMovement(true);
+        }
+        pressed = !pressed;
     }
 
-    public void OnClickRelease()
-    {
-        mobileSubmarine.SetLeftMovement(false);
+    public void setPressed(bool set){
+        pressed = set;
     }
     
 }
