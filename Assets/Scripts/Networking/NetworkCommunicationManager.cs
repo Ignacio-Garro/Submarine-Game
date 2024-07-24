@@ -38,6 +38,25 @@ public class NetworkCommunicationManager : NetworkBehaviour
 
 
     [ServerRpc(RequireOwnership = false)]
+    public void ReparentNetworkObjectServerRpc(NetworkObjectReference childObject, NetworkObjectReference parentObject)
+    {
+        childObject.TryGet(out NetworkObject childnetworkObject);
+        parentObject.TryGet(out NetworkObject parentnetworkObject);
+        if (childnetworkObject == null || parentnetworkObject == null) return;
+        childnetworkObject.transform.parent = parentnetworkObject.transform;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void DeattachFromParentNetworkObjectServerRpc(NetworkObjectReference childObject)
+    {
+        childObject.TryGet(out NetworkObject childnetworkObject);
+        if (childnetworkObject == null) return;
+        childnetworkObject.transform.parent = null;
+    }
+
+
+
+    [ServerRpc(RequireOwnership = false)]
     public void DestroyNetworkObjectServerRpc(NetworkObjectReference objectToDestroy)
     {
         objectToDestroy.TryGet(out NetworkObject networkObject);
