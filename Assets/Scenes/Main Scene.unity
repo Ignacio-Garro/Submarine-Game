@@ -8965,6 +8965,16 @@ PrefabInstance:
       propertyPath: 'pathPoints.Array.data[5]'
       value: 
       objectReference: {fileID: 989053016}
+    - target: {fileID: 756659256299922910, guid: 5ac9d2ca066b0fd408bc301cb4f67c52,
+        type: 3}
+      propertyPath: Interpolate
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 756659256299922910, guid: 5ac9d2ca066b0fd408bc301cb4f67c52,
+        type: 3}
+      propertyPath: SlerpPosition
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1702172584685887918, guid: 5ac9d2ca066b0fd408bc301cb4f67c52,
         type: 3}
       propertyPath: GlobalObjectIdHash
