@@ -10,5 +10,5 @@ public class ItemSO : ScriptableObject
     public Sprite item_sprite;
 }
 
-public enum itemType { karambit, redCan, blueCan};
+public enum itemType { karambit, redCan, blueCan, coal};
 

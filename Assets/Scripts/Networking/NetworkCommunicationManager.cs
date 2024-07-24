@@ -47,7 +47,8 @@ public class NetworkCommunicationManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SpawnNetworkObjectServerRpc(itemType item, Vector3 spawnPosition)
     {
-        InventoryInfoManager.Instance.SpawnableObjects.TryGetValue(item, out GameObject prefabToSpawn);
+        PlayerInventory inventory = GameManager.Instance.ActualPlayer.GetComponent<PlayerInventory>(); 
+        inventory.ItemInstantiate.TryGetValue(item, out GameObject prefabToSpawn);
         if (prefabToSpawn == null) return;
         SpawnNetworkObject(prefabToSpawn, spawnPosition);
     }
@@ -55,7 +56,8 @@ public class NetworkCommunicationManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     public void SpawnNetworkWithForceObjectServerRpc(itemType item, Vector3 spawnPosition, Vector3 forwardDirection, float throwForce)
     {
-        InventoryInfoManager.Instance.SpawnableObjects.TryGetValue(item, out GameObject prefabToSpawn);
+        PlayerInventory inventory = GameManager.Instance.ActualPlayer.GetComponent<PlayerInventory>();
+        inventory.ItemInstantiate.TryGetValue(item, out GameObject prefabToSpawn);
         if (prefabToSpawn == null) return;
         GameObject thrownItem = SpawnNetworkObject(prefabToSpawn, spawnPosition);
         Rigidbody rb = thrownItem.GetComponent<Rigidbody>();

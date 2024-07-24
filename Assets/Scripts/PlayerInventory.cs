@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,17 @@ using UnityEngine.UI;
 
 public class PlayerInventory : NetworkBehaviour
 {
+
+    [System.Serializable]
+    public struct InventoryItem
+    {
+        public itemType Type;
+        public GameObject Prefab;
+        public GameObject Item;
+    }
+
+
+
     [Header("Gerneral")]
     public List<itemType> inventoryList;
     public int selectedItem;
@@ -16,15 +28,9 @@ public class PlayerInventory : NetworkBehaviour
     [SerializeField] Camera cam;
     [SerializeField] GameObject throwItem_gameobjectPostion;
 
-     [Header("Keys")]
-
-    [SerializeField] KeyCode throwItemKey;
-    [SerializeField] KeyCode pickUpItemKey;
 
     [Header("Item gameobjects")]
-    [SerializeField] GameObject RedCan_item;
-    [SerializeField] GameObject BlueCan_item;
-
+    [SerializeField] List<InventoryItem> inventoryItems;
     
 
     [Header("UI")]
@@ -37,12 +43,14 @@ public class PlayerInventory : NetworkBehaviour
 
 
     private Dictionary<itemType, GameObject> itemSetActive = new Dictionary<itemType, GameObject>(){};
-    private Dictionary<itemType, GameObject> itemInstantiate => InventoryInfoManager.Instance.SpawnableObjects;
+    private Dictionary<itemType, GameObject> itemInstantiate = new Dictionary<itemType, GameObject>() { };
+
+    public Dictionary<itemType, GameObject> ItemInstantiate => itemInstantiate;
     void Start()
     {
-        itemSetActive.Add(itemType.redCan, RedCan_item);
-        itemSetActive.Add(itemType.blueCan, BlueCan_item);
-
+        inventoryItems.ForEach(item => itemSetActive.Add(item.Type, item.Item));
+        inventoryItems.ForEach(item => itemInstantiate.Add(item.Type, item.Prefab));
+        
         emptySlotImage = null;
 
         newItemSelected();
