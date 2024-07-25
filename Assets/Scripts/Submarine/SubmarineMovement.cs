@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Formatters;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,8 +13,9 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] float forwardsAcceleration = 1;
     [SerializeField] float backWardsAcceleration = 2;
     [SerializeField] float Deceleration = 1;
+    [SerializeField] float maxVerticalVelocity = 5;
+    [SerializeField] float maxDepth = 20;
 
-    
     [SerializeField] float rotationAcceleration = 8f;
     [SerializeField] float maxRotateVelocity = 25;
     [SerializeField] float rotationDeceleration = 5f;
@@ -25,12 +27,13 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] bool isMovingBackWards;
     [SerializeField] bool isMovingRight;
     [SerializeField] bool isMovingLeft;
-
+   
    
     
     float velocity = 0;
     float rotateVelocity = 0;
-    
+    float targetHeigth = 0;
+    private float verticalVelocity;
 
 
     // Update is called once per frame
@@ -55,6 +58,8 @@ public class SubmarineMovement : NetworkBehaviour
         else {
             rotateVelocity = Mathf.MoveTowards(rotateVelocity, 0, rotationDeceleration * Time.deltaTime);
         }
+        
+
     }
 
     void FixedUpdate()
@@ -64,6 +69,17 @@ public class SubmarineMovement : NetworkBehaviour
         Vector3 rotation = Vector3.up * rotateVelocity * Time.fixedDeltaTime;
         // Apply rotation to the transform
         transform.Rotate(rotation);
+        float acceleration;
+        float targetVerticalVelocity = Mathf.Sign(targetHeigth - transform.position.y) * Mathf.Lerp(0, maxVerticalVelocity, Mathf.Abs(targetHeigth - transform.position.y) / maxDepth);
+        if(verticalVelocity > 0 && targetVerticalVelocity < verticalVelocity || verticalVelocity < 0 && targetVerticalVelocity > verticalVelocity) {
+            acceleration = 2;
+        }
+        else {
+            acceleration = (Mathf.Abs(targetHeigth - transform.position.y) / 10);
+        }
+
+        verticalVelocity = Mathf.MoveTowards(verticalVelocity, targetVerticalVelocity, acceleration * Time.fixedDeltaTime);
+        transform.position += transform.up * verticalVelocity * Time.fixedDeltaTime;
     }
 
 
@@ -112,4 +128,13 @@ public class SubmarineMovement : NetworkBehaviour
         isMovingLeft = false;
     }
 
+    public void IncreaseTargetHeigth()
+    {
+        targetHeigth += 10;
+    }
+
+    public void DecreaseTargetHeigth()
+    {
+        targetHeigth -= 10;
+    }
 }
