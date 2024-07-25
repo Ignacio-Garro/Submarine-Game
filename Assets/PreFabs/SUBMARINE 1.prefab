@@ -6537,7 +6537,7 @@ GameObject:
   - component: {fileID: 5394035666736833431}
   - component: {fileID: 2594195291556186167}
   - component: {fileID: 7984456198097896590}
-  - component: {fileID: 8330390811774759738}
+  - component: {fileID: 3281923635021849701}
   m_Layer: 0
   m_Name: Coal Zone
   m_TagString: Ladder
@@ -6635,7 +6635,7 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &8330390811774759738
+--- !u!114 &3281923635021849701
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6644,13 +6644,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 4893399044632220306}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff676c6893da31141ae129ef4a1e8133, type: 3}
+  m_Script: {fileID: 11500000, guid: dc9614b417cfe3145a53eb07918d82e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tagFilter: Coal
-  onTriggerEnter:
+  onTriggerEnterEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11836689972456086}
+        m_TargetAssemblyTypeName: SubmarineController, Assembly-CSharp
+        m_MethodName: InsertCoal
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTriggerExitEvent:
     m_PersistentCalls:
       m_Calls: []
+  acceptanceTags:
+  - Coal
+  mustHaveAllTags: 1
 --- !u!1 &5524520006134119384
 GameObject:
   m_ObjectHideFlags: 0
@@ -21931,7 +21948,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1854614684
+  GlobalObjectIdHash: 893463484
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -21977,6 +21994,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EnterPosition: {fileID: 4583762645323285597}
+  submarineEngine: {fileID: 6942058958222943313}
 --- !u!114 &-472770868146098633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22377,7 +22395,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3301620660
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -22456,7 +22474,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1973417782
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
@@ -22540,7 +22558,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2490082188
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
@@ -22694,7 +22712,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 331561085
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -22773,7 +22791,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1567582963
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
@@ -24445,7 +24463,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 120807548
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -24524,7 +24542,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2148912983
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
@@ -24678,7 +24696,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3064756839
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -24757,7 +24775,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1491557935
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
