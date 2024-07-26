@@ -5678,6 +5678,8 @@ GameObject:
   - component: {fileID: 2494221316201636439}
   - component: {fileID: 5416697484556374675}
   - component: {fileID: 495764876549709910}
+  - component: {fileID: 5623129453704791222}
+  - component: {fileID: 304938035869197391}
   m_Layer: 0
   m_Name: submarine water
   m_TagString: Water
@@ -5789,6 +5791,58 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tagFilter: WaterTrigger
   WaterFilter: {fileID: 0}
+--- !u!114 &5623129453704791222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2800636679937980117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 893463484
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 1
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &304938035869197391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2800636679937980117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 0
+  SyncRotAngleY: 0
+  SyncRotAngleZ: 0
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 1
+  Interpolate: 1
+  SlerpPosition: 0
 --- !u!1 &2845688885498651043
 GameObject:
   m_ObjectHideFlags: 0
@@ -6046,7 +6100,7 @@ GameObject:
   - component: {fileID: 1429540099230724237}
   - component: {fileID: 1173263130030811326}
   - component: {fileID: 1982999720903760600}
-  - component: {fileID: 3500482769870762364}
+  - component: {fileID: 1246623361705009332}
   m_Layer: 0
   m_Name: FixHoleArea
   m_TagString: Untagged
@@ -6143,7 +6197,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3500482769870762364
+--- !u!114 &1246623361705009332
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6152,9 +6206,54 @@ MonoBehaviour:
   m_GameObject: {fileID: 3594193513553204342}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ef4cb7a7459bde40ab9352ee67af822, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b2d533a634da4f4580eb690e89f2731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onClickLocal:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4719239412502358593}
+        m_TargetAssemblyTypeName: SinkingHole, Assembly-CSharp
+        m_MethodName: TurnOffParticleSystem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClickServer:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4719239412502358593}
+        m_TargetAssemblyTypeName: SinkingHole, Assembly-CSharp
+        m_MethodName: TurnOffParticleSystem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClickClients:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4719239412502358593}
+        m_TargetAssemblyTypeName: SinkingHole, Assembly-CSharp
+        m_MethodName: TurnOffParticleSystem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3898641296233179939
 GameObject:
   m_ObjectHideFlags: 0
@@ -6895,7 +6994,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3892434652495835162}
-  - component: {fileID: 1269433943779668450}
+  - component: {fileID: 6110118947980069819}
   m_Layer: 0
   m_Name: Sinking Manager
   m_TagString: Untagged
@@ -6920,7 +7019,7 @@ Transform:
   - {fileID: 9023808836394919939}
   m_Father: {fileID: 9110646459722423762}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1269433943779668450
+--- !u!114 &6110118947980069819
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6929,20 +7028,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 5524520006134119384}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6fc67b186490c94b9ffe6af1c275559, type: 3}
+  m_Script: {fileID: 11500000, guid: c9f05a2b582175848883a6eb049369a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  submarineSinking: 0
-  waterBeingDrained: 0
-  automaticTimedSinking: 0
-  drainageSpeed: 0.05
-  sinkingLevelOfWater: 0
-  numberOfHolesSinking: 0
-  levelRisingAmountPerHole: 0.005
-  WaterMassThatRisses: {fileID: 8155279538670008350}
-  startPosition: {fileID: 8699111410120684077}
-  endPosition: {fileID: 9010256700155335212}
-  timerNewHole: 20
+  controller: {fileID: 11836689972456086}
+  initialWaterPosition: {fileID: 8699111410120684077}
+  finalWaterPosition: {fileID: 9010256700155335212}
+  waterMassThatRises: {fileID: 2800636679937980117}
+  sinkVelocityPerHole: 0.5
+  sinkDistancePerPorcent: 1
 --- !u!1 &5770026332929153658
 GameObject:
   m_ObjectHideFlags: 0
@@ -16899,7 +16993,7 @@ GameObject:
   - component: {fileID: 6153863882026223500}
   - component: {fileID: 1196774905461898176}
   - component: {fileID: 7960238747879207763}
-  - component: {fileID: 42140279119817717}
+  - component: {fileID: 8670482990952914527}
   m_Layer: 0
   m_Name: FixHoleArea
   m_TagString: Untagged
@@ -16996,7 +17090,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &42140279119817717
+--- !u!114 &8670482990952914527
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -17005,9 +17099,54 @@ MonoBehaviour:
   m_GameObject: {fileID: 7019891327883097911}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ef4cb7a7459bde40ab9352ee67af822, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b2d533a634da4f4580eb690e89f2731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onClickLocal:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 782431886828228791}
+        m_TargetAssemblyTypeName: SinkingHole, Assembly-CSharp
+        m_MethodName: TurnOffParticleSystem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClickServer:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 782431886828228791}
+        m_TargetAssemblyTypeName: SinkingHole, Assembly-CSharp
+        m_MethodName: TurnOffParticleSystem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClickClients:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 782431886828228791}
+        m_TargetAssemblyTypeName: SinkingHole, Assembly-CSharp
+        m_MethodName: TurnOffParticleSystem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7092614422585563464
 GameObject:
   m_ObjectHideFlags: 0
@@ -21933,7 +22072,7 @@ GameObject:
   - component: {fileID: 1509677301113822642}
   - component: {fileID: 7969199508483574358}
   - component: {fileID: 8647333774627611519}
-  - component: {fileID: 1052701023850986175}
+  - component: {fileID: 2597976672723385755}
   m_Layer: 0
   m_Name: FixHoleArea
   m_TagString: Untagged
@@ -22030,7 +22169,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1052701023850986175
+--- !u!114 &2597976672723385755
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -22039,9 +22178,54 @@ MonoBehaviour:
   m_GameObject: {fileID: 7350226721027358032}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ef4cb7a7459bde40ab9352ee67af822, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b2d533a634da4f4580eb690e89f2731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onClickLocal:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1181892851340712256}
+        m_TargetAssemblyTypeName: SinkingHole, Assembly-CSharp
+        m_MethodName: TurnOffParticleSystem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClickServer:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1181892851340712256}
+        m_TargetAssemblyTypeName: SinkingHole, Assembly-CSharp
+        m_MethodName: TurnOffParticleSystem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClickClients:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1181892851340712256}
+        m_TargetAssemblyTypeName: SinkingHole, Assembly-CSharp
+        m_MethodName: TurnOffParticleSystem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &7636081118473910671
 GameObject:
   m_ObjectHideFlags: 0
@@ -22187,6 +22371,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a37fdf8def303224e80cad26c5248299, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: {fileID: 11836689972456086}
   maxVelocity: 15
   forwardsAcceleration: 3
   backWardsAcceleration: 6
@@ -22196,7 +22381,6 @@ MonoBehaviour:
   rotationAcceleration: 8
   maxRotateVelocity: 25
   rotationDeceleration: 5
-  workingEngine: 1
   isMovingForward: 0
   isMovingBackWards: 0
   isMovingRight: 0
@@ -22213,8 +22397,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a0e32cdcc548204fa986fcb8a44e16a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnterPosition: {fileID: 4583762645323285597}
+  movement: {fileID: 579665732192765280}
+  sinking: {fileID: 6110118947980069819}
   submarineEngine: {fileID: 6942058958222943313}
+  holes:
+  - {fileID: 4719239412502358593}
+  - {fileID: 1181892851340712256}
+  - {fileID: 782431886828228791}
+  - {fileID: 6313416188974471594}
+  EnterPosition: {fileID: 4583762645323285597}
 --- !u!114 &-472770868146098633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22380,7 +22571,7 @@ GameObject:
   - component: {fileID: 4384969056803785227}
   - component: {fileID: 263981959820963624}
   - component: {fileID: 8529681914884314768}
-  - component: {fileID: 3059615455649238594}
+  - component: {fileID: 6486496009008015589}
   m_Layer: 0
   m_Name: FixHoleArea
   m_TagString: Untagged
@@ -22477,7 +22668,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &3059615455649238594
+--- !u!114 &6486496009008015589
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -22486,9 +22677,54 @@ MonoBehaviour:
   m_GameObject: {fileID: 9092995408204886613}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ef4cb7a7459bde40ab9352ee67af822, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b2d533a634da4f4580eb690e89f2731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onClickLocal:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6313416188974471594}
+        m_TargetAssemblyTypeName: SinkingHole, Assembly-CSharp
+        m_MethodName: TurnOffParticleSystem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClickServer:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6313416188974471594}
+        m_TargetAssemblyTypeName: SinkingHole, Assembly-CSharp
+        m_MethodName: TurnOffParticleSystem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClickClients:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6313416188974471594}
+        m_TargetAssemblyTypeName: SinkingHole, Assembly-CSharp
+        m_MethodName: TurnOffParticleSystem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &9095904106829935174
 GameObject:
   m_ObjectHideFlags: 0
@@ -22530,6 +22766,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4773047116710381578}
   - component: {fileID: 1181892851340712256}
+  - component: {fileID: 1177027625536402587}
   m_Layer: 0
   m_Name: Hole2
   m_TagString: Untagged
@@ -22567,6 +22804,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   holeIsOpen: 0
+--- !u!114 &1177027625536402587
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9108018743213513319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b2d533a634da4f4580eb690e89f2731, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onClickLocal:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClickServer:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClickClients:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &9125405302016345810
 GameObject:
   m_ObjectHideFlags: 0

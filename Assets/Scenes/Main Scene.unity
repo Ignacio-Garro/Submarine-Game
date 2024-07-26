@@ -4085,7 +4085,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5409208870891767244, guid: a47976335e7c03b46ab44f1ebc5d2be5,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2130645566}
+      addedObject: {fileID: 2130645571}
   m_SourcePrefab: {fileID: 100100000, guid: a47976335e7c03b46ab44f1ebc5d2be5, type: 3}
 --- !u!1 &1084830930
 GameObject:
@@ -8042,12 +8042,12 @@ MonoBehaviour:
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
+  ActiveSceneSynchronization: 1
   SceneMigrationSynchronization: 1
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &2130645566
+--- !u!114 &2130645571
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8056,10 +8056,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2130645559}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24441eebb9e2ab840a8224f0cadace50, type: 3}
+  m_Script: {fileID: 11500000, guid: 0b2d533a634da4f4580eb690e89f2731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onClick:
+  onClickLocal:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1858022609}
@@ -8074,6 +8074,24 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onClickServer:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1858022609}
+        m_TargetAssemblyTypeName: SubmarineController, Assembly-CSharp
+        m_MethodName: EnterSubmarine
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClickClients:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &2142455271 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 408744013035386129, guid: a47976335e7c03b46ab44f1ebc5d2be5,
@@ -8985,6 +9003,26 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 1854614684
       objectReference: {fileID: 0}
+    - target: {fileID: 3008438408197863843, guid: 5ac9d2ca066b0fd408bc301cb4f67c52,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1677846160
+      objectReference: {fileID: 0}
+    - target: {fileID: 3008438408197863843, guid: 5ac9d2ca066b0fd408bc301cb4f67c52,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1854614684
+      objectReference: {fileID: 0}
+    - target: {fileID: 3312229060461398449, guid: 5ac9d2ca066b0fd408bc301cb4f67c52,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 867710900
+      objectReference: {fileID: 0}
+    - target: {fileID: 3312229060461398449, guid: 5ac9d2ca066b0fd408bc301cb4f67c52,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1854614684
+      objectReference: {fileID: 0}
     - target: {fileID: 3773752706534070670, guid: 5ac9d2ca066b0fd408bc301cb4f67c52,
         type: 3}
       propertyPath: GlobalObjectIdHash
@@ -9011,6 +9049,16 @@ PrefabInstance:
       value: 49142612
       objectReference: {fileID: 0}
     - target: {fileID: 5026144515939766204, guid: 5ac9d2ca066b0fd408bc301cb4f67c52,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1854614684
+      objectReference: {fileID: 0}
+    - target: {fileID: 5623129453704791222, guid: 5ac9d2ca066b0fd408bc301cb4f67c52,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 2187572538
+      objectReference: {fileID: 0}
+    - target: {fileID: 5623129453704791222, guid: 5ac9d2ca066b0fd408bc301cb4f67c52,
         type: 3}
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 1854614684
@@ -9079,6 +9127,11 @@ PrefabInstance:
         type: 3}
       propertyPath: GlobalObjectIdHash
       value: 511707935
+      objectReference: {fileID: 0}
+    - target: {fileID: 8696555897039857881, guid: 5ac9d2ca066b0fd408bc301cb4f67c52,
+        type: 3}
+      propertyPath: AlwaysReplicateAsRoot
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8696555897039857881, guid: 5ac9d2ca066b0fd408bc301cb4f67c52,
         type: 3}

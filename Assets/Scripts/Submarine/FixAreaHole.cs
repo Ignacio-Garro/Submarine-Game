@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FixAreaHole : MonoBehaviour, IClickableObject
+public class FixAreaHole : MonoBehaviour
 {
-    private SinkingHoles sinkingHoles;
+    private SinkingHole sinkingHoles;
 
     private void Start() {
-        sinkingHoles = GetComponentInParent<SinkingHoles>();
+        sinkingHoles = GetComponentInParent<SinkingHole>();
     }
 
     public void OnClick(GameObject playerThatInteracted)

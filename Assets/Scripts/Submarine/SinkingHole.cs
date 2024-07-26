@@ -1,40 +1,69 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class SinkingHoles : MonoBehaviour
+public class SinkingHole : NetworkBehaviour
 {
-    [SerializeField] private bool holeIsOpen;
+    [SerializeField] private bool holeIsOpen = true;
 
     // Getter for holeIsOpen
-    public bool HoleIsOpen
-    {
-        get { return holeIsOpen; }
-    }
+    public bool HoleIsOpen => holeIsOpen;
+    
     private ParticleSystem waterParticles;
-    private SubmarineSinking submarineSinking;
+    public Action turnOnServerCallback = () => { };
+    public Action turnOffServerCallback = () => { };
 
-    private void Start(){
+    
+
+    public override void OnNetworkSpawn()
+    {
         waterParticles = GetComponentInChildren<ParticleSystem>();
-        submarineSinking = GetComponentInParent<SubmarineSinking>();
         TurnOffParticleSystem();
     }
 
     public void TurnOnParticleSystem()
     {
+        if (IsClient)
+        {
+            waterParticles.gameObject.SetActive(true); // tengo que volver a abilitar el gameobject
+            waterParticles.Play(); // Start emitting particles
+        }
+        if (!HoleIsOpen && IsServer)
+        {
+            turnOnServerCallback();
+        }
         holeIsOpen = true;
-        waterParticles.gameObject.SetActive(true); // tengo que volver a abilitar el gameobject
-        submarineSinking.ChangeNumberOfHolesSinking(1);
-        waterParticles.Play(); // Start emitting particles
+
     }
 
     // Method to turn off the Particle System
     public void TurnOffParticleSystem()
     {
+        if(IsClient)
+        {
+            waterParticles.Stop();
+        }
+        if (IsServer && holeIsOpen)
+        {
+            turnOffServerCallback();
+        }
         holeIsOpen = false; 
-        submarineSinking.ChangeNumberOfHolesSinking(-1);
-        waterParticles.Stop(); // Stop emitting particles - wtf me hace disable de el gameobject
         
     }
-    
+
+    [ClientRpc(RequireOwnership = false)]
+    public void TurnOnParticleSystemClientRpc()
+    {
+        TurnOnParticleSystem();
+    }
+
+    public void OpenHoleFromServer()
+    {
+        TurnOffParticleSystem();
+        TurnOnParticleSystemClientRpc();
+    }
+
+   
 }

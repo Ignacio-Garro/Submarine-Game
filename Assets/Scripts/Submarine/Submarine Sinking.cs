@@ -19,14 +19,14 @@ public class SubmarineSinking : MonoBehaviour
 
     [Header("Holes")]
     [SerializeField] private float timerNewHole;
-    private SinkingHoles[] holes;
-    private SinkingHoles hole;
+    private SinkingHole[] holes;
+    private SinkingHole hole;
 
     // Start is called before the first frame update
     void Start()
     {
         // Store the holes in an array for easier access
-        holes = GameObject.FindObjectsOfType<SinkingHoles>();
+       
         // Start the coroutine to randomly choose a hole every 30 seconds
         StartCoroutine(StartRandomLeakAfterDelay());
     }

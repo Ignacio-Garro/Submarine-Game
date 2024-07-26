@@ -8,6 +8,9 @@ using UnityEngine;
 
 public class SubmarineMovement : NetworkBehaviour
 {
+    [Header("Conmtroller")]
+    [SerializeField] SubmarineController controller;
+
     [Header("sub nav controls")]
     [SerializeField] float maxVelocity = 10;
     [SerializeField] float forwardsAcceleration = 1;
@@ -15,12 +18,9 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] float Deceleration = 1;
     [SerializeField] float maxVerticalVelocity = 5;
     [SerializeField] float maxDepth = 20;
-
     [SerializeField] float rotationAcceleration = 8f;
     [SerializeField] float maxRotateVelocity = 25;
     [SerializeField] float rotationDeceleration = 5f;
-
-    [SerializeField] bool workingEngine;
 
     [Header("nav info")]
     [SerializeField] bool isMovingForward;
@@ -28,11 +28,11 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] bool isMovingRight;
     [SerializeField] bool isMovingLeft;
    
-   
-    
     float velocity = 0;
     float rotateVelocity = 0;
     float targetHeigth = 0;
+    float sinkingHeigthOffset => controller.sinking.WaterLevel * controller.sinking.SinkDistancePerPorcent;
+    float realTargetHeigth => targetHeigth - sinkingHeigthOffset;
     private float verticalVelocity;
 
 
@@ -70,12 +70,12 @@ public class SubmarineMovement : NetworkBehaviour
         // Apply rotation to the transform
         transform.Rotate(rotation);
         float acceleration;
-        float targetVerticalVelocity = Mathf.Sign(targetHeigth - transform.position.y) * Mathf.Lerp(0, maxVerticalVelocity, Mathf.Abs(targetHeigth - transform.position.y) / maxDepth);
+        float targetVerticalVelocity = Mathf.Sign(realTargetHeigth - transform.position.y) * Mathf.Lerp(0, maxVerticalVelocity, Mathf.Abs(realTargetHeigth - transform.position.y) / maxDepth);
         if(verticalVelocity > 0 && targetVerticalVelocity < verticalVelocity || verticalVelocity < 0 && targetVerticalVelocity > verticalVelocity) {
             acceleration = 2;
         }
         else {
-            acceleration = (Mathf.Abs(targetHeigth - transform.position.y) / 10);
+            acceleration = (Mathf.Abs(realTargetHeigth - transform.position.y) / 10);
         }
 
         verticalVelocity = Mathf.MoveTowards(verticalVelocity, targetVerticalVelocity, acceleration * Time.fixedDeltaTime);
@@ -91,7 +91,7 @@ public class SubmarineMovement : NetworkBehaviour
             isMovingRight = false;
             isMovingLeft = false;
         }
-        workingEngine = engineState;
+        //workingEngine = engineState;
     }
 
 
