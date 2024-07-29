@@ -5803,7 +5803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1765491040
+  GlobalObjectIdHash: 893463484
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -22350,7 +22350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1854614684
+  GlobalObjectIdHash: 893463484
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -22381,15 +22381,22 @@ MonoBehaviour:
   rotationAcceleration: 8
   maxRotateVelocity: 25
   rotationDeceleration: 5
-  submarineMass: 2100000
-  submarineInsideVolumeLitres: 1900000
-  submarineTankVolumeLitres: 1000000
+  submarineMass: 2500000
+  submarineInsideVolumeLitres: 1800000
+  submarineTankVolumeLitres: 1400000
   diamenter: 10
   length: 100
   tankPercentage: 0
   gravity: 9.8
-  dragCoeficient: 4
+  maxEnginePowerWatt: 74000000
+  currentPowerPercent: 0
+  horizontalDragCoeficient: 2
+  horizontalVelocity: 0
+  verticalDragCoeficient: 1
   verticalVelocity: 0
+  waterHeigth: 0
+  submarineHeigth: 2
+  minDragVelocity: 0.1
   isMovingForward: 0
   isMovingBackWards: 0
   isMovingRight: 0
@@ -22984,7 +22991,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2059245682
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -23133,7 +23140,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 4270449446
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -23282,7 +23289,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3301620660
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -23361,7 +23368,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1973417782
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
@@ -23445,7 +23452,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2490082188
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
@@ -23599,7 +23606,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 331561085
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -23678,7 +23685,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1567582963
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
@@ -25350,7 +25357,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 120807548
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -25429,7 +25436,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 2148912983
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
@@ -25583,7 +25590,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3064756839
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -25662,7 +25669,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 1491557935
+      value: 893463484
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}

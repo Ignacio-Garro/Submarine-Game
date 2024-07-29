@@ -22,8 +22,7 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] float maxRotateVelocity = 25;
     [SerializeField] float rotationDeceleration = 5f;
 
-
-    [Header("Vertical movement")]
+    [Header("Physic attributes")]
     [SerializeField] float submarineMass = 2100000f;
     [SerializeField] float submarineInsideVolumeLitres = 1900000f;
     [SerializeField] float submarineTankVolumeLitres = 515000f;
@@ -31,10 +30,25 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] float length = 100f;
     [SerializeField] float tankPercentage = 0f;
     [SerializeField] float gravity = 9.8f;
-    [SerializeField] float dragCoeficient = 1f;
+
+    [Header("Engine Attributes")]
+    [SerializeField] float maxEnginePowerWatt = 2500000f;
+    [SerializeField] float currentPowerPercent = 0;
+
+    [Header("HorizontalMovement")]
+    [SerializeField] float horizontalDragCoeficient = 1f;
+    [SerializeField] float horizontalVelocity = 0f;
+    
+    float horizontalSurface => diamenter * diamenter / 4 * Mathf.PI;
+
+    float currentPowerWatt => maxEnginePowerWatt * currentPowerPercent / 100;
+
+
+    [Header("Vertical movement")]
+    [SerializeField] float verticalDragCoeficient = 1f;
     [SerializeField] float verticalVelocity = 0;
     [SerializeField] float waterHeigth = 0;
-    [SerializeField] float submarineHeigth = 2f;
+    [SerializeField] float submarineHeigth = 5f;
     [SerializeField] float minDragVelocity = 0.1f;
     float verticalSurface => diamenter * length;
     float totalVolume => submarineInsideVolumeLitres + submarineTankVolumeLitres;
@@ -86,11 +100,30 @@ public class SubmarineMovement : NetworkBehaviour
     void FixedUpdate()
     {
         if (!IsServer) return;
-        transform.position += transform.forward * velocity * Time.fixedDeltaTime;
+        
         Vector3 rotation = Vector3.up * rotateVelocity * Time.fixedDeltaTime;
         // Apply rotation to the transform
         transform.Rotate(rotation);
+        HorizontalMovement();
         VerticalMovement();
+    }
+
+    public void HorizontalMovement()
+    {
+        float horizontalForce = currentPowerWatt / Mathf.Max(Mathf.Abs(horizontalVelocity),0.1f);
+        float horizontalDrag = Mathf.Sign(-horizontalVelocity) * horizontalDragCoeficient * 0.5f * 1000 * horizontalSurface * horizontalVelocity * horizontalVelocity;
+        float totalForce = horizontalForce + horizontalDrag;
+        bool dragChangedForceDirection = Mathf.Sign(totalForce) != Mathf.Sign(horizontalForce);
+        float acceleration = totalForce / totalMass;
+        if(dragChangedForceDirection)
+        {
+            horizontalVelocity = Mathf.Sign(horizontalVelocity + acceleration * Time.fixedDeltaTime) == Mathf.Sign(horizontalVelocity) ? horizontalVelocity + acceleration * Time.fixedDeltaTime : 0;
+        }
+        else
+        {
+            horizontalVelocity += acceleration * Time.fixedDeltaTime;
+        }
+        transform.position += transform.forward * horizontalVelocity * Time.fixedDeltaTime;
     }
 
     void VerticalMovement()
@@ -99,7 +132,7 @@ public class SubmarineMovement : NetworkBehaviour
         float bouyancyForce = underWaterVolume * gravity;
         //We fix a minimun drag velocity so the submarine doesnt brake that slowly at very low velociies
         float fixeddragVelocity = (verticalVelocity < minDragVelocity && verticalVelocity > -minDragVelocity) ? minDragVelocity : verticalVelocity;
-        float dragForce = Mathf.Sign(-verticalVelocity) * dragCoeficient * 0.5f * 1000 * verticalSurface * fixeddragVelocity * fixeddragVelocity;
+        float dragForce = Mathf.Sign(-verticalVelocity) * verticalDragCoeficient * 0.5f * 1000 * verticalSurface * fixeddragVelocity * fixeddragVelocity;
         float totalForce = bouyancyForce - weigthForce + dragForce;
         bool dragChangedForceDirection = Mathf.Sign(totalForce) != Mathf.Sign(bouyancyForce - weigthForce);
         float acceleration = totalForce / totalMass;
@@ -148,19 +181,19 @@ public class SubmarineMovement : NetworkBehaviour
 
     public void StartForwandMovement()
     {
-        isMovingForward = true;
+        currentPowerPercent = 100;
     }
     public void StopForwandMovement()
     {
-        isMovingForward = false;
+        currentPowerPercent = 0;
     }
     public void StopBackWardsMovement()
     {
-        isMovingBackWards = false;
+        currentPowerPercent = 0;
     }
     public void StarBackWardsMovement()
     {
-        isMovingBackWards = true;
+        currentPowerPercent = -100;
     }
     public void StopRightMovement()
     {
