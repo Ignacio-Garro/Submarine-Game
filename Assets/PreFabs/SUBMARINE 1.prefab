@@ -5803,7 +5803,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 893463484
+  GlobalObjectIdHash: 1765491040
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -22350,7 +22350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 893463484
+  GlobalObjectIdHash: 1854614684
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -22381,6 +22381,15 @@ MonoBehaviour:
   rotationAcceleration: 8
   maxRotateVelocity: 25
   rotationDeceleration: 5
+  submarineMass: 2100000
+  submarineInsideVolumeLitres: 1900000
+  submarineTankVolumeLitres: 1000000
+  diamenter: 10
+  length: 100
+  tankPercentage: 0
+  gravity: 9.8
+  dragCoeficient: 4
+  verticalVelocity: 0
   isMovingForward: 0
   isMovingBackWards: 0
   isMovingRight: 0
@@ -22945,12 +22954,12 @@ PrefabInstance:
     - target: {fileID: -5926031012509841699, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: onClickOn.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: DecreaseTargetHeigth
+      value: IncreaseTankWater
       objectReference: {fileID: 0}
     - target: {fileID: -5926031012509841699, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: onClickOff.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: DecreaseTargetHeigth
+      value: IncreaseTankWater
       objectReference: {fileID: 0}
     - target: {fileID: -5926031012509841699, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -22975,7 +22984,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 893463484
+      value: 2059245682
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -23094,12 +23103,12 @@ PrefabInstance:
     - target: {fileID: -5926031012509841699, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: onClickOn.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: IncreaseTargetHeigth
+      value: DecreaseTankWater
       objectReference: {fileID: 0}
     - target: {fileID: -5926031012509841699, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: onClickOff.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: IncreaseTargetHeigth
+      value: DecreaseTankWater
       objectReference: {fileID: 0}
     - target: {fileID: -5926031012509841699, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -23124,7 +23133,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 893463484
+      value: 4270449446
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -23273,7 +23282,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 893463484
+      value: 3301620660
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -23352,7 +23361,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 893463484
+      value: 1973417782
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
@@ -23436,7 +23445,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 893463484
+      value: 2490082188
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
@@ -23590,7 +23599,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 893463484
+      value: 331561085
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -23669,7 +23678,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 893463484
+      value: 1567582963
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
@@ -25341,7 +25350,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 893463484
+      value: 120807548
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -25420,7 +25429,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 893463484
+      value: 2148912983
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
@@ -25574,7 +25583,7 @@ PrefabInstance:
     - target: {fileID: 2526287536785937597, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 893463484
+      value: 3064756839
       objectReference: {fileID: 0}
     - target: {fileID: 6404487567150008320, guid: 140bac78de651b545a642eba1b8d4f7d,
         type: 3}
@@ -25653,7 +25662,7 @@ PrefabInstance:
     - target: {fileID: 669564785871288293, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 893463484
+      value: 1491557935
       objectReference: {fileID: 0}
     - target: {fileID: 1309675293936979377, guid: 6fe31358e28cd40419d3710d7bdfc5ad,
         type: 3}

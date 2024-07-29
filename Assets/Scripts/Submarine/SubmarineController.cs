@@ -52,7 +52,7 @@ public class SubmarineController : NetworkBehaviour
             hole.turnOnServerCallback += () => sinkingRate++;
         }
         AddSubmarineEvents();
-        StartCoroutine(StartRecursiveEvent());
+    //    StartCoroutine(StartRecursiveEvent());
     }
 
     private void AddSubmarineEvents()

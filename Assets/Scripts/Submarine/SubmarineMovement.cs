@@ -22,6 +22,29 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] float maxRotateVelocity = 25;
     [SerializeField] float rotationDeceleration = 5f;
 
+
+    [Header("Vertical movement")]
+    [SerializeField] float submarineMass = 2100000f;
+    [SerializeField] float submarineInsideVolumeLitres = 1900000f;
+    [SerializeField] float submarineTankVolumeLitres = 515000f;
+    [SerializeField] float diamenter = 10f;
+    [SerializeField] float length = 100f;
+    [SerializeField] float tankPercentage = 0f;
+    [SerializeField] float gravity = 9.8f;
+    [SerializeField] float dragCoeficient = 1f;
+    [SerializeField] float verticalVelocity = 0;
+    [SerializeField] float waterHeigth = 0;
+    [SerializeField] float submarineHeigth = 2f;
+    [SerializeField] float minDragVelocity = 0.1f;
+    float verticalSurface => diamenter * length;
+    float totalVolume => submarineInsideVolumeLitres + submarineTankVolumeLitres;
+    float underWaterVolume => (1 - Mathf.Clamp((transform.position.y - waterHeigth) / submarineHeigth, 0, 1)) * totalVolume;
+    float tankMass => tankPercentage / 100 * submarineTankVolumeLitres;
+    float sinkingMass => controller.sinking.WaterLevel / 100 * submarineInsideVolumeLitres;
+    float totalMass => submarineMass + tankMass + sinkingMass;
+    
+
+
     [Header("nav info")]
     [SerializeField] bool isMovingForward;
     [SerializeField] bool isMovingBackWards;
@@ -30,10 +53,10 @@ public class SubmarineMovement : NetworkBehaviour
    
     float velocity = 0;
     float rotateVelocity = 0;
-    float targetHeigth = 0;
-    float sinkingHeigthOffset => controller.sinking.WaterLevel * controller.sinking.SinkDistancePerPorcent;
-    float realTargetHeigth => targetHeigth - sinkingHeigthOffset;
-    private float verticalVelocity;
+
+   
+
+    
 
 
     // Update is called once per frame
@@ -58,8 +81,6 @@ public class SubmarineMovement : NetworkBehaviour
         else {
             rotateVelocity = Mathf.MoveTowards(rotateVelocity, 0, rotationDeceleration * Time.deltaTime);
         }
-        
-
     }
 
     void FixedUpdate()
@@ -69,19 +90,49 @@ public class SubmarineMovement : NetworkBehaviour
         Vector3 rotation = Vector3.up * rotateVelocity * Time.fixedDeltaTime;
         // Apply rotation to the transform
         transform.Rotate(rotation);
+        VerticalMovement();
+    }
+
+    void VerticalMovement()
+    {
+        float weigthForce = totalMass * gravity;
+        float bouyancyForce = underWaterVolume * gravity;
+        //We fix a minimun drag velocity so the submarine doesnt brake that slowly at very low velociies
+        float fixeddragVelocity = (verticalVelocity < minDragVelocity && verticalVelocity > -minDragVelocity) ? minDragVelocity : verticalVelocity;
+        float dragForce = Mathf.Sign(-verticalVelocity) * dragCoeficient * 0.5f * 1000 * verticalSurface * fixeddragVelocity * fixeddragVelocity;
+        float totalForce = bouyancyForce - weigthForce + dragForce;
+        bool dragChangedForceDirection = Mathf.Sign(totalForce) != Mathf.Sign(bouyancyForce - weigthForce);
+        float acceleration = totalForce / totalMass;
+        if (dragChangedForceDirection)
+        {   
+            //We clamp the velocity to assure that the drag never changes the direction of the velocity. Drag should always only subtract force without getting to the point of changing the direction of the object. 
+            verticalVelocity = Mathf.Sign(verticalVelocity + acceleration * Time.fixedDeltaTime) == Mathf.Sign(verticalVelocity) ? verticalVelocity + acceleration * Time.fixedDeltaTime : 0;
+        }
+        else
+        {
+            verticalVelocity += acceleration * Time.fixedDeltaTime;
+        }
+        transform.position += transform.up * verticalVelocity * Time.fixedDeltaTime;
+    }
+
+    /*
+    void OldVerticalMovement()
+    {
         float acceleration;
         float targetVerticalVelocity = Mathf.Sign(realTargetHeigth - transform.position.y) * Mathf.Lerp(0, maxVerticalVelocity, Mathf.Abs(realTargetHeigth - transform.position.y) / maxDepth);
-        if(verticalVelocity > 0 && targetVerticalVelocity < verticalVelocity || verticalVelocity < 0 && targetVerticalVelocity > verticalVelocity) {
+        if (verticalVelocity > 0 && targetVerticalVelocity < verticalVelocity || verticalVelocity < 0 && targetVerticalVelocity > verticalVelocity)
+        {
             acceleration = 2;
         }
-        else {
+        else
+        {
             acceleration = (Mathf.Abs(realTargetHeigth - transform.position.y) / 10);
         }
 
         verticalVelocity = Mathf.MoveTowards(verticalVelocity, targetVerticalVelocity, acceleration * Time.fixedDeltaTime);
         transform.position += transform.up * verticalVelocity * Time.fixedDeltaTime;
     }
-
+    */
 
   
     public void SetworkingEngine(bool engineState){
@@ -128,13 +179,20 @@ public class SubmarineMovement : NetworkBehaviour
         isMovingLeft = false;
     }
 
-    public void IncreaseTargetHeigth()
+    public void IncreaseTankWater()
     {
-        targetHeigth += 10;
+        tankPercentage = Mathf.Min(tankPercentage + 10, 100);
     }
 
-    public void DecreaseTargetHeigth()
+    public void DecreaseTankWater()
     {
-        targetHeigth -= 10;
+        tankPercentage = Mathf.Max(tankPercentage - 10, 0);
+    }
+
+    public void BalanceTankWater()
+    {
+        float neededMass = totalVolume - submarineMass;
+        float neededPercent = neededMass / submarineTankVolumeLitres;
+        tankPercentage = neededPercent * 100;
     }
 }
