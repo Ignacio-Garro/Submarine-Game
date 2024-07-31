@@ -5,6 +5,7 @@ using System.Runtime.Serialization.Formatters;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class SubmarineMovement : NetworkBehaviour
 {
@@ -12,15 +13,9 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] SubmarineController controller;
 
     [Header("sub nav controls")]
-    [SerializeField] float maxVelocity = 10;
-    [SerializeField] float forwardsAcceleration = 1;
-    [SerializeField] float backWardsAcceleration = 2;
-    [SerializeField] float Deceleration = 1;
-    [SerializeField] float maxVerticalVelocity = 5;
-    [SerializeField] float maxDepth = 20;
-    [SerializeField] float rotationAcceleration = 8f;
-    [SerializeField] float maxRotateVelocity = 25;
-    [SerializeField] float rotationDeceleration = 5f;
+    [SerializeField] float rotationAcceleration = 2f;
+    [SerializeField] float maxRotateVelocity = 5f;
+    [SerializeField] float rotationDeceleration = 2f;
 
     [Header("Physic attributes")]
     [SerializeField] float submarineMass = 2100000f;
@@ -29,25 +24,32 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] float diamenter = 10f;
     [SerializeField] float length = 100f;
     [SerializeField] float tankPercentage = 0f;
-    [SerializeField] float gravity = 9.8f;
+
+    
 
     [Header("Engine Attributes")]
+    [SerializeField] Transform propellerObject; 
     [SerializeField] float maxEnginePowerWatt = 2500000f;
     [SerializeField] float currentPowerPercent = 0;
+    [SerializeField] float propellerRadius = 5;
+    [SerializeField] float propellerMass = 3000f;
+    [SerializeField] float propellerEfficiencyPerSecond = 0.8f;
+    [SerializeField] float propellerConversionToPushForcePerSecond = 0.1f;
+    [SerializeField] float numberOfPropellers = 3;
+
 
     [Header("HorizontalMovement")]
     [SerializeField] float horizontalDragCoeficient = 1f;
     [SerializeField] float horizontalVelocity = 0f;
-    
+    [SerializeField] float propellerAngularVelocity = 0f;
+    [SerializeField] float minDragHorizontalVelocity = 3f;
     float horizontalSurface => diamenter * diamenter / 4 * Mathf.PI;
-
     float currentPowerWatt => maxEnginePowerWatt * currentPowerPercent / 100;
 
 
     [Header("Vertical movement")]
     [SerializeField] float verticalDragCoeficient = 1f;
     [SerializeField] float verticalVelocity = 0;
-    [SerializeField] float waterHeigth = 0;
     [SerializeField] float submarineHeigth = 5f;
     [SerializeField] float minDragVelocity = 0.1f;
     float verticalSurface => diamenter * length;
@@ -68,24 +70,17 @@ public class SubmarineMovement : NetworkBehaviour
     float velocity = 0;
     float rotateVelocity = 0;
 
-   
 
-    
+    //Values from controller
+    float gravity => controller.SubmarineGravity;
+    float waterHeigth => controller.WaterHeigth;
 
 
     // Update is called once per frame
     void Update()
     {
         if (!IsServer) return;
-        if (isMovingForward && !isMovingBackWards) {
-            velocity = Mathf.Min(velocity + forwardsAcceleration * Time.deltaTime, maxVelocity);
-        }
-        else if (!isMovingForward && isMovingBackWards) {
-            velocity = Mathf.Max(velocity - backWardsAcceleration * Time.deltaTime, -maxVelocity);
-        }
-        else {
-            velocity = Mathf.MoveTowards(velocity, 0, Deceleration * Time.deltaTime);
-        }
+        
         if(isMovingRight) {
             rotateVelocity = Mathf.Min(rotateVelocity + rotationAcceleration * Time.deltaTime, maxRotateVelocity);
         }
@@ -110,8 +105,25 @@ public class SubmarineMovement : NetworkBehaviour
 
     public void HorizontalMovement()
     {
-        float horizontalForce = currentPowerWatt / Mathf.Max(Mathf.Abs(horizontalVelocity),0.1f);
-        float horizontalDrag = Mathf.Sign(-horizontalVelocity) * horizontalDragCoeficient * 0.5f * 1000 * horizontalSurface * horizontalVelocity * horizontalVelocity;
+        float inertiaMoment = 0.5f * propellerMass * propellerRadius * propellerRadius;
+        float addedEnergy = currentPowerWatt * Time.fixedDeltaTime;
+        float previousEnergy = Mathf.Sign(propellerAngularVelocity) * 0.5f * inertiaMoment * propellerAngularVelocity * propellerAngularVelocity * numberOfPropellers;
+        float totalEnergy = Mathf.Abs(addedEnergy + previousEnergy);
+        totalEnergy -= (1 - propellerEfficiencyPerSecond) * Time.fixedDeltaTime * totalEnergy;
+        float submarineEnergy = propellerConversionToPushForcePerSecond * Time.fixedDeltaTime * totalEnergy;
+        totalEnergy -= submarineEnergy;
+
+        propellerAngularVelocity = Mathf.Sign(addedEnergy + previousEnergy) * Mathf.Sqrt(2 * totalEnergy / (inertiaMoment * numberOfPropellers));
+
+        
+        float outWatt = Mathf.Sign(addedEnergy + previousEnergy) * submarineEnergy / Time.fixedDeltaTime;
+        Vector3 propellerRotation = Vector3.forward * propellerAngularVelocity * 360/(2*Mathf.PI) * Time.fixedDeltaTime;
+        propellerObject.Rotate(propellerRotation);
+
+       
+        float horizontalForce = outWatt / Mathf.Max(Mathf.Abs(horizontalVelocity),0.1f);
+        float fixeddragVelocity = (horizontalVelocity < minDragHorizontalVelocity && horizontalVelocity > -minDragHorizontalVelocity) ? minDragHorizontalVelocity : horizontalVelocity;
+        float horizontalDrag = Mathf.Sign(-horizontalVelocity) * horizontalDragCoeficient * 0.5f * 1000 * horizontalSurface * fixeddragVelocity * fixeddragVelocity;
         float totalForce = horizontalForce + horizontalDrag;
         bool dragChangedForceDirection = Mathf.Sign(totalForce) != Mathf.Sign(horizontalForce);
         float acceleration = totalForce / totalMass;
@@ -123,6 +135,7 @@ public class SubmarineMovement : NetworkBehaviour
         {
             horizontalVelocity += acceleration * Time.fixedDeltaTime;
         }
+
         transform.position += transform.forward * horizontalVelocity * Time.fixedDeltaTime;
     }
 
@@ -145,7 +158,8 @@ public class SubmarineMovement : NetworkBehaviour
         {
             verticalVelocity += acceleration * Time.fixedDeltaTime;
         }
-        transform.position += transform.up * verticalVelocity * Time.fixedDeltaTime;
+        controller.collision.MakeDownMovementWithCollisions(verticalVelocity * Time.fixedDeltaTime);
+        //transform.position += transform.up * verticalVelocity * Time.fixedDeltaTime;
     }
 
     /*

@@ -7,16 +7,24 @@ using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.Rendering;
+
+enum SubmarineEventType
+{
+    OpenHole
+}
 
 public class SubmarineController : NetworkBehaviour
 {
 
     struct SubmarineEvent
     {
+        public SubmarineEventType type;
         public Action submarineEventAction;
-        public float weigth;
-        public SubmarineEvent(Action submarineEventAction, float weigth)
+        public Func<float> weigth;
+        public SubmarineEvent(SubmarineEventType type, Action submarineEventAction, Func<float> weigth)
         {
+            this.type = type;
             this.submarineEventAction = submarineEventAction;
             this.weigth = weigth;
         }
@@ -27,22 +35,32 @@ public class SubmarineController : NetworkBehaviour
     public SinkingController sinking;
     public Engine submarineEngine;
     public List<SinkingHole> holes;
-
+    public submarineCollisionController collision;
 
     [Header("Submarine settings")]
     [SerializeField] private Transform EnterPosition;
 
+    bool currentPlayerIsInSubmarine = false;
+
+    //Global variables
+    [Header("Global submarine variables")]
+    public float SubmarineGravity{ get; private set; } = 9.8f;
+    public float WaterHeigth{ get; private set; } = 0;
+    public float WaterDensity { get; private set; } = 1000;
+    public float SubmarineLength { get; private set; } = 10;
 
     private bool eventsShouldFire = true;
     private int sinkingRate = 0;
     private int drainRate = 0;
     public int SinkingRate => sinkingRate;
     public int DrainRate => drainRate;
+    private float pressure => (WaterHeigth - transform.position.y) * WaterDensity * SubmarineGravity;
+
     List<SubmarineEvent> submarineRandomEvents = new List<SubmarineEvent>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
-
+  
     public override void OnNetworkSpawn()
     {
         if (!IsServer) return;
@@ -52,12 +70,12 @@ public class SubmarineController : NetworkBehaviour
             hole.turnOnServerCallback += () => sinkingRate++;
         }
         AddSubmarineEvents();
-    //    StartCoroutine(StartRecursiveEvent());
+        StartCoroutine(StartRecursiveEvent());
     }
 
     private void AddSubmarineEvents()
     {
-        submarineRandomEvents.Add(new SubmarineEvent(RandomHoleOpens, 1));
+        submarineRandomEvents.Add(new SubmarineEvent(SubmarineEventType.OpenHole, RandomHoleOpens, () => Mathf.Clamp((pressure - 2) / 2, 0, 3)));
     }
 
     private IEnumerator StartRecursiveEvent()
@@ -70,7 +88,7 @@ public class SubmarineController : NetworkBehaviour
         }
         else
         {
-            SelectRandomEvent()();
+            SelectRandomEvent()?.Invoke();
         }
         StartCoroutine(StartRecursiveEvent());
 
@@ -79,18 +97,19 @@ public class SubmarineController : NetworkBehaviour
     private Action SelectRandomEvent()
     {
         float totalWeigth = 0;
-        submarineRandomEvents.ForEach(element => totalWeigth += element.weigth);
+        submarineRandomEvents.ForEach(element => totalWeigth += element.weigth());
+        if (totalWeigth == 0) return null;
         float selectedWeigth = UnityEngine.Random.Range(0f, totalWeigth);
         float currentWeigth = 0;
         foreach (SubmarineEvent element in submarineRandomEvents)
         {
-            currentWeigth += element.weigth;
+            currentWeigth += element.weigth();
             if (selectedWeigth <= currentWeigth)
             {
                 return element.submarineEventAction;
             }
         }
-        return submarineRandomEvents.Any() ? submarineRandomEvents.First().submarineEventAction : null;
+        return null;
     }
 
 
@@ -124,12 +143,22 @@ public class SubmarineController : NetworkBehaviour
         }
         if (IsClient)
         {
+            if(player == GameManager.Instance.ActualPlayer) currentPlayerIsInSubmarine = true;
             Rigidbody rb = player.GetComponent<Rigidbody>();
             if (rb != null)
             {
                 rb.Sleep();
                 rb.transform.position = EnterPosition.position;
             }
+            if(player == GameManager.Instance.ActualPlayer)
+            {
+                PlayerController controller = player.GetComponent<PlayerController>();
+                if(controller != null)
+                {
+                    controller.EnterSubmarine();
+                }
+            }
+            
             
         }
        
