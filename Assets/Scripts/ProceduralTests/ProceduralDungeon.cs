@@ -34,13 +34,13 @@ public class ProceduralDungeon : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] GameObject tilePrefab;
-    [SerializeField] int maxNumberOfRooms = 4;
-    [SerializeField] int minNumberOfRooms = 4;
+    [SerializeField] int numberOfRooms = 4;
     [SerializeField] int maxRoomSize = 6;
     [SerializeField] int minRoomSize = 3;
-    [SerializeField] int maxGridSize = 10;
-    [SerializeField] int minGridSize = 8;
-    [SerializeField ] float tileSize = 20;
+    [SerializeField] int xGridSize = 10;
+    [SerializeField] int yGridSize = 8;
+    [SerializeField] int zGridSize = 8;
+    [SerializeField] float tileSize = 20;
     [SerializeField]int numberOfExits = 3;
     [SerializeField] bool generate = true;
     [SerializeField] private float roomWideHillProbability = 0.1f;
@@ -84,11 +84,11 @@ public class ProceduralDungeon : MonoBehaviour
 
     private Vector3Int BuildGrid()
     {
-        int xDim = Random.Range(minGridSize, maxGridSize + 1);
-        int yDim = Random.Range(minGridSize, maxGridSize + 1);
-        int zDim = Random.Range(minGridSize, maxGridSize + 1);
+        int xDim = xGridSize;
+        int yDim = yGridSize;
+        int zDim = zGridSize;
         FillEmptyGrid(xDim, yDim, zDim);
-        int nRooms = Random.Range(minNumberOfRooms, maxNumberOfRooms + 1);
+        int nRooms = numberOfRooms;
         List<RoomGrid> rooms = new List<RoomGrid>();
         for(int i = 0; i < nRooms; i++)
         {
@@ -166,7 +166,7 @@ public class ProceduralDungeon : MonoBehaviour
                 posibleExits.RemoveAt(indx);
             }
         }
-
+        Dictionary<int,List<int>> exitsTo = new Dictionary<int,List<int>>();
         foreach (Vector4 exit in exits)
         {
             if (exits.Count <= 1) break;
@@ -175,7 +175,33 @@ public class ProceduralDungeon : MonoBehaviour
             {
                 return Vector3.Distance(new Vector3(ele1.x, ele1.y, ele1.z), new Vector3(exit.x, exit.y, exit.z)).CompareTo(Vector3.Distance(new Vector3(ele2.x, ele2.y, ele2.z), new Vector3(exit.x, exit.y, exit.z)));
             });
-            Vector3 toConnect = sortedExits.Find((ele) => ele.w != exit.w);
+            Vector4 toConnect = sortedExits.Find((ele) => ele.w != exit.w && (!exitsTo.TryGetValue((int)exit.w, out List<int> conections) || !conections.Contains((int)ele.w)));
+            if (exitsTo.ContainsKey((int)exit.w))
+            {
+                exitsTo.TryGetValue((int)exit.w, out List<int> conections);
+                conections.Add((int)toConnect.w);
+            }
+            else
+            {
+                exitsTo.Add((int)exit.w, new List<int>
+                {
+                    (int)toConnect.w
+                });
+            }
+            if (exitsTo.ContainsKey((int)toConnect.w))
+            {
+                exitsTo.TryGetValue((int)toConnect.w, out List<int> conections);
+                conections.Add((int)exit.w);
+            }
+            else
+            {
+                exitsTo.Add((int)toConnect.w, new List<int>
+                {
+                    (int)exit.w
+                });
+            }
+
+
             int x = (int)exit.x;
             int y = (int) exit.y;
             int z = (int) exit.z;
@@ -224,22 +250,21 @@ public class ProceduralDungeon : MonoBehaviour
 
     private void SeparateRooms(List<RoomGrid> rooms, Vector3Int GridDimensions)
     {
-        for(int k = 0; k < 1000; k++)
+        for(int k = 0; k < 10000; k++)
         {
-            bool noSeparation = false;
+            bool neededSeparation = false;
             
             for(int i = 0; i < rooms.Count; i++) 
             {
                 
                 for (int j = 0; j < rooms.Count; j++)
                 {
-                    
                     if (i == j) continue;
-                    noSeparation = noSeparation || Separate2Rooms(rooms, i, j, GridDimensions);
+                    neededSeparation = neededSeparation || Separate2Rooms(rooms, i, j, GridDimensions);
                 }
             }
-            if (noSeparation) break;
-            if (k == 1000 - 1) Debug.LogError("No se han conseguido separar las salas");
+            if (!neededSeparation) break;
+            if (k == 10000 - 1) Debug.LogError("No se han conseguido separar las salas");
         }
         
     }
@@ -282,9 +307,9 @@ public class ProceduralDungeon : MonoBehaviour
 
     private bool Check2RoomsSeparated(RoomGrid room1, RoomGrid room2)
     {
-        bool xNoSolapation = room1.OriginPosition.x + room1.RoomDimensions.x < room2.OriginPosition.x || room2.OriginPosition.x + room2.RoomDimensions.x < room1.OriginPosition.x;
-        bool yNoSeparation = room1.OriginPosition.y + room1.RoomDimensions.y < room2.OriginPosition.y || room2.OriginPosition.y + room2.RoomDimensions.y < room1.OriginPosition.y;
-        bool zNoSeparation = room1.OriginPosition.z + room1.RoomDimensions.z < room2.OriginPosition.z || room2.OriginPosition.z + room2.RoomDimensions.z < room1.OriginPosition.z;
+        bool xNoSolapation = room1.OriginPosition.x + room1.RoomDimensions.x <= room2.OriginPosition.x + 1 || room2.OriginPosition.x + room2.RoomDimensions.x <= room1.OriginPosition.x + 1;
+        bool yNoSeparation = room1.OriginPosition.y + room1.RoomDimensions.y <= room2.OriginPosition.y + 1|| room2.OriginPosition.y + room2.RoomDimensions.y <= room1.OriginPosition.y + 1;
+        bool zNoSeparation = room1.OriginPosition.z + room1.RoomDimensions.z <= room2.OriginPosition.z + 1 || room2.OriginPosition.z + room2.RoomDimensions.z <= room1.OriginPosition.z + 1;
         return xNoSolapation || yNoSeparation || zNoSeparation;
     }
     private bool vectorIsGreater(Vector3Int vector1, Vector3Int vector2)
