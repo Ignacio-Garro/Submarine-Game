@@ -167,8 +167,9 @@ public class ProceduralDungeon : MonoBehaviour
             }
         }
         Dictionary<int,List<int>> exitsTo = new Dictionary<int,List<int>>();
-        foreach (Vector4 exit in exits)
+        for (int i = 0; i < exits.Count;  i++)
         {
+            Vector4 exit = exits[i];
             if (exits.Count <= 1) break;
             List<Vector4> sortedExits = new List<Vector4> (exits);
             sortedExits.Sort((ele1, ele2) =>
@@ -201,14 +202,17 @@ public class ProceduralDungeon : MonoBehaviour
                 });
             }
 
+            exits.Remove(toConnect);
 
             int x = (int)exit.x;
             int y = (int) exit.y;
             int z = (int) exit.z;
             bool finished = false;
-            for(; x != toConnect.x; x = (int)Mathf.MoveTowards(x, toConnect.x, 1))
+            Grid[x][y][z] = false;
+            while (x != toConnect.x)
             {
-                if (!Grid[x][y][z])
+                x = (int)Mathf.MoveTowards(x, toConnect.x, 1);
+                if (!Grid[x][y][z] && IsGreaterVector(new Vector3(x,y,z), rooms[(int)toConnect.w - 1].OriginPosition) && IsGreaterVector(rooms[(int)toConnect.w - 1].OriginPosition + rooms[(int)toConnect.w - 1].RoomDimensions, new Vector3(x,y,z)))
                 {
                     finished = true; 
                 }
@@ -218,9 +222,10 @@ public class ProceduralDungeon : MonoBehaviour
                 }
                 Grid[x][y][z] = false;
             }
-            for (; y != toConnect.y; y = (int)Mathf.MoveTowards(y, toConnect.y, 1))
+            while (y != toConnect.y)
             {
-                if (!Grid[x][y][z])
+                y = (int)Mathf.MoveTowards(y, toConnect.y, 1);
+                if (!Grid[x][y][z] && IsGreaterVector(new Vector3(x, y, z), rooms[(int)toConnect.w - 1].OriginPosition) && IsGreaterVector(rooms[(int)toConnect.w - 1].OriginPosition + rooms[(int)toConnect.w - 1].RoomDimensions, new Vector3(x, y, z)))
                 {
                     finished = true;
                 }
@@ -230,9 +235,10 @@ public class ProceduralDungeon : MonoBehaviour
                 }
                 Grid[x][y][z] = false;
             }
-            for (; z != toConnect.z; z = (int)Mathf.MoveTowards(z, toConnect.z, 1))
+            while (z != toConnect.z)
             {
-                if (!Grid[x][y][z])
+                z = (int)Mathf.MoveTowards(z, toConnect.z, 1);
+                if (!Grid[x][y][z] && IsGreaterVector(new Vector3(x, y, z), rooms[(int)toConnect.w - 1].OriginPosition) && IsGreaterVector(rooms[(int)toConnect.w - 1].OriginPosition + rooms[(int)toConnect.w - 1].RoomDimensions, new Vector3(x, y, z)))
                 {
                     finished = true;
                 }
@@ -245,6 +251,11 @@ public class ProceduralDungeon : MonoBehaviour
 
         }
 
+    }
+
+    private bool IsGreaterVector(Vector3 first, Vector3 second)
+    {
+        return (first.x > second.x) && (first.y > second.y) && (first.z > second.z);
     }
 
 
@@ -341,10 +352,6 @@ public class ProceduralDungeon : MonoBehaviour
         int xDim = Random.Range(minRoomSize, Mathf.Min(maxRoomSize + 1, gridDimensions.x));
         int yDim = Random.Range(minRoomSize, Mathf.Min(maxRoomSize + 1, gridDimensions.y));
         int zDim = Random.Range(minRoomSize, Mathf.Min(maxRoomSize + 1, gridDimensions.z));
-        int consecutiveHills = 0;
-        int tallHill = 0;
-        int axis = 0;
-        int axisNumber = 0;
 
         for (int i = 0; i < xDim; i++)
         {

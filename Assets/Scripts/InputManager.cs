@@ -109,6 +109,11 @@ public class InputManager : MonoBehaviour
         {
             GameObject actorChocado = hit.collider.gameObject;
             IInteractuableObject interactuableObject = actorChocado.GetComponent<IInteractuableObject>();
+            while (interactuableObject == null && actorChocado.transform.parent != null)
+            {
+                actorChocado = actorChocado.transform.parent.gameObject;
+                interactuableObject = actorChocado.GetComponent<IInteractuableObject>();
+            }
             if (interactuableObject != null)
             {
                 interactuableObject.OnInteract(ActualPlayer);

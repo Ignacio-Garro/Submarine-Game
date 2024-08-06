@@ -1116,14 +1116,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 3723463060080143689, guid: 0b6a261f01d0782448eb36a172898697,
     type: 3}
-  numberOfRooms: 5
-  maxRoomSize: 5
-  minRoomSize: 5
-  xGridSize: 11
-  yGridSize: 11
-  zGridSize: 11
+  numberOfRooms: 9
+  maxRoomSize: 3
+  minRoomSize: 3
+  xGridSize: 15
+  yGridSize: 5
+  zGridSize: 15
   tileSize: 20
-  numberOfExits: 1
+  numberOfExits: 8
   generate: 1
   roomWideHillProbability: 0.1
   maxWideHillsCount: 3
@@ -2557,6 +2557,90 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 8.350208, z: 0.6038132}
   m_Center: {x: 0, y: 0.1228888, z: 0.19809341}
+--- !u!1001 &625041237
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -508403430164099357, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 335312782
+      objectReference: {fileID: 0}
+    - target: {fileID: -508403430164099357, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 412901171
+      objectReference: {fileID: 0}
+    - target: {fileID: 1072683769042990653, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: m_Name
+      value: mushroom Item
+      objectReference: {fileID: 0}
+    - target: {fileID: 1161697801134315564, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: ItemScriprableObject
+      value: 
+      objectReference: {fileID: 11400000, guid: 2f0b5c455541e7042835ea286143816e,
+        type: 2}
+    - target: {fileID: 8888574808995734778, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.0972834
+      objectReference: {fileID: 0}
+    - target: {fileID: 8888574808995734778, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.431
+      objectReference: {fileID: 0}
+    - target: {fileID: 8888574808995734778, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 3.1669765
+      objectReference: {fileID: 0}
+    - target: {fileID: 8888574808995734778, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8888574808995734778, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8888574808995734778, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8888574808995734778, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8888574808995734778, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8888574808995734778, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8888574808995734778, guid: 4bd6ea573eb9f384fb422ffb7419f99c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 4bd6ea573eb9f384fb422ffb7419f99c, type: 3}
 --- !u!1 &660831722
 GameObject:
   m_ObjectHideFlags: 0
@@ -10107,3 +10191,4 @@ SceneRoots:
   - {fileID: 1265931883}
   - {fileID: 396100206}
   - {fileID: 304916438}
+  - {fileID: 625041237}
