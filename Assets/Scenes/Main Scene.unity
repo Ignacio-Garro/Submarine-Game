@@ -1116,19 +1116,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 3723463060080143689, guid: 0b6a261f01d0782448eb36a172898697,
     type: 3}
-  numberOfRooms: 9
-  maxRoomSize: 3
-  minRoomSize: 3
-  xGridSize: 15
-  yGridSize: 5
-  zGridSize: 15
+  numberOfRooms: 15
   tileSize: 20
-  numberOfExits: 8
   generate: 1
-  roomWideHillProbability: 0.1
-  maxWideHillsCount: 3
-  roomTallHillProbability: 0.1
-  maxTallHillsCount: 3
 --- !u!1 &324878508
 GameObject:
   m_ObjectHideFlags: 0
