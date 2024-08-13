@@ -66,8 +66,8 @@ public class Engine : MonoBehaviour
 
 
     private void UpdateText(){
-        textBox.text = "Fuel: " + fuel + "\nPressure: " + pressure + "\nState: " + engineState + "\nengineRunning: " + engineRunning;
-        textUI.text = "Fuel: " + fuel + "\nPressure: " + pressure + "\nState: " + engineState + "\nengineRunning: " + engineRunning;
+        /*textBox.text = "Fuel: " + fuel + "\nPressure: " + pressure + "\nState: " + engineState + "\nengineRunning: " + engineRunning;
+        textUI.text = "Fuel: " + fuel + "\nPressure: " + pressure + "\nState: " + engineState + "\nengineRunning: " + engineRunning;*/
     }
 
     public void RefillEnginefuel(int amountrefueled){

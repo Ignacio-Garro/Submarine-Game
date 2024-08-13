@@ -28,7 +28,7 @@ public class SubmarineMovement : NetworkBehaviour
     
 
     [Header("Engine Attributes")]
-    [SerializeField] Transform propellerObject; 
+    [SerializeField] List<Transform> propellerObject; 
     [SerializeField] float maxEnginePowerWatt = 2500000f;
     [SerializeField] float currentPowerPercent = 0;
     [SerializeField] float propellerRadius = 5;
@@ -67,8 +67,9 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] bool isMovingRight;
     [SerializeField] bool isMovingLeft;
    
+
     float velocity = 0;
-    float rotateVelocity = 0;
+    [SerializeField] float rotateVelocity = 0;
 
 
     //Values from controller
@@ -118,12 +119,13 @@ public class SubmarineMovement : NetworkBehaviour
         
         float outWatt = Mathf.Sign(addedEnergy + previousEnergy) * submarineEnergy / Time.fixedDeltaTime;
         Vector3 propellerRotation = Vector3.forward * propellerAngularVelocity * 360/(2*Mathf.PI) * Time.fixedDeltaTime;
-        propellerObject.Rotate(propellerRotation);
+        propellerObject.ForEach((ele) => ele.Rotate(propellerRotation));
 
        
-        float horizontalForce = outWatt / Mathf.Max(Mathf.Abs(horizontalVelocity),0.1f);
+        float horizontalForce = currentPowerWatt / Mathf.Max(Mathf.Abs(horizontalVelocity),3f);
         float fixeddragVelocity = (horizontalVelocity < minDragHorizontalVelocity && horizontalVelocity > -minDragHorizontalVelocity) ? minDragHorizontalVelocity : horizontalVelocity;
         float horizontalDrag = Mathf.Sign(-horizontalVelocity) * horizontalDragCoeficient * 0.5f * 1000 * horizontalSurface * fixeddragVelocity * fixeddragVelocity;
+        if (horizontalVelocity == 0) horizontalDrag = 0;
         float totalForce = horizontalForce + horizontalDrag;
         bool dragChangedForceDirection = Mathf.Sign(totalForce) != Mathf.Sign(horizontalForce);
         float acceleration = totalForce / totalMass;
@@ -146,9 +148,12 @@ public class SubmarineMovement : NetworkBehaviour
         //We fix a minimun drag velocity so the submarine doesnt brake that slowly at very low velociies
         float fixeddragVelocity = (verticalVelocity < minDragVelocity && verticalVelocity > -minDragVelocity) ? minDragVelocity : verticalVelocity;
         float dragForce = Mathf.Sign(-verticalVelocity) * verticalDragCoeficient * 0.5f * 1000 * verticalSurface * fixeddragVelocity * fixeddragVelocity;
+        if(verticalVelocity == 0) dragForce = 0;
         float totalForce = bouyancyForce - weigthForce + dragForce;
+      
         bool dragChangedForceDirection = Mathf.Sign(totalForce) != Mathf.Sign(bouyancyForce - weigthForce);
         float acceleration = totalForce / totalMass;
+        
         if (dragChangedForceDirection)
         {   
             //We clamp the velocity to assure that the drag never changes the direction of the velocity. Drag should always only subtract force without getting to the point of changing the direction of the object. 
@@ -183,12 +188,12 @@ public class SubmarineMovement : NetworkBehaviour
 
   
     public void SetworkingEngine(bool engineState){
-        if(!engineState){
+/*        if(!engineState){
             isMovingForward = false;
             isMovingBackWards = false;
             isMovingRight = false;
             isMovingLeft = false;
-        }
+        }*/
         //workingEngine = engineState;
     }
 

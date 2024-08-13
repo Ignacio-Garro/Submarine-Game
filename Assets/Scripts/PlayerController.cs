@@ -6,6 +6,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject waterMask;
     public void EnterSubmarine()
     {
-        waterMask.SetActive(true);
+        //waterMask.SetActive(true);
     }
 }
