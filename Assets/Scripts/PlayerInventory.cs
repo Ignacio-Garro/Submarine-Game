@@ -5,33 +5,21 @@ using System.Linq;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 using UnityEngine.UI;
 
 public class PlayerInventory : NetworkBehaviour
 {
 
-    [System.Serializable]
-    public struct InventoryItem
-    {
-        public itemType Type;
-        public GameObject Prefab;
-        public GameObject Item;
-    }
-
-
-
     [Header("Gerneral")]
-    public List<itemType> inventoryList;
+    public List<ItemPickable> inventoryList;
     public int selectedItem;
     public float playerReach;
     public float throwForce;
-    [SerializeField] Camera cam;
-    [SerializeField] GameObject throwItem_gameobjectPostion;
+    [SerializeField] Transform objectInventoryPosition;
+    public Transform ObjectInventoryPosition => objectInventoryPosition;
+    [SerializeField] int inventoryCapacity = 3;
 
-
-    [Header("Item gameobjects")]
-    [SerializeField] List<InventoryItem> inventoryItems;
-    
 
     [Header("UI")]
     [SerializeField] Image[] inventorySlotImage = new Image[3];
@@ -40,17 +28,9 @@ public class PlayerInventory : NetworkBehaviour
     //[SerializeField] GameObject PickUpTextHover;
 
     
-
-
-    private Dictionary<itemType, GameObject> itemSetActive = new Dictionary<itemType, GameObject>(){};
-    private Dictionary<itemType, GameObject> itemInstantiate = new Dictionary<itemType, GameObject>() { };
-
-    public Dictionary<itemType, GameObject> ItemInstantiate => itemInstantiate;
     void Start()
     {
-        inventoryItems.ForEach(item => itemSetActive.Add(item.Type, item.Item));
-        inventoryItems.ForEach(item => itemInstantiate.Add(item.Type, item.Prefab));
-        
+       
         emptySlotImage = null;
 
         newItemSelected();
@@ -67,30 +47,80 @@ public class PlayerInventory : NetworkBehaviour
 
     public void PickupObject(ItemPickable item)
     {
-        inventoryList.Add(item.ItemScriprableObject.item_type);
+        if (inventoryList.Count >= inventoryCapacity) return;
+        inventoryList.Add(item);
         selectedItem = inventoryList.Count - 1;
+        item.IsBeingHold = true;
+        NetworkCommunicationManager.Instance.ChangeOwnerShipServerRpc(item.gameObject, NetworkManager.Singleton.LocalClientId);
+        DeactivateColliders(item.gameObject);
+        NetworkCommunicationManager.Instance.DeactivateCollisionsServerRpc(item.gameObject);
+        Rigidbody rb = item.gameObject.GetComponent<Rigidbody>();
+        if (rb != null) rb.isKinematic = true;
+        item.transform.position = Vector3.zero;
+        item.transform.rotation = Quaternion.identity;
         newItemSelected();
+        item.currentInventory = this;
+    }
+
+    public void DeactivateColliders(GameObject obj)
+    {
+        
+        List<Transform> transformList = new List<Transform>();
+        if (obj != null)
+        {
+            transformList.Add(obj.transform);
+            Collider collider = obj.GetComponent<Collider>();
+            if (collider != null) collider.isTrigger = true;
+        }
+        while (transformList.Any())
+        {
+            foreach (Transform child in transformList[0])
+            {
+                Collider collider = child.gameObject.GetComponent<Collider>();
+                if (collider != null) collider.isTrigger = true;
+                transformList.Add(child);
+            }
+            transformList.RemoveAt(0);
+        }
+    }
+
+    public void ActivateColliders(GameObject obj)
+    {
+        
+        List<Transform> transformList = new List<Transform>();
+        if (obj != null)
+        {
+            transformList.Add(obj.transform);
+            Collider collider = obj.GetComponent<Collider>();
+            if (collider != null) collider.isTrigger = false;
+        }
+        while (transformList.Any())
+        {
+            foreach (Transform child in transformList[0])
+            {
+                Collider collider = child.gameObject.GetComponent<Collider>();
+                if (collider != null) collider.isTrigger = false;
+                transformList.Add(child);
+            }
+            transformList.RemoveAt(0);
+        }
     }
 
     public void TryToDropCurrentObject(GameObject player, Camera camera)
     {
-        if (inventoryList.Count <= 0) return;
-        NetworkCommunicationManager.Instance.SpawnNetworkWithForceObjectServerRpc(inventoryList[selectedItem], throwItem_gameobjectPostion.transform.position, throwItem_gameobjectPostion.transform.forward, throwForce);
-        //GameObject thrownItem = Instantiate(itemInstantiate[inventoryList[selectedItem]], position: throwItem_gameobjectPostion.transform.position, new Quaternion());
+        if (!inventoryList.Any()) return;
+        Rigidbody rb = inventoryList[selectedItem].GetComponent<Rigidbody>();
+        if (rb != null) rb.isKinematic = false;
+        ActivateColliders(inventoryList[selectedItem].gameObject);
+        NetworkCommunicationManager.Instance.ActivateCollisionsServerRpc(inventoryList[selectedItem].gameObject);
+        inventoryList[selectedItem].IsBeingHold = false;
         inventoryList.RemoveAt(selectedItem);
-
         if (selectedItem != 0)
         {
             selectedItem -= 1;
         }
-        newItemSelected();
-        /*Rigidbody rb = thrownItem.GetComponent<Rigidbody>();
-        if(rb != null)
-        {
-            rb.isKinematic = false;
-            rb.AddForce(throwItem_gameobjectPostion.transform.forward * throwForce, ForceMode.VelocityChange);
-        }*/
         
+        newItemSelected();
     }
 
     public void ChangeSelectedInventoryObject(int index)
@@ -159,35 +189,19 @@ public class PlayerInventory : NetworkBehaviour
     }
 
     private void newItemSelected(){
-        itemSetActive.Keys.ToList().ForEach(type => {
-            NetworkCommunicationManager.Instance.DeactivateItemServerRpc(GameManager.Instance.ActualPlayer, type);
-            HideItem(type);
+        inventoryList.ForEach(item => {
+            NetworkCommunicationManager.Instance.DeactivateItemServerRpc(GameManager.Instance.ActualPlayer, item.gameObject);
+            item.gameObject.SetActive(false);
         });
         if(inventoryList.Count > 0){
-            NetworkCommunicationManager.Instance.ActivateItemServerRpc(GameManager.Instance.ActualPlayer, inventoryList[selectedItem]);
-            ShowItem(inventoryList[selectedItem]);
+            NetworkCommunicationManager.Instance.ActivateItemServerRpc(GameManager.Instance.ActualPlayer, inventoryList[selectedItem].gameObject);
+            inventoryList[selectedItem].gameObject.SetActive(true);
             //GameObject selectedItemGameObject = itemSetActive[inventoryList[selectedItem]];
             //selectedItemGameObject.SetActive(true);
         }
     }
 
-    public void HideItem(itemType item)
-    {
-        itemSetActive.TryGetValue(item, out GameObject itemObject);
-        if(itemObject != null)
-        {
-            itemObject.SetActive(false);
-        }
-    }
-
-    public void ShowItem(itemType item)
-    {
-        itemSetActive.TryGetValue(item, out GameObject itemObject);
-        if (itemObject != null)
-        {
-            itemObject.SetActive(true);
-        }
-    }
+    
 
 }
 

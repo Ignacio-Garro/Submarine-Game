@@ -10,6 +10,7 @@ TagManager:
   - LadderTrigger
   - Coal
   - GasTankGrab
+  - Fuel
   layers:
   - Default
   - TransparentFX

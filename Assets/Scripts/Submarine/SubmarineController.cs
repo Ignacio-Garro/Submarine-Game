@@ -1,5 +1,4 @@
 
-using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -164,14 +163,7 @@ public class SubmarineController : NetworkBehaviour
        
     }
 
-    public void InsertCoal(GameObject coal)
-    {
-        if (!IsServer) return;
-        submarineEngine.RefillEnginefuel(1);
-        NetworkObject coalNetwork = coal.GetComponent<NetworkObject>();
-        Assert.IsNotNull(coalNetwork);
-        coalNetwork.Despawn();
-    }
+    
 
 
 }

@@ -58,19 +58,23 @@ public class InputManager : MonoBehaviour
             GameObject actorChocado = hit.collider.gameObject;
             if((actorChocado == null || actorChocado != viewedActor) && viewedActor != null)
             {
-                viewedActor.GetComponent<Renderer>().material = previousMaterial;
+                if(viewedActor.GetComponent<Renderer>() != null)
+                {
+                    viewedActor.GetComponent<Renderer>().material = previousMaterial;
+                }
+                
             }
             if(actorChocado.GetComponent<IClickableObject>() != null || actorChocado.GetComponent<IInteractuableObject>() != null)
             {
                 if (viewedActor != actorChocado)
                 {
                     viewedActor = actorChocado;
-                    previousMaterial = actorChocado.GetComponent<Renderer>().material;
+                    if (actorChocado.GetComponent<Renderer>() != null) previousMaterial = actorChocado.GetComponent<Renderer>().material;
                 }
-                actorChocado.GetComponent<Renderer>().material = interactMaterial;
+                if (viewedActor.GetComponent<Renderer>() != null) actorChocado.GetComponent<Renderer>().material = interactMaterial;
+                   
             }
         }
-        
     }
 
 

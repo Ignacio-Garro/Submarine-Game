@@ -1,9 +1,7 @@
-using NUnit.Framework;
-using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -17,6 +15,7 @@ public class NetworkTrigger : NetworkBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Colision:" + other.gameObject);
         if (!CheckOtherObject(other.gameObject)) return;
         EnterTriggerServerRpc(other.gameObject);
     }

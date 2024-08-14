@@ -1,3 +1,6 @@
+
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -37,6 +40,27 @@ public class NetworkCommunicationManager : NetworkBehaviour
     //-----------------------Server Rpcs-------------------------------
 
 
+    //Reparents an object into the orientation object of the player. If orientation is not found does nothing
+    [ServerRpc(RequireOwnership = false)]
+    public void ReparentItemServerRpc(NetworkObjectReference childObject, NetworkObjectReference player)
+    {
+        childObject.TryGet(out NetworkObject childnetworkObject);
+        player.TryGet(out NetworkObject playernetworkObject);
+        if (childnetworkObject == null || playernetworkObject == null) return;
+        Transform searched = null;
+        Transform[] allChildren = playernetworkObject.GetComponentsInChildren<Transform>();
+        foreach (Transform child in allChildren)
+        {
+            if (child.name == "ObjectGrabPoint")
+            {
+                searched = child;
+                // Ahora tienes acceso al objeto "f"
+                break;
+            }
+        }
+        if(searched != null) childnetworkObject.transform.parent = searched;
+    }
+
     [ServerRpc(RequireOwnership = false)]
     public void ReparentNetworkObjectServerRpc(NetworkObjectReference childObject, NetworkObjectReference parentObject)
     {
@@ -63,70 +87,110 @@ public class NetworkCommunicationManager : NetworkBehaviour
         DestroyNetworkObject(networkObject);
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    public void SpawnNetworkObjectServerRpc(itemType item, Vector3 spawnPosition)
-    {
-        PlayerInventory inventory = GameManager.Instance.ActualPlayer.GetComponent<PlayerInventory>(); 
-        inventory.ItemInstantiate.TryGetValue(item, out GameObject prefabToSpawn);
-        if (prefabToSpawn == null) return;
-        SpawnNetworkObject(prefabToSpawn, spawnPosition);
-    }
+        
 
     [ServerRpc(RequireOwnership = false)]
-    public void SpawnNetworkWithForceObjectServerRpc(itemType item, Vector3 spawnPosition, Vector3 forwardDirection, float throwForce)
-    {
-        PlayerInventory inventory = GameManager.Instance.ActualPlayer.GetComponent<PlayerInventory>();
-        inventory.ItemInstantiate.TryGetValue(item, out GameObject prefabToSpawn);
-        if (prefabToSpawn == null) return;
-        GameObject thrownItem = SpawnNetworkObject(prefabToSpawn, spawnPosition);
-        Rigidbody rb = thrownItem.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.isKinematic = false;
-            rb.AddForce(forwardDirection * throwForce, ForceMode.VelocityChange);
-        }
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    public void ActivateItemServerRpc(NetworkObjectReference player, itemType item)
+    public void ActivateItemServerRpc(NetworkObjectReference player, NetworkObjectReference item)
     {
         ActivateItemClientRpc(player, item);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void DeactivateItemServerRpc(NetworkObjectReference player, itemType item)
+    public void DeactivateItemServerRpc(NetworkObjectReference player, NetworkObjectReference item)
     {
         DeactivateItemClientRpc(player, item);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void DeactivateCollisionsServerRpc(NetworkObjectReference obj)
+    {
+        DeactivateCollisionsClientRpc(obj);
+    }
+
+    [ServerRpc(RequireOwnership =false)]
+    public void ActivateCollisionsServerRpc(NetworkObjectReference obj)
+    {
+        ActivateCollisionsClientRpc(obj);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ChangeOwnerShipServerRpc(NetworkObjectReference obj, ulong newOwnerId)
+    {
+        obj.TryGet(out NetworkObject networkObject);
+        if (networkObject == null) return;
+        networkObject.ChangeOwnership(newOwnerId);
+
     }
 
     //-------------------------Client_Rpcs-----------------------------
 
     [ClientRpc(RequireOwnership = false)]
-    public void ActivateItemClientRpc(NetworkObjectReference player, itemType item)
+    public void ActivateCollisionsClientRpc(NetworkObjectReference obj)
     {
-        player.TryGet(out NetworkObject playerNetworkObject);
-        if (playerNetworkObject == null) return;
-        //This prevents calling the sender
-        if (playerNetworkObject.IsOwner) return;
-        PlayerInventory currentPlayerInventory = playerNetworkObject.GetComponent<PlayerInventory>();
-        if (currentPlayerInventory != null)
+        obj.TryGet(out NetworkObject networkObj);
+        List<Transform> transformList = new List<Transform>();
+        if (networkObj != null) { 
+            transformList.Add(networkObj.transform);
+            Collider collider = networkObj.GetComponent<Collider>();
+            if (collider != null) collider.isTrigger = false;
+        }
+        while (transformList.Any())
         {
-            currentPlayerInventory.ShowItem(item);
+            foreach (Transform child in transformList[0])
+            {
+                Collider collider = child.gameObject.GetComponent<Collider>();
+                if (collider != null) collider.isTrigger = false;
+                transformList.Add(child);
+            }
+            transformList.RemoveAt(0);
         }
     }
 
     [ClientRpc(RequireOwnership = false)]
-    public void DeactivateItemClientRpc(NetworkObjectReference player, itemType item)
+    public void DeactivateCollisionsClientRpc(NetworkObjectReference obj)
+    {
+        obj.TryGet(out NetworkObject networkObj);
+        List<Transform> transformList = new List<Transform>();
+        if (networkObj != null)
+        {
+            transformList.Add(networkObj.transform);
+            Collider collider = networkObj.GetComponent<Collider>();
+            if (collider != null) collider.isTrigger = true;
+        }
+        while (transformList.Any())
+        {
+            foreach(Transform child in transformList[0])
+            {
+                Collider collider = child.gameObject.GetComponent<Collider>();
+                if(collider != null) collider.isTrigger = true;
+                transformList.Add(child);
+            }
+            transformList.RemoveAt(0);
+        }
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void ActivateItemClientRpc(NetworkObjectReference player, NetworkObjectReference item)
     {
         player.TryGet(out NetworkObject playerNetworkObject);
+        item.TryGet(out NetworkObject itemNetworkObject);
         if (playerNetworkObject == null) return;
+        if(itemNetworkObject == null) return;
         //This prevents calling the sender
         if (playerNetworkObject.IsOwner) return;
-        PlayerInventory currentPlayerInventory = playerNetworkObject.GetComponent<PlayerInventory>();
-        if (currentPlayerInventory != null)
-        {
-            currentPlayerInventory.HideItem(item);
-        }
+        itemNetworkObject.gameObject.SetActive(true);
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void DeactivateItemClientRpc(NetworkObjectReference player, NetworkObjectReference item)
+    {
+        player.TryGet(out NetworkObject playerNetworkObject);
+        item.TryGet(out NetworkObject itemNetworkObject);
+        if (playerNetworkObject == null) return;
+        if (itemNetworkObject == null) return;
+        //This prevents calling the sender
+        if (playerNetworkObject.IsOwner) return;
+        itemNetworkObject.gameObject.SetActive(false);
     }
 
 }
