@@ -7,6 +7,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem.HID;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class PlayerInventory : NetworkBehaviour
 {
@@ -51,15 +52,14 @@ public class PlayerInventory : NetworkBehaviour
         inventoryList.Add(item);
         selectedItem = inventoryList.Count - 1;
         item.IsBeingHold = true;
-        NetworkCommunicationManager.Instance.ChangeOwnerShipServerRpc(item.gameObject, NetworkManager.Singleton.LocalClientId);
+        item.ChangeItemProperty(this);
         DeactivateColliders(item.gameObject);
-        NetworkCommunicationManager.Instance.DeactivateCollisionsServerRpc(item.gameObject);
-        Rigidbody rb = item.gameObject.GetComponent<Rigidbody>();
-        if (rb != null) rb.isKinematic = true;
+        NetworkCommunicationManager.Instance.DeactivateRigidBodyServerRpc(item.gameObject);
+        NetworkCommunicationManager.Instance.DeactivatePhysicCollisionsServerRpc(item.gameObject);
         item.transform.position = Vector3.zero;
         item.transform.rotation = Quaternion.identity;
         newItemSelected();
-        item.currentInventory = this;
+        
     }
 
     public void DeactivateColliders(GameObject obj)
@@ -106,20 +106,53 @@ public class PlayerInventory : NetworkBehaviour
         }
     }
 
+    public void DeactivateVisibility(GameObject item)
+    {
+
+        if (item == null) return;
+        Renderer[] allChildren = item.GetComponentsInChildren<Renderer>(true);
+        foreach (var item1 in allChildren)
+        {
+            item1.enabled = false;
+        }
+    }
+
+    public void ActivateVisibility(GameObject item)
+    {
+
+        if (item == null) return;
+        Renderer[] allChildren = item.GetComponentsInChildren<Renderer>(true);
+        foreach (var item1 in allChildren)
+        {
+            item1.enabled = true;
+        }
+    }
+
     public void TryToDropCurrentObject(GameObject player, Camera camera)
     {
         if (!inventoryList.Any()) return;
-        Rigidbody rb = inventoryList[selectedItem].GetComponent<Rigidbody>();
-        if (rb != null) rb.isKinematic = false;
+        NetworkCommunicationManager.Instance.ActivateRigidBodyServerRpc(inventoryList[selectedItem].gameObject);
         ActivateColliders(inventoryList[selectedItem].gameObject);
-        NetworkCommunicationManager.Instance.ActivateCollisionsServerRpc(inventoryList[selectedItem].gameObject);
+        NetworkCommunicationManager.Instance.ActivatePhysicCollisionsServerRpc(inventoryList[selectedItem].gameObject);
         inventoryList[selectedItem].IsBeingHold = false;
         inventoryList.RemoveAt(selectedItem);
-        if (selectedItem != 0)
+        if (selectedItem > 0)
         {
             selectedItem -= 1;
         }
         
+        newItemSelected();
+    }
+
+    public void ExtractItemForcefully()
+    {
+        if (!inventoryList.Any()) return;
+        inventoryList[selectedItem].IsBeingHold = false;
+        inventoryList.RemoveAt(selectedItem);
+        if (selectedItem > 0)
+        {
+            selectedItem -= 1;
+        }
         newItemSelected();
     }
 
@@ -190,12 +223,15 @@ public class PlayerInventory : NetworkBehaviour
 
     private void newItemSelected(){
         inventoryList.ForEach(item => {
-            NetworkCommunicationManager.Instance.DeactivateItemServerRpc(GameManager.Instance.ActualPlayer, item.gameObject);
-            item.gameObject.SetActive(false);
+            NetworkCommunicationManager.Instance.DeactivateVisibilityServerRpc(item.gameObject);
+            NetworkCommunicationManager.Instance.DeactivateCollisionsServerRpc(item.gameObject);
+            DeactivateVisibility(item.gameObject);
         });
         if(inventoryList.Count > 0){
-            NetworkCommunicationManager.Instance.ActivateItemServerRpc(GameManager.Instance.ActualPlayer, inventoryList[selectedItem].gameObject);
-            inventoryList[selectedItem].gameObject.SetActive(true);
+            NetworkCommunicationManager.Instance.ActivateVisibilityServerRpc(inventoryList[selectedItem].gameObject);
+            NetworkCommunicationManager.Instance.ActivateCollisionsServerRpc(inventoryList[selectedItem].gameObject);
+            ActivateVisibility(inventoryList[selectedItem].gameObject);
+            
             //GameObject selectedItemGameObject = itemSetActive[inventoryList[selectedItem]];
             //selectedItemGameObject.SetActive(true);
         }

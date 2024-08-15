@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 
 public class NetworkCommunicationManager : NetworkBehaviour
@@ -102,16 +103,29 @@ public class NetworkCommunicationManager : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
+    public void DeactivatePhysicCollisionsServerRpc(NetworkObjectReference obj)
+    {
+        DeactivatePhysicCollisionsClientRpc(obj);
+    }
+
+    [ServerRpc(RequireOwnership =false)]
+    public void ActivatePhysicCollisionsServerRpc(NetworkObjectReference obj)
+    {
+        ActivatePhysicCollisionsClientRpc(obj);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
     public void DeactivateCollisionsServerRpc(NetworkObjectReference obj)
     {
         DeactivateCollisionsClientRpc(obj);
     }
 
-    [ServerRpc(RequireOwnership =false)]
+    [ServerRpc(RequireOwnership = false)]
     public void ActivateCollisionsServerRpc(NetworkObjectReference obj)
     {
         ActivateCollisionsClientRpc(obj);
     }
+
 
     [ServerRpc(RequireOwnership = false)]
     public void ChangeOwnerShipServerRpc(NetworkObjectReference obj, ulong newOwnerId)
@@ -119,30 +133,92 @@ public class NetworkCommunicationManager : NetworkBehaviour
         obj.TryGet(out NetworkObject networkObject);
         if (networkObject == null) return;
         networkObject.ChangeOwnership(newOwnerId);
+        
+    }
 
+    [ServerRpc(RequireOwnership = false)]
+    public void DeactivateRigidBodyServerRpc(NetworkObjectReference obj)
+    {
+        DeactivateRigidBodyClientRpc(obj);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ActivateRigidBodyServerRpc(NetworkObjectReference obj)
+    {
+        ActivateRigidBodyClientRpc(obj);
+    }
+
+
+    [ServerRpc(RequireOwnership = false)]
+    public void ActivateVisibilityServerRpc(NetworkObjectReference item)
+    {
+
+        ActivateVisibilityClientRpc(item);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void DeactivateVisibilityServerRpc(NetworkObjectReference item)
+    {
+
+        DeactivateVisibilityClientRpc(item);
     }
 
     //-------------------------Client_Rpcs-----------------------------
+
+
+    [ClientRpc(RequireOwnership = false)]
+    public void DeactivateRigidBodyClientRpc(NetworkObjectReference obj)
+    {
+        obj.TryGet(out NetworkObject networkObject);
+        Rigidbody rb = networkObject.gameObject.GetComponent<Rigidbody>();
+        if (rb != null) rb.isKinematic = true;
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void ActivateRigidBodyClientRpc(NetworkObjectReference obj)
+    {
+        obj.TryGet(out NetworkObject networkObject);
+        Rigidbody rb = networkObject.gameObject.GetComponent<Rigidbody>();
+        if (rb != null) rb.isKinematic = false;
+    }
+
+
+    [ClientRpc(RequireOwnership = false)]
+    public void ActivatePhysicCollisionsClientRpc(NetworkObjectReference obj)
+    {
+        obj.TryGet(out NetworkObject networkObj);
+        List<Transform> transformList = new List<Transform>();
+        if (networkObj == null) return;
+        Collider[] allChildren = networkObj.GetComponentsInChildren<Collider>(true);
+        foreach (var item1 in allChildren)
+        {
+            item1.isTrigger = false;
+        }
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void DeactivatePhysicCollisionsClientRpc(NetworkObjectReference obj)
+    {
+        obj.TryGet(out NetworkObject networkObj);
+        List<Transform> transformList = new List<Transform>();
+        if (networkObj == null) return;
+        Collider[] allChildren = networkObj.GetComponentsInChildren<Collider>(true);
+        foreach (var item1 in allChildren)
+        {
+            item1.isTrigger = true;
+        }
+    }
 
     [ClientRpc(RequireOwnership = false)]
     public void ActivateCollisionsClientRpc(NetworkObjectReference obj)
     {
         obj.TryGet(out NetworkObject networkObj);
         List<Transform> transformList = new List<Transform>();
-        if (networkObj != null) { 
-            transformList.Add(networkObj.transform);
-            Collider collider = networkObj.GetComponent<Collider>();
-            if (collider != null) collider.isTrigger = false;
-        }
-        while (transformList.Any())
+        if (networkObj == null) return;
+        Collider[] allChildren = networkObj.GetComponentsInChildren<Collider>(true);
+        foreach (var item1 in allChildren)
         {
-            foreach (Transform child in transformList[0])
-            {
-                Collider collider = child.gameObject.GetComponent<Collider>();
-                if (collider != null) collider.isTrigger = false;
-                transformList.Add(child);
-            }
-            transformList.RemoveAt(0);
+            item1.enabled = true;
         }
     }
 
@@ -151,21 +227,41 @@ public class NetworkCommunicationManager : NetworkBehaviour
     {
         obj.TryGet(out NetworkObject networkObj);
         List<Transform> transformList = new List<Transform>();
-        if (networkObj != null)
+        if (networkObj == null) return;
+        Collider[] allChildren = networkObj.GetComponentsInChildren<Collider>(true);
+        foreach (var item1 in allChildren)
         {
-            transformList.Add(networkObj.transform);
-            Collider collider = networkObj.GetComponent<Collider>();
-            if (collider != null) collider.isTrigger = true;
+            item1.enabled = false;
         }
-        while (transformList.Any())
+
+    }
+
+
+    [ClientRpc(RequireOwnership = false)]
+    public void ActivateVisibilityClientRpc(NetworkObjectReference item)
+    {
+        
+        item.TryGet(out NetworkObject itemNetworkObject);
+      
+        if (itemNetworkObject == null) return;
+        Renderer[] allChildren = itemNetworkObject.GetComponentsInChildren<Renderer>(true);
+        foreach (var item1 in allChildren)
         {
-            foreach(Transform child in transformList[0])
-            {
-                Collider collider = child.gameObject.GetComponent<Collider>();
-                if(collider != null) collider.isTrigger = true;
-                transformList.Add(child);
-            }
-            transformList.RemoveAt(0);
+            item1.enabled = true;
+        }
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void DeactivateVisibilityClientRpc(NetworkObjectReference item)
+    {
+      
+        item.TryGet(out NetworkObject itemNetworkObject);
+       
+        if (itemNetworkObject == null) return;
+        Renderer[] allChildren = itemNetworkObject.GetComponentsInChildren<Renderer>(true);
+        foreach (var item1 in allChildren)
+        {
+            item1.enabled = false;
         }
     }
 

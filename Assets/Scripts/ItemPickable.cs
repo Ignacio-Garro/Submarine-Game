@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class ItemPickable : NetworkBehaviour, IInteractuableObject
 {
@@ -26,6 +27,7 @@ public class ItemPickable : NetworkBehaviour, IInteractuableObject
 
     private void Update()
     {
+        //Move to object position only if the player is the owner, and if the player is holding the item
         if(IsOwner && IsBeingHold)
         {
             if(CurrentPlayerInventory != null)
@@ -35,5 +37,32 @@ public class ItemPickable : NetworkBehaviour, IInteractuableObject
             }
         }
     }
+
+    public void ChangeItemProperty(PlayerInventory inventory)
+    {
+        NetworkObject nObj = GetComponent<NetworkObject>();
+        //if the previous owner is different from the new one remove the object form the formers inventory
+        if(NetworkManager.Singleton.LocalClientId != nObj.OwnerClientId)
+        {
+            RemovePreviousOwnerServerRpc(nObj.OwnerClientId);
+            NetworkCommunicationManager.Instance.ChangeOwnerShipServerRpc(gameObject, NetworkManager.Singleton.LocalClientId);
+        }
+        currentInventory = inventory;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void RemovePreviousOwnerServerRpc(ulong previousOwnerId)
+    {
+        RemovePreviousOwnerClientRpc(previousOwnerId);
+    }
+    [ClientRpc(RequireOwnership = false)]
+    public void RemovePreviousOwnerClientRpc(ulong previousOwnerId)
+    {
+        if (NetworkManager.Singleton.LocalClientId == previousOwnerId && IsBeingHold && currentInventory != null)
+        {
+            currentInventory.ExtractItemForcefully();
+        }
+    }
+
 }
 
