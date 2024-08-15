@@ -38,6 +38,8 @@ public class ItemPickable : NetworkBehaviour, IInteractuableObject
         }
     }
 
+
+
     public void ChangeItemProperty(PlayerInventory inventory)
     {
         NetworkObject nObj = GetComponent<NetworkObject>();
@@ -60,8 +62,18 @@ public class ItemPickable : NetworkBehaviour, IInteractuableObject
     {
         if (NetworkManager.Singleton.LocalClientId == previousOwnerId && IsBeingHold && currentInventory != null)
         {
-            currentInventory.ExtractItemForcefully();
+            currentInventory.ExtractItemForcefully(this);
         }
+    }
+
+    public void OnEnterInRange()
+    {
+        InputManager.Instance.AddInteractuableMaterial(gameObject);
+    }
+
+    public void OnExitInRange()
+    {
+        InputManager.Instance.RemoveInteractuableMaterial(gameObject);
     }
 
 }

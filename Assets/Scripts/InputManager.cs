@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,19 +22,14 @@ public class InputManager : MonoBehaviour
 
     [Header("info")]
     [SerializeField] private float interactionRange = 5.0f;
-    [SerializeField] private Material interactMaterial = null;
-    [SerializeField] private PlayerStats playerStats;
+    [SerializeField] private Material interactuableMaterial = null;
 
-    IClickableObject clickedObject = null;
-    GameObject viewedActor = null;
-    Material previousMaterial = null;
+    IInteractuableObject viewedActor = null;
 
-    [Header("GrabItems")]
-    [SerializeField] private Transform objectGrabPointTransform;
-    [SerializeField] private LayerMask pickUpLayerMask;
+    
 
 
-    private IGrabbableObject grabbedObject = null;
+   
 
     public Camera PlayerCamera => GameManager.Instance.PlayerCamera;
     public GameObject ActualPlayer => GameManager.Instance.ActualPlayer;
@@ -52,27 +48,34 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        //Call on interactuable objects when they are in range
         if (GameManager.Instance == null || ActualPlayer == null || PlayerCamera == null) return;
         if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out RaycastHit hit, interactionRange))
         {
             GameObject actorChocado = hit.collider.gameObject;
-            if((actorChocado == null || actorChocado != viewedActor) && viewedActor != null)
+            IInteractuableObject inter = actorChocado.GetComponent<IInteractuableObject>();
+            if(inter == null)
             {
-                if(viewedActor.GetComponent<Renderer>() != null)
+                if(viewedActor != null)
                 {
-                    viewedActor.GetComponent<Renderer>().material = previousMaterial;
+                    viewedActor.OnExitInRange();
+                    viewedActor = null;
                 }
-                
             }
-            if(actorChocado.GetComponent<IClickableObject>() != null || actorChocado.GetComponent<IInteractuableObject>() != null)
+            else
             {
-                if (viewedActor != actorChocado)
+                if(viewedActor == null)
                 {
-                    viewedActor = actorChocado;
-                    if (actorChocado.GetComponent<Renderer>() != null) previousMaterial = actorChocado.GetComponent<Renderer>().material;
+                    inter.OnEnterInRange();
+                    viewedActor = inter;
                 }
-                if (viewedActor.GetComponent<Renderer>() != null) actorChocado.GetComponent<Renderer>().material = interactMaterial;
-                   
+                else if(viewedActor != inter)
+                {
+                    viewedActor.OnExitInRange();
+                    inter.OnEnterInRange();
+                    viewedActor = inter;
+                }
             }
         }
     }
@@ -123,24 +126,26 @@ public class InputManager : MonoBehaviour
                 interactuableObject.OnInteract(ActualPlayer);
             }
         }
-    }
-    
+    } 
 
-
-    private void OnNewClickPressed()
+    public void AddInteractuableMaterial(GameObject obj)
     {
-        if (ActualPlayer == null || PlayerCamera == null) return;
-        onClickPressed(ActualPlayer, PlayerCamera);
+        Renderer[] renders = obj.GetComponentsInChildren<Renderer>();
+        foreach (Renderer render in renders)
+        {
+            List<Material> materials = render.materials.ToList();
+            materials.Add(interactuableMaterial);
+            render.materials = materials.ToArray();
+        }
     }
-
-    private void OnNewClickRelease()
+    public void RemoveInteractuableMaterial(GameObject obj)
     {
-        clickedObject?.OnClickRelease();
+        Renderer[] renders = obj.GetComponentsInChildren<Renderer>();
+        foreach (Renderer render in renders)
+        {
+            List<Material> materials = render.materials.ToList();
+            materials.Remove(interactuableMaterial);
+            render.materials = materials.ToArray();
+        }
     }
-
-    public void dropObject(){
-        grabbedObject = null;
-        playerStats.setGrabbedObject(null);
-    }
-    
 }

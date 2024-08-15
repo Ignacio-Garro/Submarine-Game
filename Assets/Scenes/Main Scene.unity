@@ -817,6 +817,36 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Fuel
       objectReference: {fileID: 0}
+    - target: {fileID: 2585290498126106325, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickLocal.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2585290498126106325, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickLocal.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2585290498126106325, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickLocal.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 326766787}
+    - target: {fileID: 2585290498126106325, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickLocal.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ExtractItemFromPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 2585290498126106325, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickLocal.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GeneralButtonUsageLibrary, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2585290498126106325, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickLocal.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3000822477318596675, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
       propertyPath: GlobalObjectIdHash
@@ -973,7 +1003,8 @@ PrefabInstance:
       value: 1922518054
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4357909145471888729, guid: 5ce4154e109b756499b81c1147f03ad2, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1987670695345038285, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
@@ -1003,7 +1034,11 @@ PrefabInstance:
         type: 3}
       insertIndex: 10
       addedObject: {fileID: 750753825}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4659283289966432248, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 326766787}
   m_SourcePrefab: {fileID: 100100000, guid: 5ce4154e109b756499b81c1147f03ad2, type: 3}
 --- !u!1 &176611602
 GameObject:
@@ -1541,6 +1576,24 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 326716964}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &326766781 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4659283289966432248, guid: 5ce4154e109b756499b81c1147f03ad2,
+    type: 3}
+  m_PrefabInstance: {fileID: 166204168}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &326766787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 326766781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e95529b8729e73846b39552b29b26fa8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &352898871
 GameObject:
   m_ObjectHideFlags: 0
@@ -4805,12 +4858,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionRange: 5
-  interactMaterial: {fileID: 0}
-  playerStats: {fileID: 0}
-  objectGrabPointTransform: {fileID: 0}
-  pickUpLayerMask:
-    serializedVersion: 2
-    m_Bits: 0
+  interactuableMaterial: {fileID: 2100000, guid: cb3cc3c26e1e6ba46a700849fb3622db,
+    type: 2}
 --- !u!114 &1104598573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10209,12 +10258,12 @@ SceneRoots:
   - {fileID: 1006475001}
   - {fileID: 7392382226932024472}
   - {fileID: 1469946060}
+  - {fileID: 396100206}
+  - {fileID: 625041237}
+  - {fileID: 840954169}
+  - {fileID: 166204168}
   - {fileID: 1492895049}
   - {fileID: 1929094414}
   - {fileID: 421318304}
   - {fileID: 1104598571}
   - {fileID: 1265931883}
-  - {fileID: 396100206}
-  - {fileID: 625041237}
-  - {fileID: 840954169}
-  - {fileID: 166204168}

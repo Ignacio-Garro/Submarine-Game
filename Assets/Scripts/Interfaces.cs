@@ -11,7 +11,8 @@ public interface IClickableObject
 public interface IInteractuableObject
 {
     void OnInteract(GameObject playerThatInteracted);
-
+    void OnEnterInRange();
+    void OnExitInRange();
 }
 
 public interface IGrabbableObject

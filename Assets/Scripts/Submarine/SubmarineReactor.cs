@@ -11,9 +11,12 @@ public class SubmarineReactor : NetworkBehaviour
     [SerializeField] float rodClimbSpeed = 1; 
     List<FuelRod> centralRodList = new List<FuelRod>();
 
-    public void InsertNewFuelRod(GameObject fuelRod)
+     
+    public void InsertNewFuelRod(GameObject player, ItemPickable fuelRod)
     {
+
         if (!IsServer) return;
+        
         Collider collider = fuelRod.GetComponent<Collider>();
         if (collider != null) collider.enabled = false;
         FuelRod rod = fuelRod.GetComponent<FuelRod>();

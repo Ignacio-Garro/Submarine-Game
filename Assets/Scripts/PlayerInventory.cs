@@ -21,6 +21,7 @@ public class PlayerInventory : NetworkBehaviour
     public Transform ObjectInventoryPosition => objectInventoryPosition;
     [SerializeField] int inventoryCapacity = 3;
 
+    public ItemPickable currentHoldingItem => inventoryList.Any() ? inventoryList[selectedItem] : null;
 
     [Header("UI")]
     [SerializeField] Image[] inventorySlotImage = new Image[3];
@@ -144,9 +145,10 @@ public class PlayerInventory : NetworkBehaviour
         newItemSelected();
     }
 
-    public void ExtractItemForcefully()
+    public void ExtractItemForcefully(ItemPickable item)
     {
         if (!inventoryList.Any()) return;
+        if (item != null && inventoryList[selectedItem] != item) return;
         inventoryList[selectedItem].IsBeingHold = false;
         inventoryList.RemoveAt(selectedItem);
         if (selectedItem > 0)

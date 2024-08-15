@@ -29,4 +29,14 @@ public class CompleteGameButton : NetworkBehaviour, IInteractuableObject
         playerThatInteracted.TryGet(out NetworkObject networkObject);
         onClickClients.Invoke(networkObject == null ? null : networkObject.gameObject);
     }
+
+    public void OnEnterInRange()
+    {
+        InputManager.Instance.AddInteractuableMaterial(gameObject);
+    }
+
+    public void OnExitInRange()
+    {
+        InputManager.Instance.RemoveInteractuableMaterial(gameObject);
+    }
 }

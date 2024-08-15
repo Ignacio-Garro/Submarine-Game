@@ -29,4 +29,13 @@ public class NetworkSwitchButton : NetworkBehaviour, IInteractuableObject
         pressed = !pressed;
     }
 
+    public void OnEnterInRange()
+    {
+        InputManager.Instance.AddInteractuableMaterial(gameObject);
+    }
+
+    public void OnExitInRange()
+    {
+        InputManager.Instance.RemoveInteractuableMaterial(gameObject);
+    }
 }
