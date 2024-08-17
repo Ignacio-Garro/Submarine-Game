@@ -6,7 +6,7 @@ using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ConditionalCompleteGameButton : NetworkBehaviour, IInteractuableObject
+public class ConditionalItemCompleteGameButton : NetworkBehaviour, IInteractuableObject
 {
 
     public List<GameObject> acceptableGameObjects;

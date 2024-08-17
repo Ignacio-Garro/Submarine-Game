@@ -5,8 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerCam : MonoBehaviour
 {
-    InputAction lookAction;
-    InputAction moveAction;
+    Vector2 lookInput => InputManager.Instance.LookInputNormal;
 
     [SerializeField] private PlayerInput playerInput;
     [SerializeField] private float mouseSensitivity;
@@ -19,10 +18,6 @@ public class PlayerCam : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        //input system
-        lookAction = playerInput.actions["look"];
-        moveAction  = playerInput.actions["move"];
     }
     void Update()
     {
@@ -30,14 +25,9 @@ public class PlayerCam : MonoBehaviour
     }
 
     private void UpdateLook() {
-        Vector2 lookInput = lookAction.ReadValue<Vector2>();
-
         yRotation += lookInput.x * mouseSensitivity;
         xRotation -= lookInput.y * mouseSensitivity;
-
         xRotation = Mathf.Clamp(xRotation, -89f, 89f);
-
-        
     }
 
     private void FixedUpdate()

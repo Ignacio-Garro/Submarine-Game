@@ -18,7 +18,7 @@ public class PlayerMovement : NetworkBehaviour {
 
     //everone can read but only server writes
     //private NetworkVariable<int> randomNumber = new NetworkVariable<int>(1);
-    private NetworkVariable<int> randomNumber = new NetworkVariable<int>(1, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+   
 
 
     [Header("State")]
@@ -98,7 +98,7 @@ public class PlayerMovement : NetworkBehaviour {
 
     Rigidbody rb;
 
-    static Vector2 moveInput;
+    Vector2 moveInput => InputManager.Instance.MoveInputNormal;
 
     public enum MovementState {
         still,
@@ -135,26 +135,19 @@ public class PlayerMovement : NetworkBehaviour {
         crouchAction = playerInput.actions["crouch"];
         sprintAction = playerInput.actions["sprint"];
 
-        jumpAction.started += OnJumpStarted;
-        jumpAction.canceled += OnJumpCanceled;
+        InputManager.Instance.onJumpPressed += (_,_) => OnJumpStarted();
+        InputManager.Instance.onJumpReleased += (_, _) => OnJumpCanceled();
+        InputManager.Instance.onCrouchPressed += (_, _) => OnCrouchStarted();
+        InputManager.Instance.onCrouchReleased += (_, _) => OnCrouchCanceled();
+        InputManager.Instance.onSprintPressed += (_, _) => OnSprintStarted();
+        InputManager.Instance.onSprintReleased += (_, _) => OnSprintCanceled();
 
-        crouchAction.started += OnCrouchStarted;
-        crouchAction.canceled += OnCrouchCanceled;
-
-        sprintAction.started += OnSprintStarted;
-        sprintAction.canceled += OnSprintCanceled;
     }
 
     private void Update() {
         //Debug.Log(OwnerClientId + "; randomNumber: " + randomNumber.Value);
         if(!IsOwner) return;
 
-
-        if(Input.GetKeyDown(KeyCode.T)){
-            randomNumber.Value = Random.Range(0, 100);
-        }
-
-        MyInput();
         StateHandler();
         showDebugLines();
         DragControl();
@@ -192,15 +185,12 @@ public class PlayerMovement : NetworkBehaviour {
 
     private void FixedUpdate() { // fisicas
         if(!IsOwner) return;
-
         MovePlayer();
         ManualDrag();
         SwimControlUpDown();
     }
 
-    private void MyInput() {
-        moveInput = moveAction.ReadValue<Vector2>();      
-    }
+   
 
     private void StateHandler() {
         // Mode - ladder
@@ -411,23 +401,21 @@ public class PlayerMovement : NetworkBehaviour {
 
     //INPUT-------------------------------------------------------
 
-    private void OnJumpStarted(InputAction.CallbackContext context) {
+    private void OnJumpStarted() {
         isJumping = true;
         // when to jump
         if (isJumping && isGrounded && readyToJump) {
             readyToJump = false;
-
             Jump();
-
             Invoke(nameof(ResetJump), jumpCooldown);
         }
     }
 
-    private void OnJumpCanceled(InputAction.CallbackContext context) {
+    private void OnJumpCanceled() {
         isJumping = false;
     }
 
-    private void OnCrouchStarted(InputAction.CallbackContext context) {
+    private void OnCrouchStarted() {
         if(!inWater || isGrounded){
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
@@ -436,15 +424,15 @@ public class PlayerMovement : NetworkBehaviour {
         tryingToUncrouch = false;
     }
 
-    private void OnCrouchCanceled(InputAction.CallbackContext context){
+    private void OnCrouchCanceled(){
         tryingToUncrouch = true;
     }
 
-    private void OnSprintStarted(InputAction.CallbackContext context){
+    private void OnSprintStarted(){
         isSprinting = true;
     }
 
-    private void OnSprintCanceled(InputAction.CallbackContext context){
+    private void OnSprintCanceled(){
         isSprinting = false;
     }
 }

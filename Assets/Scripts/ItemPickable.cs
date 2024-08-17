@@ -28,6 +28,7 @@ public class ItemPickable : NetworkBehaviour, IInteractuableObject
     private void Update()
     {
         //Move to object position only if the player is the owner, and if the player is holding the item
+        //Can be optimized
         if(IsOwner && IsBeingHold)
         {
             if(CurrentPlayerInventory != null)

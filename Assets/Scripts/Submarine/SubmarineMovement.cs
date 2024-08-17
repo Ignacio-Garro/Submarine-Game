@@ -23,20 +23,20 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] float submarineTankVolumeLitres = 515000f;
     [SerializeField] float diamenter = 10f;
     [SerializeField] float length = 100f;
-    [SerializeField] float tankPercentage = 0f;
+    [SerializeField] float tankPercentage => 100f - (controller.FloatLever.LeverPosition + 100f) / 2f;
 
     
 
     [Header("Engine Attributes")]
     [SerializeField] List<Transform> propellerObject; 
     [SerializeField] float maxEnginePowerWatt = 2500000f;
-    [SerializeField] float currentPowerPercent = 0;
+    
     [SerializeField] float propellerRadius = 5;
     [SerializeField] float propellerMass = 3000f;
     [SerializeField] float propellerEfficiencyPerSecond = 0.8f;
     [SerializeField] float propellerConversionToPushForcePerSecond = 0.1f;
     [SerializeField] float numberOfPropellers = 3;
-
+    [SerializeField] float currentPowerPercent => controller.MovementLever.LeverPosition;
 
     [Header("HorizontalMovement")]
     [SerializeField] float horizontalDragCoeficient = 1f;
@@ -118,7 +118,7 @@ public class SubmarineMovement : NetworkBehaviour
 
         
         float outWatt = Mathf.Sign(addedEnergy + previousEnergy) * submarineEnergy / Time.fixedDeltaTime;
-        Vector3 propellerRotation = Vector3.forward * propellerAngularVelocity * 360/(2*Mathf.PI) * Time.fixedDeltaTime;
+        Vector3 propellerRotation = Vector3.up * propellerAngularVelocity * 360/(2*Mathf.PI) * Time.fixedDeltaTime;
         propellerObject.ForEach((ele) => ele.Rotate(propellerRotation));
 
        
@@ -196,24 +196,7 @@ public class SubmarineMovement : NetworkBehaviour
         }*/
         //workingEngine = engineState;
     }
-
-
-    public void StartForwandMovement()
-    {
-        currentPowerPercent = 100;
-    }
-    public void StopForwandMovement()
-    {
-        currentPowerPercent = 0;
-    }
-    public void StopBackWardsMovement()
-    {
-        currentPowerPercent = 0;
-    }
-    public void StarBackWardsMovement()
-    {
-        currentPowerPercent = -100;
-    }
+    
     public void StopRightMovement()
     {
         isMovingRight = false;
@@ -231,20 +214,12 @@ public class SubmarineMovement : NetworkBehaviour
         isMovingLeft = false;
     }
 
-    public void IncreaseTankWater()
-    {
-        tankPercentage = Mathf.Min(tankPercentage + 10, 100);
-    }
-
-    public void DecreaseTankWater()
-    {
-        tankPercentage = Mathf.Max(tankPercentage - 10, 0);
-    }
+    
 
     public void BalanceTankWater()
     {
         float neededMass = totalVolume - submarineMass;
         float neededPercent = neededMass / submarineTankVolumeLitres;
-        tankPercentage = neededPercent * 100;
+        //tankPercentage = neededPercent * 100;
     }
 }

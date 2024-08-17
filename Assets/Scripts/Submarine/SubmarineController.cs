@@ -35,10 +35,12 @@ public class SubmarineController : NetworkBehaviour
     public Engine submarineEngine;
     public List<SinkingHole> holes;
     public submarineCollisionController collision;
+    public Lever MovementLever;
+    public Lever FloatLever;
 
     [Header("Submarine settings")]
     [SerializeField] private Transform EnterPosition;
-
+    
     bool currentPlayerIsInSubmarine = false;
 
     //Global variables
@@ -54,6 +56,8 @@ public class SubmarineController : NetworkBehaviour
     public int SinkingRate => sinkingRate;
     public int DrainRate => drainRate;
     private float pressure => (WaterHeigth - transform.position.y) * WaterDensity * SubmarineGravity;
+
+
 
     List<SubmarineEvent> submarineRandomEvents = new List<SubmarineEvent>();
 

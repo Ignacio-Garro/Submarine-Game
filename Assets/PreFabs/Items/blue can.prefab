@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 1343808173876892514}
   - component: {fileID: 8911352659536817318}
   - component: {fileID: 4227543289855446908}
-  - component: {fileID: 2660551754638746394}
+  - component: {fileID: 657418426063077992}
   m_Layer: 0
   m_Name: blue can
   m_TagString: Untagged
@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1310748456
+  GlobalObjectIdHash: 2069261789
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -208,7 +208,7 @@ MonoBehaviour:
   InLocalSpace: 1
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &2660551754638746394
+--- !u!114 &657418426063077992
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
