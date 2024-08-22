@@ -35,6 +35,7 @@ public class SubmarineController : NetworkBehaviour
     public Engine submarineEngine;
     public List<SinkingHole> holes;
     public submarineCollisionController collision;
+    public SubmarineReactor reactor;
     public Lever MovementLever;
     public Lever FloatLever;
 

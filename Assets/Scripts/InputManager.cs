@@ -221,13 +221,12 @@ public class InputManager : MonoBehaviour
 
     private void OnInteractReleasedFunction(InputAction.CallbackContext context)
     {
+        if (ActualPlayer == null || PlayerCamera == null) return;
         if (inputIsBlocked)
         {
             onInteractReleasedAfterBlock(ActualPlayer, PlayerCamera);
             return;
         }
-        if (ActualPlayer == null || PlayerCamera == null) return;
-        TryToInteractWithObject();
         onInteractReleased(ActualPlayer, PlayerCamera);
     }
 

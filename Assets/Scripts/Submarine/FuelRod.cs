@@ -6,9 +6,10 @@ using UnityEngine;
 
 public class FuelRod : NetworkBehaviour
 {
-    [SerializeField] float initialStoredEnergy = 50000;
+    [SerializeField] float initialStoredEnergy = 50000000;
     [SerializeField] Transform energyFluid;
     public SubmarineReactor currentReactor = null;
+    public bool IsInPlace = false;
     public float ySize => GetYSize();
 
     float storedEnergy = 0;

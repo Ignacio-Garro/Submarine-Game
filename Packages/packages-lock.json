@@ -1,5 +1,14 @@
 {
   "dependencies": {
+    "com.community.netcode.transport.facepunch": {
+      "version": "https://github.com/Unity-Technologies/multiplayer-community-contributions.git?path=/Transports/com.community.netcode.transport.facepunch",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.netcode.gameobjects": "1.0.0-pre.4"
+      },
+      "hash": "0eda04fc2146a4f907a61de6403315bce705279e"
+    },
     "com.unity.burst": {
       "version": "1.8.16",
       "depth": 1,

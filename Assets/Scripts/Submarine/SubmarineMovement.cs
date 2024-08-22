@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,12 +59,13 @@ public class SubmarineMovement : NetworkBehaviour
     float tankMass => tankPercentage / 100 * submarineTankVolumeLitres;
     float sinkingMass => controller.sinking.WaterLevel / 100 * submarineInsideVolumeLitres;
     float totalMass => submarineMass + tankMass + sinkingMass;
-    
+
 
 
     [Header("nav info")]
-    [SerializeField] bool isMovingForward;
-    [SerializeField] bool isMovingBackWards;
+    [SerializeField] TextMeshProUGUI horizontalSpeedText;
+    [SerializeField] TextMeshProUGUI energyText;
+
     [SerializeField] bool isMovingRight;
     [SerializeField] bool isMovingLeft;
    
@@ -121,8 +123,8 @@ public class SubmarineMovement : NetworkBehaviour
         Vector3 propellerRotation = Vector3.up * propellerAngularVelocity * 360/(2*Mathf.PI) * Time.fixedDeltaTime;
         propellerObject.ForEach((ele) => ele.Rotate(propellerRotation));
 
-       
-        float horizontalForce = currentPowerWatt / Mathf.Max(Mathf.Abs(horizontalVelocity),3f);
+        float usableEnergy = controller.reactor.TryToExctractEnergy(Mathf.Abs(currentPowerWatt) * Time.fixedDeltaTime);
+        float horizontalForce = Mathf.Sign(currentPowerWatt) * (usableEnergy/Time.fixedDeltaTime) / Mathf.Max(Mathf.Abs(horizontalVelocity),3f);
         float fixeddragVelocity = (horizontalVelocity < minDragHorizontalVelocity && horizontalVelocity > -minDragHorizontalVelocity) ? minDragHorizontalVelocity : horizontalVelocity;
         float horizontalDrag = Mathf.Sign(-horizontalVelocity) * horizontalDragCoeficient * 0.5f * 1000 * horizontalSurface * fixeddragVelocity * fixeddragVelocity;
         if (horizontalVelocity == 0) horizontalDrag = 0;
@@ -139,6 +141,8 @@ public class SubmarineMovement : NetworkBehaviour
         }
 
         transform.position += transform.forward * horizontalVelocity * Time.fixedDeltaTime;
+        horizontalSpeedText.text = Math.Round(horizontalVelocity,1) + "<size=40%> kts";
+        energyText.text = (usableEnergy / Time.fixedDeltaTime) / 1000f + "<size=40%> Kw";
     }
 
     void VerticalMovement()

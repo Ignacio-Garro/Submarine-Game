@@ -8,8 +8,16 @@ public class SubmarineReactor : NetworkBehaviour
 {
     [SerializeField] Transform CentreFuelColumnDownPosition;
     [SerializeField] Transform CentreFuelColumnUpPosition;
-    [SerializeField] float rodClimbSpeed = 1; 
-    List<FuelRod> centralRodList = new List<FuelRod>();
+    [SerializeField] float rodClimbSpeed = 1;
+    [SerializeField] bool isGodMode = false;
+    [SerializeField] float averageCalculateTime = 1;
+    [SerializeField] float lowOverheatLimit = 100000;
+    [SerializeField] float highOverheatLimit = 200000;
+    List<FuelRod> centralRodList = new List<FuelRod>(); 
+    float energyUsedPerSecond = 0;
+    float energyUsedPerSecondAverage = 0;
+    
+    float secondTimer = 0;
 
      
     public void InsertNewFuelRod(GameObject player, ItemPickable fuelRod)
@@ -33,11 +41,24 @@ public class SubmarineReactor : NetworkBehaviour
         rod.currentReactor = this;
     }
 
+    public float TryToExctractEnergy(float energyAmmount)
+    {
+
+        if (!centralRodList.Any() || !centralRodList.First().IsInPlace) return 0;
+        float availableEnergy = centralRodList.First().TryToExtractEnergy(energyAmmount);
+        energyUsedPerSecond += availableEnergy;
+        if (isGodMode) return energyAmmount;
+        else return availableEnergy;
+    }
 
     public void ExtractFuelRod(FuelRod fuelRod)
     {
         if (!IsServer) return;
         centralRodList.Remove(fuelRod);
+        foreach (var item in centralRodList)
+        {
+            item.IsInPlace = false;
+        }
     }
 
     private void Update()
@@ -49,12 +70,27 @@ public class SubmarineReactor : NetworkBehaviour
             foreach (FuelRod item in centralRodList)
             {
                 objectiveHeigth -= item.ySize/2;
-                if(item.transform.localPosition.y < objectiveHeigth)
+                if(item.transform.localPosition.y < objectiveHeigth && !item.IsInPlace)
                 {
                     item.transform.localPosition = Vector3.MoveTowards(item.transform.localPosition, new Vector3(CentreFuelColumnUpPosition.localPosition.x, objectiveHeigth, CentreFuelColumnUpPosition.localPosition.z), rodClimbSpeed * Time.deltaTime);
                 }
+                else if(!item.IsInPlace) 
+                {
+                    item.IsInPlace = true;
+                }
                 objectiveHeigth -= item.ySize / 2;
             }
+        }
+        secondTimer += Time.deltaTime;
+        if(secondTimer > averageCalculateTime)
+        {
+            secondTimer -= averageCalculateTime;
+            energyUsedPerSecondAverage = (energyUsedPerSecondAverage * (60 - averageCalculateTime) + energyUsedPerSecond * averageCalculateTime) / 60;
+            energyUsedPerSecond = 0;
+        }
+        if(energyUsedPerSecondAverage > lowOverheatLimit)
+        {
+
         }
     }
 
