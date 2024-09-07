@@ -41,16 +41,21 @@ public class SubmarineController : NetworkBehaviour
 
     [Header("Submarine settings")]
     [SerializeField] private Transform EnterPosition;
-    
-    bool currentPlayerIsInSubmarine = false;
+
 
     //Global variables
     [Header("Global submarine variables")]
-    public float SubmarineGravity{ get; private set; } = 9.8f;
-    public float WaterHeigth{ get; private set; } = 0;
-    public float WaterDensity { get; private set; } = 1000;
-    public float SubmarineLength { get; private set; } = 10;
 
+    [SerializeField]
+    public float SubmarineGravity = 9.8f;
+    [SerializeField]
+    public float WaterHeigth = 0;
+    [SerializeField]
+    public float WaterDensity = 1000;
+    [SerializeField]
+    public float SubmarineLength = 10;
+
+    bool currentPlayerIsInSubmarine = false;
     private bool eventsShouldFire = true;
     private int sinkingRate = 0;
     private int drainRate = 0;
