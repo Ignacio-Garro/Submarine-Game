@@ -108,6 +108,7 @@ public class SubmarineMovement : NetworkBehaviour
 
     public void HorizontalMovement()
     {
+        /*
         float inertiaMoment = 0.5f * propellerMass * propellerRadius * propellerRadius;
         float addedEnergy = currentPowerWatt * Time.fixedDeltaTime;
         float previousEnergy = Mathf.Sign(propellerAngularVelocity) * 0.5f * inertiaMoment * propellerAngularVelocity * propellerAngularVelocity * numberOfPropellers;
@@ -122,10 +123,14 @@ public class SubmarineMovement : NetworkBehaviour
         float outWatt = Mathf.Sign(addedEnergy + previousEnergy) * submarineEnergy / Time.fixedDeltaTime;
         Vector3 propellerRotation = Vector3.up * propellerAngularVelocity * 360/(2*Mathf.PI) * Time.fixedDeltaTime;
         propellerObject.ForEach((ele) => ele.Rotate(propellerRotation));
+        */
 
         float usableEnergy = controller.reactor.TryToExctractEnergy(Mathf.Abs(currentPowerWatt) * Time.fixedDeltaTime);
-        float horizontalForce = Mathf.Sign(currentPowerWatt) * (usableEnergy/Time.fixedDeltaTime) / Mathf.Max(Mathf.Abs(horizontalVelocity),3f);
-        float fixeddragVelocity = (horizontalVelocity < minDragHorizontalVelocity && horizontalVelocity > -minDragHorizontalVelocity) ? minDragHorizontalVelocity : horizontalVelocity;
+
+        float horizontalForce = Mathf.Sign(currentPowerWatt) * (usableEnergy/Time.fixedDeltaTime) / Mathf.Max(Mathf.Abs(horizontalVelocity),3f); //fuerza que genera el motor
+
+        float fixeddragVelocity = (horizontalVelocity < minDragHorizontalVelocity && horizontalVelocity > -minDragHorizontalVelocity) ? minDragHorizontalVelocity : horizontalVelocity;//
+
         float horizontalDrag = Mathf.Sign(-horizontalVelocity) * horizontalDragCoeficient * 0.5f * 1000 * horizontalSurface * fixeddragVelocity * fixeddragVelocity;
         if (horizontalVelocity == 0) horizontalDrag = 0;
         float totalForce = horizontalForce + horizontalDrag;

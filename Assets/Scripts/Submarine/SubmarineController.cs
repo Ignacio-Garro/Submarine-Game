@@ -172,8 +172,4 @@ public class SubmarineController : NetworkBehaviour
         }
        
     }
-
-    
-
-
 }

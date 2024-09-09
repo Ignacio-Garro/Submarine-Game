@@ -43,12 +43,12 @@ public class SubmarineReactor : NetworkBehaviour
 
     public float TryToExctractEnergy(float energyAmmount)
     {
-
+        if (isGodMode) return energyAmmount;
+        
         if (!centralRodList.Any() || !centralRodList.First().IsInPlace) return 0;
         float availableEnergy = centralRodList.First().TryToExtractEnergy(energyAmmount);
         energyUsedPerSecond += availableEnergy;
-        if (isGodMode) return energyAmmount;
-        else return availableEnergy;
+        return availableEnergy;
     }
 
     public void ExtractFuelRod(FuelRod fuelRod)
