@@ -1086,7 +1086,7 @@ MonoBehaviour:
   verticalDragCoeficient: 0.3
   verticalVelocity: 0
   submarineHeigth: 3
-  minDragVelocity: 1
+  minDragVelocity: 3
   horizontalSpeedText: {fileID: 6763695077347216243}
   energyText: {fileID: 2984404114937199619}
   isMovingRight: 0

@@ -37,7 +37,6 @@ public class Lever : NetworkBehaviour
         isActive = false;
         InputManager.Instance.onInteractReleasedAfterBlock -= CancelInteract;
         InputManager.Instance.InputIsBlocked = false;
-
     }
 
 

@@ -908,6 +908,16 @@ PrefabInstance:
       propertyPath: InScenePlacedSourceGlobalObjectIdHash
       value: 1922518054
       objectReference: {fileID: 0}
+    - target: {fileID: 4153771507862025887, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: rodClimbSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4515089431067835052, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: minDragVelocity
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 4515089431067835052, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
       propertyPath: submarineHeigth
@@ -917,6 +927,11 @@ PrefabInstance:
         type: 3}
       propertyPath: maxEnginePowerWatt
       value: 750000
+      objectReference: {fileID: 0}
+    - target: {fileID: 4515089431067835052, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: verticalDragCoeficient
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4515089431067835052, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
@@ -931,12 +946,12 @@ PrefabInstance:
     - target: {fileID: 4515089431067835052, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
       propertyPath: submarineTankVolumeLitres
-      value: 8000
+      value: 6000
       objectReference: {fileID: 0}
     - target: {fileID: 4515089431067835052, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
       propertyPath: submarineInsideVolumeLitres
-      value: 17000
+      value: 18000
       objectReference: {fileID: 0}
     - target: {fileID: 4515089431067835052, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
