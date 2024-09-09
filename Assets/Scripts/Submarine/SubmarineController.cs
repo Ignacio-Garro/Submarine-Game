@@ -90,7 +90,7 @@ public class SubmarineController : NetworkBehaviour
     private IEnumerator StartRecursiveEvent()
     {
         if (!IsServer) yield break;
-        yield return new WaitForSeconds(UnityEngine.Random.Range(30, 120));
+        yield return new WaitForSeconds(UnityEngine.Random.Range(1, 2));
         if(!eventsShouldFire)
         {
             yield return new WaitWhile(() => !eventsShouldFire);
