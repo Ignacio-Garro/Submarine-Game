@@ -173,7 +173,15 @@ public class SubmarineController : NetworkBehaviour
        
     }
 
-    
+    public void StartPumping()
+    {
+        drainRate += 2;
+    }
+
+    public void StopPumping()
+    {
+        drainRate -= 2;
+    }
 
 
 }

@@ -7741,6 +7741,10 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3489819855271634745}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -1152227022884027691, guid: 5905818b1b8140b428a768b765330c34,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6621553010865776046}
     - targetCorrespondingSourceObject: {fileID: 2988369774566813679, guid: 5905818b1b8140b428a768b765330c34,
         type: 3}
       insertIndex: -1
@@ -7752,6 +7756,66 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7625098902031392791}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1861038526152909506 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1152227022884027691, guid: 5905818b1b8140b428a768b765330c34,
+    type: 3}
+  m_PrefabInstance: {fileID: 7625098902031392791}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6621553010865776046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1861038526152909506}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823de61716393e249be640d18ebd1ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onClickLocal:
+    m_PersistentCalls:
+      m_Calls: []
+  onClickServer:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8728733184777472073}
+        m_TargetAssemblyTypeName: SubmarineController, Assembly-CSharp
+        m_MethodName: StartPumping
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onClickClients:
+    m_PersistentCalls:
+      m_Calls: []
+  onReleaseLocal:
+    m_PersistentCalls:
+      m_Calls: []
+  onReleaseServer:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8728733184777472073}
+        m_TargetAssemblyTypeName: SubmarineController, Assembly-CSharp
+        m_MethodName: StopPumping
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onReleaseClients:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &3678068249440791833 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -2676593276479156978, guid: 5905818b1b8140b428a768b765330c34,
