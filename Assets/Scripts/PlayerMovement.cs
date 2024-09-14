@@ -172,7 +172,7 @@ public class PlayerMovement : NetworkBehaviour {
         
         // ground check
         //isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + extraSpaceToJump, whatIsGround);
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + extraSpaceToJump);
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.7f + extraSpaceToJump);
 
         //trying to uncrouch
         canUncrouch = !Physics.Raycast(transform.position, Vector3.up, playerHeight * 0.5f + extraSpaceToUncrouch);

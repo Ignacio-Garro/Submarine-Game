@@ -22,6 +22,7 @@ public class PlayerCam : MonoBehaviour
     void Update()
     {
         UpdateLook();
+        MoveCamera();
     }
 
     private void UpdateLook() {
@@ -30,7 +31,7 @@ public class PlayerCam : MonoBehaviour
         xRotation = Mathf.Clamp(xRotation, -89f, 89f);
     }
 
-    private void FixedUpdate()
+    private void MoveCamera()
     {
         //rotate camera
         transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
