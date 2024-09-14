@@ -202,7 +202,8 @@ MonoBehaviour:
   startPosition: {fileID: 3398879582041714149}
   endPosition: {fileID: 1128474844735357641}
   LeverMovable: {fileID: 1064489336076219935}
-  mouseSensitivity: 0.05
+  mouseSensitivity: 0.2
+  numberOfDivisions: 5
 --- !u!1001 &3922162211545149362
 PrefabInstance:
   m_ObjectHideFlags: 0

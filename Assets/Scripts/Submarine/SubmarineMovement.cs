@@ -156,7 +156,8 @@ public class SubmarineMovement : NetworkBehaviour
         float bouyancyForce = underWaterVolume * gravity;
         //We fix a minimun drag velocity so the submarine doesnt brake that slowly at very low velociies
         float fixeddragVelocity = (verticalVelocity < minDragVelocity && verticalVelocity > -minDragVelocity) ? minDragVelocity : verticalVelocity;
-        float dragForce = Mathf.Sign(-verticalVelocity) * verticalDragCoeficient * 0.5f * 1000 * verticalSurface * fixeddragVelocity * fixeddragVelocity;
+        float dragForce = Mathf.Sign(-verticalVelocity) * verticalDragCoeficient * 0.5f * 1000 * verticalSurface * fixeddragVelocity * Math.Sign(fixeddragVelocity);
+        
         if(verticalVelocity == 0) dragForce = 0;
         float totalForce = bouyancyForce - weigthForce + dragForce;
       

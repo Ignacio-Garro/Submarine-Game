@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class SinkingHole : NetworkBehaviour
 {
-    [SerializeField] private bool holeIsOpen = true;
+    [SerializeField] private bool holeIsOpen = false;
 
     // Getter for holeIsOpen
     public bool HoleIsOpen => holeIsOpen;
@@ -61,7 +61,7 @@ public class SinkingHole : NetworkBehaviour
 
     public void OpenHoleFromServer()
     {
-        TurnOffParticleSystem();
+        TurnOnParticleSystem();
         TurnOnParticleSystemClientRpc();
     }
 
