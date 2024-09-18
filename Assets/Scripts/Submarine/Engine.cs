@@ -7,84 +7,54 @@ public class Engine : MonoBehaviour
 {
 
     [Header("Engine info")]
-    [SerializeField] private int fuel;
-    [SerializeField] private int pressure;
-    [SerializeField] private int pressureIncrease;
-    [SerializeField] private int fuelSpending;
-    [SerializeField] private bool engineRunning;
-    [SerializeField] private EngineState engineState;
-    [SerializeField] private TextMeshProUGUI textBox;
-    [SerializeField] private TextMeshProUGUI textUI;
-    [SerializeField] private SubmarineMovement submarineMovement;
+    [SerializeField] ScreenBar pressureBar;
+    [SerializeField] float minTimeToExplode;
+    [SerializeField] float maxTimeToExplode;
+    [SerializeField] float timeToRegulatePressure = 50;
+    [SerializeField] float explosionPoint = 70;
+    
+    bool isWorking = true;
+    bool IsWorking => isWorking;
 
+    private float probabilityPerSecond => 1 - Mathf.Pow(0.5f, 1f / timeToExplode);
+    float timeToExplode => Mathf.Lerp(maxTimeToExplode, minTimeToExplode, (pressureLevel - explosionPoint) / (100 - explosionPoint));
 
-    public enum EngineState {
-        Normal,
-        Emergency,
-        Destroyed
-    }
+    float pressureLevel = 0f;
+
 
     private void Start(){
         InvokeRepeating("EngineHandeling", 0f, 1f);
+
     }
 
     private void Update(){
-
-        UpdateText();
-
-        if(engineState == EngineState.Destroyed || fuel <= 0){
-            engineRunning = false;
-            submarineMovement.SetworkingEngine(false);
-        }
-
-        //pressure handeling
-        if(pressure < 100){
-            engineState = EngineState.Normal;
-        }
-        else if(pressure < 150 && pressure >= 100 && engineState != EngineState.Destroyed){
-            engineState = EngineState.Emergency;
-        }
-        else if(pressure >= 150){
-            engineState = EngineState.Destroyed;
-        }
+        pressureBar.SetBarPorcentage(pressureLevel);
     }
 
     void EngineHandeling()
     {
-        //engine working
-        if(engineRunning && fuel > 0){
-            fuel = fuel - fuelSpending;
-            pressure = pressure + pressureIncrease;
-        }
-        //Engine not working
-        else{
-            if(pressure > 0 ){
-                pressure--;
-            }
+        if (isWorking && Random.Range(0f, 1f) <= probabilityPerSecond)
+        {
+            Explode();
         }
     }
 
-
-    private void UpdateText(){
-        /*textBox.text = "Fuel: " + fuel + "\nPressure: " + pressure + "\nState: " + engineState + "\nengineRunning: " + engineRunning;
-        textUI.text = "Fuel: " + fuel + "\nPressure: " + pressure + "\nState: " + engineState + "\nengineRunning: " + engineRunning;*/
+    public float UseMotorPercentage(float percentage)
+    {
+        float absPercentage = Mathf.Abs(percentage);
+        pressureLevel += (absPercentage - pressureLevel) * Time.deltaTime / timeToRegulatePressure;
+        return isWorking ? percentage : 0f;
     }
 
-    public void RefillEnginefuel(int amountrefueled){
-        fuel = fuel + amountrefueled;
-        if(fuel > 0){
-            submarineMovement.SetworkingEngine(true);
-        }
+    public void Fix()
+    {
+        isWorking = true;
+        pressureBar.Fix();
     }
 
-    public void ChangeEngineStatue(bool engineRunning){
-        if(engineRunning == true){
-            if(engineState != EngineState.Destroyed && fuel > 0){
-                this.engineRunning = engineRunning;
-            }
-        }
-        else{
-            this.engineRunning = engineRunning;
-        }
+    void Explode()
+    {
+        isWorking = false;
+        pressureBar.Break();
     }
 }

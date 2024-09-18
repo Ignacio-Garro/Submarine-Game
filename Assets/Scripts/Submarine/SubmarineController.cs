@@ -32,12 +32,14 @@ public class SubmarineController : NetworkBehaviour
     [Header("Submarine components")]
     public SubmarineMovement movement;
     public SinkingController sinking;
-    public Engine submarineEngine;
-    public List<SinkingHole> holes;
+    public Engine rigthEngine;
+    public Engine leftEngine;
     public submarineCollisionController collision;
     public SubmarineReactor reactor;
     public Lever MovementLever;
     public Lever FloatLever;
+    public List<SinkingHole> holes;
+
 
     [Header("Submarine settings")]
     [SerializeField] private Transform EnterPosition;

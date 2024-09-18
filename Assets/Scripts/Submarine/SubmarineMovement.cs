@@ -37,7 +37,7 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] float propellerEfficiencyPerSecond = 0.8f;
     [SerializeField] float propellerConversionToPushForcePerSecond = 0.1f;
     [SerializeField] float numberOfPropellers = 3;
-    [SerializeField] float currentPowerPercent => controller.MovementLever.LeverPosition;
+    float currentPowerPercent => controller.MovementLever.LeverPosition;
 
     [Header("HorizontalMovement")]
     [SerializeField] float horizontalDragCoeficient = 1f;
@@ -45,7 +45,7 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] float propellerAngularVelocity = 0f;
     [SerializeField] float minDragHorizontalVelocity = 3f;
     float horizontalSurface => diamenter * diamenter / 4 * Mathf.PI;
-    float currentPowerWatt => maxEnginePowerWatt * currentPowerPercent / 100;
+    
 
 
     [Header("Vertical movement")]
@@ -53,6 +53,10 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] float verticalVelocity = 0;
     [SerializeField] float submarineHeigth = 5f;
     [SerializeField] float minDragVelocity = 0.1f;
+
+
+    Engine leftEngine => controller.leftEngine;
+    Engine rightEngine => controller.rigthEngine;
     float verticalSurface => diamenter * length;
     float totalVolume => submarineInsideVolumeLitres + submarineTankVolumeLitres;
     float underWaterVolume => (1 - Mathf.Clamp((transform.position.y - waterHeigth) / submarineHeigth, 0, 1)) * totalVolume;
@@ -108,29 +112,11 @@ public class SubmarineMovement : NetworkBehaviour
 
     public void HorizontalMovement()
     {
-        /*
-        float inertiaMoment = 0.5f * propellerMass * propellerRadius * propellerRadius;
-        float addedEnergy = currentPowerWatt * Time.fixedDeltaTime;
-        float previousEnergy = Mathf.Sign(propellerAngularVelocity) * 0.5f * inertiaMoment * propellerAngularVelocity * propellerAngularVelocity * numberOfPropellers;
-        float totalEnergy = Mathf.Abs(addedEnergy + previousEnergy);
-        totalEnergy -= (1 - propellerEfficiencyPerSecond) * Time.fixedDeltaTime * totalEnergy;
-        float submarineEnergy = propellerConversionToPushForcePerSecond * Time.fixedDeltaTime * totalEnergy;
-        totalEnergy -= submarineEnergy;
-
-        propellerAngularVelocity = Mathf.Sign(addedEnergy + previousEnergy) * Mathf.Sqrt(2 * totalEnergy / (inertiaMoment * numberOfPropellers));
-
-        
-        float outWatt = Mathf.Sign(addedEnergy + previousEnergy) * submarineEnergy / Time.fixedDeltaTime;
-        Vector3 propellerRotation = Vector3.up * propellerAngularVelocity * 360/(2*Mathf.PI) * Time.fixedDeltaTime;
-        propellerObject.ForEach((ele) => ele.Rotate(propellerRotation));
-        */
-
+        float currentPercentage = (leftEngine.UseMotorPercentage(currentPowerPercent) + rightEngine.UseMotorPercentage(currentPowerPercent)) / 2;
+        float currentPowerWatt = maxEnginePowerWatt * currentPercentage / 100;
         float usableEnergy = controller.reactor.TryToExctractEnergy(Mathf.Abs(currentPowerWatt) * Time.fixedDeltaTime);
-
         float horizontalForce = Mathf.Sign(currentPowerWatt) * (usableEnergy/Time.fixedDeltaTime) / Mathf.Max(Mathf.Abs(horizontalVelocity),3f); //fuerza que genera el motor
-
         float fixeddragVelocity = (horizontalVelocity < minDragHorizontalVelocity && horizontalVelocity > -minDragHorizontalVelocity) ? minDragHorizontalVelocity : horizontalVelocity;//
-
         float horizontalDrag = Mathf.Sign(-horizontalVelocity) * horizontalDragCoeficient * 0.5f * 1000 * horizontalSurface * fixeddragVelocity * fixeddragVelocity;
         if (horizontalVelocity == 0) horizontalDrag = 0;
         float totalForce = horizontalForce + horizontalDrag;
@@ -144,7 +130,6 @@ public class SubmarineMovement : NetworkBehaviour
         {
             horizontalVelocity += acceleration * Time.fixedDeltaTime;
         }
-
         transform.position += transform.forward * horizontalVelocity * Time.fixedDeltaTime;
         horizontalSpeedText.text = Math.Round(horizontalVelocity,1) + "<size=40%> kts";
         energyText.text = (usableEnergy / Time.fixedDeltaTime) / 1000f + "<size=40%> Kw";
