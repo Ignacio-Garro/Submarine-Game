@@ -8,6 +8,7 @@ public class Ladder : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log(other.tag);
         if (other.CompareTag(tagFilter))
         {
             Rigidbody playerRb = other.GetComponentInParent<Rigidbody>();
