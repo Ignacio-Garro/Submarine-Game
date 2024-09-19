@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class SinkingHole : NetworkBehaviour
+public class SinkingHole : WeldableStructure
 {
     [SerializeField] private bool holeIsOpen = false;
 
@@ -19,6 +19,7 @@ public class SinkingHole : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        base.OnNetworkSpawn();
         waterParticles = GetComponentInChildren<ParticleSystem>();
         TurnOffParticleSystem();
     }
@@ -59,11 +60,25 @@ public class SinkingHole : NetworkBehaviour
         TurnOnParticleSystem();
     }
 
+    [ClientRpc(RequireOwnership = false)]
+    public void TurnOffParticleSystemClientRpc()
+    {
+        TurnOffParticleSystem();
+    }
+
     public void OpenHoleFromServer()
     {
         TurnOnParticleSystem();
         TurnOnParticleSystemClientRpc();
+        Break();
     }
 
-   
+    public override void Weld()
+    {
+        TurnOffParticleSystem();
+        TurnOffParticleSystemClientRpc();
+    }
+
+
+
 }

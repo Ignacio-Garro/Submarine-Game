@@ -51,6 +51,7 @@ public class PlayerInventory : NetworkBehaviour
     {
         if (inventoryList.Count >= inventoryCapacity) return;
         inventoryList.Add(item);
+        InputManager.Instance.StopUsingItem(currentHoldingItem);
         selectedItem = inventoryList.Count - 1;
         item.IsBeingHold = true;
         item.ChangeItemProperty(this);
@@ -137,6 +138,7 @@ public class PlayerInventory : NetworkBehaviour
         NetworkCommunicationManager.Instance.ActivatePhysicCollisionsServerRpc(inventoryList[selectedItem].gameObject);
         inventoryList[selectedItem].IsBeingHold = false;
         inventoryList.RemoveAt(selectedItem);
+        InputManager.Instance.StopUsingItem(currentHoldingItem);
         if (selectedItem > 0)
         {
             selectedItem -= 1;
@@ -151,6 +153,7 @@ public class PlayerInventory : NetworkBehaviour
         if (item != null && inventoryList[selectedItem] != item) return;
         inventoryList[selectedItem].IsBeingHold = false;
         inventoryList.RemoveAt(selectedItem);
+        InputManager.Instance.StopUsingItem(currentHoldingItem);
         if (selectedItem > 0)
         {
             selectedItem -= 1;
@@ -161,6 +164,7 @@ public class PlayerInventory : NetworkBehaviour
     public void ChangeSelectedInventoryObject(int index)
     {
         if (inventoryList.Count <= index) return;
+        InputManager.Instance.StopUsingItem(currentHoldingItem);
         selectedItem = index;
         newItemSelected();
     }
@@ -173,6 +177,7 @@ public class PlayerInventory : NetworkBehaviour
         {
             if (scroll > 0f)
             {
+                InputManager.Instance.StopUsingItem(currentHoldingItem);
                 selectedItem++;
                 if (selectedItem >= inventoryList.Count)
                 {
@@ -181,6 +186,7 @@ public class PlayerInventory : NetworkBehaviour
             }
             else if (scroll < 0f)
             {
+                InputManager.Instance.StopUsingItem(currentHoldingItem);
                 selectedItem--;
                 if (selectedItem < 0)
                 {
@@ -224,6 +230,7 @@ public class PlayerInventory : NetworkBehaviour
     }
 
     private void newItemSelected(){
+
         inventoryList.ForEach(item => {
             NetworkCommunicationManager.Instance.DeactivateVisibilityServerRpc(item.gameObject);
             NetworkCommunicationManager.Instance.DeactivateCollisionsServerRpc(item.gameObject);

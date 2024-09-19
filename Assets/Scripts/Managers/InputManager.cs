@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ public class InputManager : MonoBehaviour
     public event DelgateWithPlayerParam onInteractReleased = (_, _) => { };
     public event DelgateWithPlayerParam onDropPressed = (_, _) => { };
     public event DelgateWithPlayerParam onClickPressed = (_, _) => { };
+    public event DelgateWithPlayerParam onClickReleased = (_, _) => { };
     public event DelgateWithPlayerParam onOnePressed = (_, _) => { };
     public event DelgateWithPlayerParam onTwoPressed = (_, _) => { };
     public event DelgateWithPlayerParam onThreePressed = (_, _) => { };
@@ -36,6 +38,7 @@ public class InputManager : MonoBehaviour
     public event DelgateWithPlayerParam onInteractReleasedAfterBlock = (_, _) => { };
     public event DelgateWithPlayerParam onDropPressedAfterBlock = (_, _) => { };
     public event DelgateWithPlayerParam onClickPressedAfterBlock = (_, _) => { };
+    public event DelgateWithPlayerParam onClickReleasedAfterBlock = (_, _) => { };
     public event DelgateWithPlayerParam onOnePressedAfterBlock = (_, _) => { };
     public event DelgateWithPlayerParam onTwoPressedAfterBlock = (_, _) => { };
     public event DelgateWithPlayerParam onThreePressedAfterBlock = (_, _) => { };
@@ -54,12 +57,12 @@ public class InputManager : MonoBehaviour
 
     [Header("info")]
     [SerializeField] private float interactionRange = 5.0f;
+    [SerializeField] private float itemInteractionRange = 5f;
     [SerializeField] private Material interactuableMaterial = null;
 
     IInteractuableObject viewedActor = null;
-
     bool inputIsBlocked = false;
-    public bool InputIsBlocked  {get => inputIsBlocked; set => inputIsBlocked = value; }
+    public bool InputIsBlocked  {get => inputIsBlocked; set{inputIsBlocked = value; StopUsingItem(ActualPlayer.GetComponent<PlayerInventory>().currentHoldingItem); } }
 
 
     private Vector2 moveInput => moveAction == null ? Vector2.zero : moveAction.ReadValue<Vector2>();
@@ -72,6 +75,14 @@ public class InputManager : MonoBehaviour
 
     public Camera PlayerCamera => GameManager.Instance.PlayerCamera;
     public GameObject ActualPlayer => GameManager.Instance.ActualPlayer;
+
+
+
+    private GameObject currentWatchingObject = null;
+    private ItemInteractuableInterface currentInteractingItemObject;
+
+    private bool isUsingItem;
+    
 
     private void Awake()
     {
@@ -96,8 +107,10 @@ public class InputManager : MonoBehaviour
         InputAction oneAction = playerInput.actions["one"];
         InputAction twoAction = playerInput.actions["two"];
         InputAction threeAction = playerInput.actions["three"];
+        InputAction clickAction = playerInput.actions["fire"];
 
         jumpAction.started += OnJumpPressedFunction;
+        jumpAction.canceled += OnJumpReleasedFunction;
         crouchAction.started += OnCrouchPressedFunction;
         crouchAction.canceled += OnCrouchReleasedFunction;
         sprintAction.started += OnSprintPressedFunction;
@@ -108,18 +121,23 @@ public class InputManager : MonoBehaviour
         oneAction.started += OnOnePressedFunction;
         twoAction.started += OnTwoPressedFunction;
         threeAction.started += OnThreePressedFunction;
+        clickAction.started += OnClickPressedFunction;
+        clickAction.canceled += OnClickReleasedFunction;
     }
 
     // Update is called once per frame
     void Update()
     {
 
+        GetWatchingObject();
+        CheckForItemInteraction();
+
+
+
         //Call on interactuable objects when they are in range
         if (GameManager.Instance == null || ActualPlayer == null || PlayerCamera == null) return;
-        if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out RaycastHit hit, interactionRange))
-        {
-            GameObject actorChocado = hit.collider.gameObject;
-            IInteractuableObject inter = actorChocado.GetComponent<IInteractuableObject>();
+        
+            IInteractuableObject inter = GetWatchingComponent<IInteractuableObject>();
             if(inter == null)
             {
                 if(viewedActor != null)
@@ -142,10 +160,56 @@ public class InputManager : MonoBehaviour
                     viewedActor = inter;
                 }
             }
+        
+    }
+
+    private void GetWatchingObject()
+    {
+        if (PlayerCamera == null) return;
+        if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out RaycastHit hit, interactionRange))
+        {
+            currentWatchingObject = hit.collider.gameObject;
+        }
+        else
+        {
+            currentWatchingObject = null;
         }
     }
 
-  
+    private void CheckForItemInteraction()
+    {
+        if (!isUsingItem) return;
+        ItemInteractuableInterface interactuableObject = GetWatchingComponent<ItemInteractuableInterface>();
+        if (interactuableObject != currentInteractingItemObject)
+        {
+            PlayerInventory inventory = ActualPlayer.GetComponent<PlayerInventory>();
+            currentInteractingItemObject?.OnStopInteracting(inventory == null ? null : inventory.currentHoldingItem);
+            interactuableObject?.OnEnterInteractionRange(inventory == null ? null : inventory.currentHoldingItem);
+            currentInteractingItemObject = interactuableObject; 
+        }
+    }
+
+    private T GetWatchingComponent<T>()
+    {
+        if (currentWatchingObject == null) return default(T);
+        GameObject aux = currentWatchingObject;
+        T searchedComponent = aux.GetComponent<T>();
+        while (searchedComponent == null && aux.transform.parent != null)
+        {
+            aux = aux.transform.parent.gameObject;
+            searchedComponent = aux.GetComponent<T>();
+        }
+        return searchedComponent;
+    }
+
+    public void StopUsingItem(ItemPickable item)
+    {
+        item?.GetComponent<ItemFunctionInterface>()?.OnItemUnuse();
+        currentInteractingItemObject?.OnStopInteracting(item);
+        currentInteractingItemObject = null;
+        isUsingItem = false;
+    }
+
     private void OnJumpPressedFunction(InputAction.CallbackContext context)
     {
         if (inputIsBlocked)
@@ -164,6 +228,33 @@ public class InputManager : MonoBehaviour
             return;
         }
         onJumpReleased(ActualPlayer, PlayerCamera);
+    }
+
+    private void OnClickPressedFunction(InputAction.CallbackContext context)
+    {
+        if (inputIsBlocked)
+        {
+            onClickPressedAfterBlock(ActualPlayer, PlayerCamera);
+            return;
+        }
+        onClickPressed(ActualPlayer, PlayerCamera);
+        TryToUseItem();
+    }
+
+    private void OnClickReleasedFunction(InputAction.CallbackContext context)
+    {
+        if (ActualPlayer == null) return;
+        
+        if (inputIsBlocked)
+        {
+            onClickReleasedAfterBlock(ActualPlayer, PlayerCamera);
+            return;
+        }
+        onClickReleased(ActualPlayer, PlayerCamera);
+        if (ActualPlayer.GetComponent<PlayerInventory>() != null)
+        {
+            StopUsingItem(ActualPlayer.GetComponent<PlayerInventory>().currentHoldingItem);
+        }
     }
 
 
@@ -276,21 +367,30 @@ public class InputManager : MonoBehaviour
 
     private void TryToInteractWithObject()
     {
-        if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out RaycastHit hit, interactionRange))
+        IInteractuableObject interactuableObject = GetWatchingComponent<IInteractuableObject>();
+        if (interactuableObject != null)
         {
-            GameObject actorChocado = hit.collider.gameObject;
-            IInteractuableObject interactuableObject = actorChocado.GetComponent<IInteractuableObject>();
-            while (interactuableObject == null && actorChocado.transform.parent != null)
-            {
-                actorChocado = actorChocado.transform.parent.gameObject;
-                interactuableObject = actorChocado.GetComponent<IInteractuableObject>();
-            }
-            if (interactuableObject != null)
-            {
-                interactuableObject.OnInteract(ActualPlayer);
-            }
+            interactuableObject.OnInteract(ActualPlayer);
         }
-    } 
+    }
+      
+
+    private void TryToUseItem()
+    {
+        if(ActualPlayer == null || PlayerCamera == null) return;
+        ItemPickable currentItem = ActualPlayer.GetComponent<PlayerInventory>() != null ? ActualPlayer.GetComponent<PlayerInventory>().currentHoldingItem : null;
+        if (currentItem == null) return;
+        currentItem.gameObject.GetComponent<ItemFunctionInterface>()?.OnItemUse();
+        isUsingItem = true;
+        ItemInteractuableInterface interactuableObject = GetWatchingComponent<ItemInteractuableInterface>();
+        if (interactuableObject != null)
+        {
+            interactuableObject.OnInteract(currentItem);
+            currentInteractingItemObject = interactuableObject;
+        }
+    }
+
+
 
     public void AddInteractuableMaterial(GameObject obj)
     {

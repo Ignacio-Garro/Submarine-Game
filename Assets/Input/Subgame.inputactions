@@ -36,7 +36,7 @@
                     "name": "Jump",
                     "type": "Button",
                     "id": "af43f4c2-d353-4888-b856-827017df759f",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -72,7 +72,7 @@
                     "name": "NewClickRelease",
                     "type": "Button",
                     "id": "7f716c9b-269d-43a5-a660-2f59294fb8fc",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -81,7 +81,7 @@
                     "name": "NewClickPressed",
                     "type": "Button",
                     "id": "e9b6d6dd-7a77-440d-a806-5312877797ff",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
