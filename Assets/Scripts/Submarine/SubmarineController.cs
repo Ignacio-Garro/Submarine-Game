@@ -43,6 +43,8 @@ public class SubmarineController : NetworkBehaviour
 
     [Header("Submarine settings")]
     [SerializeField] private Transform EnterPosition;
+    [SerializeField] private Transform EnterPositionDoor;
+    [SerializeField] private Transform ExitPositionDoor;
 
 
     //Global variables
@@ -160,6 +162,72 @@ public class SubmarineController : NetworkBehaviour
             {
                 rb.Sleep();
                 rb.transform.position = EnterPosition.position;
+            }
+            if(player == GameManager.Instance.ActualPlayer)
+            {
+                PlayerController controller = player.GetComponent<PlayerController>();
+                if(controller != null)
+                {
+                    controller.EnterSubmarine();
+                }
+            }
+            
+            
+        }
+       
+    }
+    public void EnterSubmarineDoor(GameObject player)
+    {
+        if (IsServer)
+        {
+            Rigidbody rb = player.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.Sleep();
+                player.transform.parent = gameObject.transform;
+            }
+        }
+        if (IsClient)
+        {
+            if(player == GameManager.Instance.ActualPlayer) currentPlayerIsInSubmarine = true;
+            Rigidbody rb = player.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.Sleep();
+                rb.transform.position = EnterPositionDoor.position;
+            }
+            if(player == GameManager.Instance.ActualPlayer)
+            {
+                PlayerController controller = player.GetComponent<PlayerController>();
+                if(controller != null)
+                {
+                    controller.EnterSubmarine();
+                }
+            }
+            
+            
+        }
+       
+    }
+    public void ExitSubmarineDoor(GameObject player)
+    {
+        if (IsServer)
+        {
+            Rigidbody rb = player.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.Sleep();
+                player.transform.parent = gameObject.transform;
+            }
+        }
+        if (IsClient)
+        {
+            if(player == GameManager.Instance.ActualPlayer) currentPlayerIsInSubmarine = false;
+            Rigidbody rb = player.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.Sleep();
+                rb.transform.position = ExitPositionDoor.position;
             }
             if(player == GameManager.Instance.ActualPlayer)
             {

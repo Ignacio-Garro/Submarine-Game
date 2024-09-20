@@ -393,6 +393,7 @@ public class PlayerMovement : NetworkBehaviour {
 
     public void IsInWater(bool water){
         inWater = water;
+        Debug.Log("Water BITCH!!!: " + water);
     }
 
     public void IsInLadder(bool ladder){
