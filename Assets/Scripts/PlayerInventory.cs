@@ -50,8 +50,8 @@ public class PlayerInventory : NetworkBehaviour
     public void PickupObject(ItemPickable item)
     {
         if (inventoryList.Count >= inventoryCapacity) return;
+        if(currentHoldingItem != null) InputManager.Instance.StopUsingItem(currentHoldingItem);
         inventoryList.Add(item);
-        InputManager.Instance.StopUsingItem(currentHoldingItem);
         selectedItem = inventoryList.Count - 1;
         item.IsBeingHold = true;
         item.ChangeItemProperty(this);
@@ -137,8 +137,8 @@ public class PlayerInventory : NetworkBehaviour
         ActivateColliders(inventoryList[selectedItem].gameObject);
         NetworkCommunicationManager.Instance.ActivatePhysicCollisionsServerRpc(inventoryList[selectedItem].gameObject);
         inventoryList[selectedItem].IsBeingHold = false;
+        InputManager.Instance.ReleaseItemUsage(currentHoldingItem);
         inventoryList.RemoveAt(selectedItem);
-        InputManager.Instance.StopUsingItem(currentHoldingItem);
         if (selectedItem > 0)
         {
             selectedItem -= 1;
@@ -153,7 +153,7 @@ public class PlayerInventory : NetworkBehaviour
         if (item != null && inventoryList[selectedItem] != item) return;
         inventoryList[selectedItem].IsBeingHold = false;
         inventoryList.RemoveAt(selectedItem);
-        InputManager.Instance.StopUsingItem(currentHoldingItem);
+        InputManager.Instance.ReleaseItemUsage(currentHoldingItem);
         if (selectedItem > 0)
         {
             selectedItem -= 1;
@@ -172,7 +172,7 @@ public class PlayerInventory : NetworkBehaviour
     void Update(){  //THIS NEEDS TO BE OPTIMIZED
 
         // Change selected item with mouse scroll wheel
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        /*float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (scroll != 0f)
         {
             if (scroll > 0f)
@@ -194,7 +194,7 @@ public class PlayerInventory : NetworkBehaviour
                 }
             }
             newItemSelected();
-        }
+        }*/
 
         //UI
         /*

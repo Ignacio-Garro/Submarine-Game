@@ -11,6 +11,7 @@ TagManager:
   - Coal
   - GasTankGrab
   - Fuel
+  - RechargableItem
   layers:
   - Default
   - TransparentFX
