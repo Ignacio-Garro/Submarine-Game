@@ -204,8 +204,12 @@ public class SubmarineController : NetworkBehaviour
                     controller.EnterSubmarine();
                 }
             }
-            
-            
+            // Access the PlayerMovement script and call isInWater(true)
+            PlayerMovement movement = player.GetComponent<PlayerMovement>();
+            if (movement != null)
+            {
+                movement.IsInWater(false);
+            } 
         }
        
     }
@@ -237,8 +241,12 @@ public class SubmarineController : NetworkBehaviour
                     controller.EnterSubmarine();
                 }
             }
-            
-            
+            // Access the PlayerMovement script and call isInWater(true)
+            PlayerMovement movement = player.GetComponent<PlayerMovement>();
+            if (movement != null)
+            {
+                movement.IsInWater(true);
+            } 
         }
        
     }
