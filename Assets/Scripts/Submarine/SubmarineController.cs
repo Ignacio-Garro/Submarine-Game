@@ -221,7 +221,7 @@ public class SubmarineController : NetworkBehaviour
             if (rb != null)
             {
                 rb.Sleep();
-                player.transform.parent = gameObject.transform;
+                player.transform.parent = null; 
             }
         }
         if (IsClient)
@@ -238,7 +238,7 @@ public class SubmarineController : NetworkBehaviour
                 PlayerController controller = player.GetComponent<PlayerController>();
                 if(controller != null)
                 {
-                    controller.EnterSubmarine();
+                    controller.ExitSubmarine();
                 }
             }
             // Access the PlayerMovement script and call isInWater(true)

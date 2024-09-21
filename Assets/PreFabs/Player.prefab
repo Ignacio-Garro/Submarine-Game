@@ -694,6 +694,7 @@ MonoBehaviour:
   speedText: 0
   walkSpeed: 5
   sprintSpeed: 7
+  sprintingSwimSpeed: 6
   swimSpeed: 4
   ladderSpeed: 4
   crouchSpeed: 2

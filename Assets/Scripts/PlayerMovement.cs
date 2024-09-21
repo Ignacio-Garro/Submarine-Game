@@ -42,6 +42,7 @@ public class PlayerMovement : NetworkBehaviour {
     [Header("Speeds")]
     [SerializeField] private float walkSpeed;
     [SerializeField] private float sprintSpeed;
+    [SerializeField] private float sprintingSwimSpeed;
     [SerializeField] private float swimSpeed;
     [SerializeField] private float ladderSpeed;
     [SerializeField] private float crouchSpeed;
@@ -107,6 +108,7 @@ public class PlayerMovement : NetworkBehaviour {
         crouching,
         air,
         swimming,
+        sprintswimming,
         ladder
     }
     /*
@@ -200,8 +202,14 @@ public class PlayerMovement : NetworkBehaviour {
         }
         // Mode - Swimming
         else if(inWater){
-            state = MovementState.swimming;
-            targetSpeed = swimSpeed;
+            if(isSprinting){
+                state = MovementState.sprintswimming;
+                targetSpeed = sprintingSwimSpeed;
+            }
+            else{
+                state = MovementState.swimming;
+                targetSpeed = swimSpeed;
+            }
         }
         else{
             // Mode - Still
@@ -337,22 +345,27 @@ public class PlayerMovement : NetworkBehaviour {
     private void DragControl(){
         if(inWater){
             dragXZ = waterDrag;
+            dragY = waterDrag;
             currentDrag = waterDrag;
         }
         else if (inLadder){
             dragXZ = ladderDrag;
+            dragY = ladderDrag;
             currentDrag = ladderDrag;
         }
         else if (state == MovementState.still){
             dragXZ = stillDrag;
+            dragY = 0;
             currentDrag = stillDrag;
         }
         else if (isGrounded){
             dragXZ = groundDrag;
+            dragY = 0;
             currentDrag = groundDrag;
         }
         else{
             dragXZ = airDrag;
+            dragY = 0;
             currentDrag = airDrag;
         }
     }
@@ -393,7 +406,7 @@ public class PlayerMovement : NetworkBehaviour {
 
     public void IsInWater(bool water){
         inWater = water;
-        Debug.Log("Water BITCH!!!: " + water);
+        rb.useGravity = !water;
     }
 
     public void IsInLadder(bool ladder){

@@ -8,4 +8,8 @@ public class PlayerController : MonoBehaviour
     {
         //waterMask.SetActive(true);
     }
+    public void ExitSubmarine()
+    {
+        //waterMask.SetActive(false);
+    }
 }
