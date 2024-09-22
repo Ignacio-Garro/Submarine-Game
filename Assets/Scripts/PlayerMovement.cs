@@ -106,6 +106,7 @@ public class PlayerMovement : NetworkBehaviour {
         walking,
         sprinting,
         crouching,
+        crouchMoving,
         air,
         swimming,
         sprintswimming,
@@ -213,12 +214,16 @@ public class PlayerMovement : NetworkBehaviour {
         }
         else{
             // Mode - Still
-            if(isGrounded && moveInput.x == 0 && moveInput.y == 0){
+            if(isGrounded && moveInput.x == 0 && moveInput.y == 0 && !isCrouching){
                 state = MovementState.still;
             }
             // Mode - Crouching
-            else if (isCrouching) {
+            else if (isCrouching && moveInput.x == 0 && moveInput.y == 0) {
                 state = MovementState.crouching;
+                targetSpeed = crouchSpeed;
+            }
+            else if (isCrouching) {
+                state = MovementState.crouchMoving;
                 targetSpeed = crouchSpeed;
             }
 
@@ -353,7 +358,7 @@ public class PlayerMovement : NetworkBehaviour {
             dragY = ladderDrag;
             currentDrag = ladderDrag;
         }
-        else if (state == MovementState.still){
+        else if (state == MovementState.still || state == MovementState.crouching){
             dragXZ = stillDrag;
             dragY = 0;
             currentDrag = stillDrag;
