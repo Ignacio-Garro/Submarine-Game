@@ -62,7 +62,7 @@ public class InputManager : MonoBehaviour
 
     IInteractuableObject viewedActor = null;
     bool inputIsBlocked = false;
-    public bool InputIsBlocked  {get => inputIsBlocked; set{inputIsBlocked = value; StopUsingItem(ActualPlayer.GetComponent<PlayerInventory>().currentHoldingItem); } }
+    public bool InputIsBlocked  {get => inputIsBlocked; set{inputIsBlocked = value; ReleaseItemUsage(ActualPlayer.GetComponent<PlayerInventory>().currentHoldingItem); } }
 
 
     private Vector2 moveInput => moveAction == null ? Vector2.zero : moveAction.ReadValue<Vector2>();
@@ -204,6 +204,14 @@ public class InputManager : MonoBehaviour
 
     public void StopUsingItem(ItemPickable item)
     {
+        item?.GetComponent<ItemFunctionInterface>()?.OnItemRemove();
+        currentInteractingItemObject?.OnStopInteracting(item);
+        currentInteractingItemObject = null;
+        isUsingItem = false;
+    }
+
+    public void ReleaseItemUsage(ItemPickable item)
+    {
         item?.GetComponent<ItemFunctionInterface>()?.OnItemUnuse();
         currentInteractingItemObject?.OnStopInteracting(item);
         currentInteractingItemObject = null;
@@ -253,7 +261,7 @@ public class InputManager : MonoBehaviour
         onClickReleased(ActualPlayer, PlayerCamera);
         if (ActualPlayer.GetComponent<PlayerInventory>() != null)
         {
-            StopUsingItem(ActualPlayer.GetComponent<PlayerInventory>().currentHoldingItem);
+            ReleaseItemUsage(ActualPlayer.GetComponent<PlayerInventory>().currentHoldingItem);
         }
     }
 
