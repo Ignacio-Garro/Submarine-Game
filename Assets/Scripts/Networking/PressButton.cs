@@ -7,9 +7,6 @@ public class PressButton : MonoBehaviour, IInteractuableObject
     public UnityEvent<GameObject> onClickLocal = null;
     public UnityEvent<GameObject> onClickServer = null;
     public UnityEvent<GameObject> onClickClients = null;
-    public UnityEvent<GameObject> onReleaseLocal = null;
-    public UnityEvent<GameObject> onReleaseServer = null;
-    public UnityEvent<GameObject> onReleaseClients = null;
 
     public void OnInteract(GameObject playerThatInteracted)
     {
