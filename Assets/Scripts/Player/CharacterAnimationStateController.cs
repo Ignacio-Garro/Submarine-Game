@@ -49,26 +49,26 @@ public class CharacterAnimationStateController : MonoBehaviour
                 break;
             case PlayerMovement.MovementState.crouchMoving:
                 currentState = PlayerMovement.MovementState.crouchMoving;
-                animator.SetInteger("state", 4);
+                animator.SetInteger("state", 5);
                 break;
             case PlayerMovement.MovementState.air:
                 currentState = PlayerMovement.MovementState.air;
-                animator.SetInteger("state", 5);
+                animator.SetInteger("state", 6);
                 break;
 
             case PlayerMovement.MovementState.swimming:
                 currentState = PlayerMovement.MovementState.swimming;
-                animator.SetInteger("state", 6);
+                animator.SetInteger("state", 7);
                 break;
 
             case PlayerMovement.MovementState.sprintswimming:
                 currentState = PlayerMovement.MovementState.sprintswimming;
-                animator.SetInteger("state", 7);
+                animator.SetInteger("state", 8);
                 break;
 
             case PlayerMovement.MovementState.ladder:
                 currentState = PlayerMovement.MovementState.ladder;
-                animator.SetInteger("state", 8);
+                animator.SetInteger("state", 9);
                 break;
 
             default:

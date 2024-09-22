@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 5374756677099326372}
   - component: {fileID: 5148194171236506419}
   m_Layer: 2
-  m_Name: Capsule Collider
+  m_Name: CapsuleCollider
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -713,7 +713,7 @@ MonoBehaviour:
   lowJumpGravityMultiplier: 1.5
   extraSpaceToJump: 0.2
   crouchYScale: 0.5
-  startYScale: 0.6
+  startYScale: 0
   canUncrouch: 0
   extraSpaceToUncrouch: 0.6
   whatIsGround:
@@ -724,6 +724,7 @@ MonoBehaviour:
   objectGrabPointTransfrom: {fileID: 7533137907372858371}
   interactionRange: 5
   playerCamera: {fileID: 2540967651066300405}
+  capsuleColliderTransform: {fileID: 0}
 --- !u!114 &3417166423358297559
 MonoBehaviour:
   m_ObjectHideFlags: 0

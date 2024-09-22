@@ -86,6 +86,7 @@ public class PlayerMovement : NetworkBehaviour {
     [SerializeField] private Transform objectGrabPointTransfrom;
     [SerializeField] private float interactionRange = 1f;
     [SerializeField] private Transform playerCamera;
+    [SerializeField] private Transform capsuleColliderTransform;
 
     private Vector3 flatVel;
 
@@ -121,8 +122,11 @@ public class PlayerMovement : NetworkBehaviour {
     */
     private void Start() {
         rb = GetComponent<Rigidbody>();
-        startYScale = transform.localScale.y;
+        capsuleColliderTransform = transform.Find("CapsuleCollider");
 
+
+        startYScale = capsuleColliderTransform.localScale.y;
+        
         rb.freezeRotation = true;
         readyToJump = true;
         inLadder = false;
@@ -182,7 +186,7 @@ public class PlayerMovement : NetworkBehaviour {
 
         if(tryingToUncrouch && canUncrouch && isCrouching){
             isCrouching = false;
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+            capsuleColliderTransform.localScale = new Vector3(capsuleColliderTransform.localScale.x, startYScale, capsuleColliderTransform.localScale.z);
         }
     }
 
@@ -213,8 +217,12 @@ public class PlayerMovement : NetworkBehaviour {
             }
         }
         else{
+            // Mode - Air
+            if(!isGrounded){
+                state = MovementState.air;
+            }
             // Mode - Still
-            if(isGrounded && moveInput.x == 0 && moveInput.y == 0 && !isCrouching){
+            else if(isGrounded && moveInput.x == 0 && moveInput.y == 0 && !isCrouching){
                 state = MovementState.still;
             }
             // Mode - Crouching
@@ -237,11 +245,6 @@ public class PlayerMovement : NetworkBehaviour {
             else if (isGrounded) {
                 state = MovementState.walking;
                 targetSpeed = walkSpeed;
-            }
-
-            // Mode - Air
-            else if(!isGrounded){
-                state = MovementState.air;
             }
         }
     }
@@ -436,7 +439,7 @@ public class PlayerMovement : NetworkBehaviour {
 
     private void OnCrouchStarted() {
         if(!inWater || isGrounded){
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+            capsuleColliderTransform.localScale = new Vector3(capsuleColliderTransform.localScale.x, startYScale * crouchYScale, capsuleColliderTransform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
         }
         isCrouching = true;

@@ -2154,6 +2154,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 449586180}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!108 &482905954 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 26062807340413818, guid: 50ca35445bc7f3e4a955e5b5b17b12fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 1401796484}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &511334239
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6804,6 +6810,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0fd425583d0fc34d81f2358db318483, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  energyCapacity: 300000
+  consumptionRate: 1000
+  luz: {fileID: 482905954}
 --- !u!1 &1422113381
 GameObject:
   m_ObjectHideFlags: 0
