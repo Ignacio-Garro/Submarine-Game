@@ -813,15 +813,6 @@ MonoBehaviour:
   onClickClients:
     m_PersistentCalls:
       m_Calls: []
-  onReleaseLocal:
-    m_PersistentCalls:
-      m_Calls: []
-  onReleaseServer:
-    m_PersistentCalls:
-      m_Calls: []
-  onReleaseClients:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &684708011491351595
 GameObject:
   m_ObjectHideFlags: 0
@@ -944,7 +935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3305140210
+  GlobalObjectIdHash: 2618394702
   InScenePlacedSourceGlobalObjectIdHash: 1922518054
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -11380,15 +11371,6 @@ MonoBehaviour:
   onClickClients:
     m_PersistentCalls:
       m_Calls: []
-  onReleaseLocal:
-    m_PersistentCalls:
-      m_Calls: []
-  onReleaseServer:
-    m_PersistentCalls:
-      m_Calls: []
-  onReleaseClients:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &4551519715521981173
 GameObject:
   m_ObjectHideFlags: 0
@@ -11897,7 +11879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3171103960
+  GlobalObjectIdHash: 2618394702
   InScenePlacedSourceGlobalObjectIdHash: 1922518054
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -12495,7 +12477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1540385494
+  GlobalObjectIdHash: 2618394702
   InScenePlacedSourceGlobalObjectIdHash: 1922518054
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -17740,6 +17722,8 @@ GameObject:
   - component: {fileID: 6750437621449213176}
   - component: {fileID: 5815533092134058264}
   - component: {fileID: 7237377608381894821}
+  - component: {fileID: 5389477919313130984}
+  - component: {fileID: 2263574428648528459}
   m_Layer: 0
   m_Name: pump base
   m_TagString: Untagged
@@ -17837,6 +17821,98 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 2925756801334136394, guid: 36eabecd86210784287e05ad5e49aa93, type: 3}
+--- !u!114 &5389477919313130984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8704509776766188111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823de61716393e249be640d18ebd1ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onClickLocal:
+    m_PersistentCalls:
+      m_Calls: []
+  onClickServer:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2263574428648528459}
+        m_TargetAssemblyTypeName: VibrationComponent, Assembly-CSharp
+        m_MethodName: SetActiveVibration
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 8728733184777472073}
+        m_TargetAssemblyTypeName: SubmarineController, Assembly-CSharp
+        m_MethodName: StartPumping
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  onClickClients:
+    m_PersistentCalls:
+      m_Calls: []
+  onReleaseLocal:
+    m_PersistentCalls:
+      m_Calls: []
+  onReleaseServer:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2263574428648528459}
+        m_TargetAssemblyTypeName: VibrationComponent, Assembly-CSharp
+        m_MethodName: SetActiveVibration
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8728733184777472073}
+        m_TargetAssemblyTypeName: SubmarineController, Assembly-CSharp
+        m_MethodName: StopPumping
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onReleaseClients:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2263574428648528459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8704509776766188111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 713ab1467625b39498186d97d7a5a295, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amplitud: 0.014
+  frecuencia: 9.5
 --- !u!1 &8748309575234534113
 GameObject:
   m_ObjectHideFlags: 0
@@ -19069,7 +19145,7 @@ PrefabInstance:
     - target: {fileID: 6248832472481498757, guid: 613a3834d985c6e478d7f3d78e72d0ae,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 4179387123
+      value: 2618394702
       objectReference: {fileID: 0}
     - target: {fileID: 6248832472481498757, guid: 613a3834d985c6e478d7f3d78e72d0ae,
         type: 3}
@@ -19711,7 +19787,7 @@ PrefabInstance:
     - target: {fileID: 6248832472481498757, guid: 613a3834d985c6e478d7f3d78e72d0ae,
         type: 3}
       propertyPath: GlobalObjectIdHash
-      value: 3997225073
+      value: 2618394702
       objectReference: {fileID: 0}
     - target: {fileID: 6248832472481498757, guid: 613a3834d985c6e478d7f3d78e72d0ae,
         type: 3}
