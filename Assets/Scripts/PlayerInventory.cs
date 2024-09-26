@@ -152,8 +152,8 @@ public class PlayerInventory : NetworkBehaviour
         if (!inventoryList.Any()) return;
         if (item != null && inventoryList[selectedItem] != item) return;
         inventoryList[selectedItem].IsBeingHold = false;
-        inventoryList.RemoveAt(selectedItem);
         InputManager.Instance.ReleaseItemUsage(currentHoldingItem);
+        inventoryList.RemoveAt(selectedItem);
         if (selectedItem > 0)
         {
             selectedItem -= 1;

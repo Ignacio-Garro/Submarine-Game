@@ -24,12 +24,21 @@ public class SubmarineReactor : NetworkBehaviour
     
     bool isWorking = true;
     ReaparableStructure reparableComponent;
+    RefrigerableStructure refrigerComponent;
 
     public override void OnNetworkSpawn()
     {
         reparableComponent = GetComponent<ReaparableStructure>();
-        reparableComponent.repairClient += () => isWorking = true;
-        reparableComponent.repairServer += () => pressureBar.Fix();
+        if(reparableComponent != null)
+        {
+            reparableComponent.repairClient += () => isWorking = true;
+            reparableComponent.repairServer += () => pressureBar.Fix();
+        }
+        refrigerComponent = GetComponent<RefrigerableStructure>();
+        if (refrigerComponent != null)
+        {
+            refrigerComponent.RefrigerateServerAction += (ammount) => { energyUsedPerSecondAverage.Value = Mathf.Max(energyUsedPerSecondAverage.Value - highOverheatLimit * ammount, 0); };
+        }
     }
 
 

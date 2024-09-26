@@ -23,6 +23,7 @@ public class Engine : NetworkBehaviour
     float tryToUsePercent = 0;
     NetworkVariable<float> pressureLevel = new NetworkVariable<float>(0f);
     ReaparableStructure reparableComponent;
+    RefrigerableStructure refrigerComponent;
 
     public override void OnNetworkSpawn()
     {
@@ -30,9 +31,18 @@ public class Engine : NetworkBehaviour
         base.OnNetworkSpawn();
         if (IsServer) InvokeRepeating("EngineHandeling", 0f, 1f);
         reparableComponent = GetComponent<ReaparableStructure>();
-        if (reparableComponent == null) return;
-        reparableComponent.repairClient += () => RepairClient();
-        reparableComponent.repairServer += () => RepairServer();
+        if (reparableComponent != null)
+        {
+            reparableComponent.repairClient += () => RepairClient();
+            reparableComponent.repairServer += () => RepairServer();
+        }
+        refrigerComponent = GetComponent<RefrigerableStructure>();
+        if (refrigerComponent != null)
+        {
+            refrigerComponent.RefrigerateServerAction += (float ammount) => { pressureLevel.Value = Mathf.Max(0, pressureLevel.Value - ammount); };
+        }
+        
+
     }
 
     private void Update(){

@@ -8,8 +8,8 @@ public class ReaparableStructure : NetworkBehaviour, ItemInteractuableInterface
     [SerializeField] Transform barPosition;
     [SerializeField] Canvas worldCanvas;
     [SerializeField] int repairRequired = 1;
-    public Action repairServer;
-    public Action repairClient;
+    public Action repairServer = () => { };
+    public Action repairClient = () => { };
 
     NetworkVariable<int> currentRepair = new NetworkVariable<int>(0);
     Bar progressBar = null;
