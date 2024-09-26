@@ -3768,10 +3768,30 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 3305140210
       objectReference: {fileID: 0}
+    - target: {fileID: 6356118697963301003, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.0271
+      objectReference: {fileID: 0}
+    - target: {fileID: 6356118697963301003, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.439
+      objectReference: {fileID: 0}
     - target: {fileID: 6601782481689870994, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
       propertyPath: GlobalObjectIdHash
       value: 2594843176
+      objectReference: {fileID: 0}
+    - target: {fileID: 6601782481689870994, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 1922518054
+      objectReference: {fileID: 0}
+    - target: {fileID: 8713654164801904192, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9040022454347285480, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
@@ -7576,6 +7596,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FuelRodItem
+      objectReference: {fileID: 0}
+    - target: {fileID: 6594089805123015217, guid: 12e27b798cbe42347a1d06a277440087,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7119893569528690846, guid: 12e27b798cbe42347a1d06a277440087,
         type: 3}
