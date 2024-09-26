@@ -132,6 +132,7 @@ MonoBehaviour:
   initialStoredEnergy: 50000
   energyFluid: {fileID: 4241627978489483398}
   currentReactor: {fileID: 0}
+  IsInPlace: 0
 --- !u!114 &2291584313202583464
 MonoBehaviour:
   m_ObjectHideFlags: 0

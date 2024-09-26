@@ -21,7 +21,7 @@ public class VibrationComponent : NetworkBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        posicionOriginal = transform.position;
+        posicionOriginal = transform.localPosition;
         offsetX = Random.Range(0f, 100f);
         offsetY = Random.Range(0f, 100f);
     }
@@ -32,7 +32,7 @@ public class VibrationComponent : NetworkBehaviour
         if (!isActive || !IsServer) return;
         float desplazamientoX = (Mathf.PerlinNoise(Time.time * frecuencia + offsetX, 0) - 0.5f) * 2f * amplitud;
         float desplazamientoY = (Mathf.PerlinNoise(0, Time.time * frecuencia + offsetY) - 0.5f) * 2f * amplitud;
-        transform.position = posicionOriginal + new Vector3(desplazamientoX, desplazamientoY, 0);
+        transform.localPosition = posicionOriginal + new Vector3(desplazamientoX, desplazamientoY, 0);
     }
 
     public void SetActiveVibration(bool active)
