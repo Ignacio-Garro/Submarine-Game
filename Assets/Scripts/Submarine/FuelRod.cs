@@ -19,6 +19,8 @@ public class FuelRod : NetworkBehaviour
     {
         storedEnergy = initialStoredEnergy;
         initialScale = energyFluid.localScale;
+        ItemPickable item = GetComponent<ItemPickable>();
+        if (item != null) item.OnPickItem += _ => RemoveFromReactor();
     }
 
     public float TryToExtractEnergy(float energy)

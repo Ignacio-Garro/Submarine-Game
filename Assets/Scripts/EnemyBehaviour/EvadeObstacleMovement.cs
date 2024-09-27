@@ -78,6 +78,7 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
 
             foreach(PlayerHealth target in posibleTargets)
             {
+                if (target == null) continue;
                 if((target.transform.position - transform.position).magnitude < farRange)
                 {
                     if(nearest == null || (nearest.transform.position - transform.position).magnitude > (target.transform.position - transform.position).magnitude)

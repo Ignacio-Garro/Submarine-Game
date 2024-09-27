@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class SubmarineReactor : NetworkBehaviour
 {
@@ -41,19 +42,48 @@ public class SubmarineReactor : NetworkBehaviour
         }
     }
 
+    public void TryToInsertFuelRod(GameObject player, ItemPickable fuelRod)
+    {
+        if (!IsServer) return;
+        FuelRod rod = fuelRod.GetComponent<FuelRod>();
+        if (rod == null) return;
+        if (downRod != null) return;
+        InsertNewFuelRodClientRpc(player, fuelRod.gameObject);
+    }
 
-    public void InsertNewFuelRod(GameObject player, ItemPickable fuelRod)
+    [ClientRpc(RequireOwnership = false)]
+    public void InsertNewFuelRodClientRpc(NetworkObjectReference playerThatInteracted, NetworkObjectReference item)
+    {
+        playerThatInteracted.TryGet(out NetworkObject player);
+        if (player == null) return;
+        item.TryGet(out NetworkObject fuelRodObj);
+        if (fuelRodObj == null) return;
+        ItemPickable fuelRod = fuelRodObj.GetComponent<ItemPickable>();
+        if (fuelRod == null) return;
+        if (GameManager.Instance.ActualPlayer != player.gameObject) return;
+        PlayerInventory inventory = player.GetComponent<PlayerInventory>();
+        if (inventory != null)
+        {
+            inventory.ExtractItemForcefully(fuelRod);
+        }
+        InsertNewFuelRodServerRpc(player, item);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void InsertNewFuelRodServerRpc(NetworkObjectReference playerThatInteracted, NetworkObjectReference item)
     {
 
         if (!IsServer) return;
-        
+        playerThatInteracted.TryGet(out NetworkObject player);
+        if (player == null) return;
+        item.TryGet(out NetworkObject fuelRodObj);
+        if (fuelRodObj == null) return;
+        ItemPickable fuelRod = fuelRodObj.GetComponent<ItemPickable>();
+        if (fuelRod == null) return;
         Collider collider = fuelRod.GetComponent<Collider>();
         if (collider != null) collider.enabled = false;
         FuelRod rod = fuelRod.GetComponent<FuelRod>();
-        if (rod == null) return;
         float targetHeight = CentreFuelColumnDownPosition.localPosition.y + rod.ySize/2;
-        if (downRod != null) return;
-        
         fuelRod.GetComponent<Rigidbody>().isKinematic = true;
         fuelRod.transform.localPosition = new Vector3(CentreFuelColumnDownPosition.localPosition.x, targetHeight, CentreFuelColumnDownPosition.localPosition.z);
         fuelRod.transform.localRotation = CentreFuelColumnDownPosition.localRotation;
@@ -92,7 +122,7 @@ public class SubmarineReactor : NetworkBehaviour
 
     private void Update()
     {
-        pressureBar.SetBarPercentage(energyUsedPerSecondAverage.Value * 100 / highOverheatLimit);
+        pressureBar.SetBarPercentage(energyUsedPerSecondAverage.Value / highOverheatLimit);
         if (!IsServer) return;
         if (rodIsClimbing)
         {

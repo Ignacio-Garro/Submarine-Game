@@ -51,6 +51,7 @@ public class PlayerInventory : NetworkBehaviour
     {
         if (inventoryList.Count >= inventoryCapacity) return;
         if(currentHoldingItem != null) InputManager.Instance.StopUsingItem(currentHoldingItem);
+        if(item.gameObject.transform.parent != null) NetworkCommunicationManager.Instance.DeattachFromParentNetworkObjectServerRpc(item.gameObject);
         inventoryList.Add(item);
         selectedItem = inventoryList.Count - 1;
         item.IsBeingHold = true;
@@ -133,9 +134,14 @@ public class PlayerInventory : NetworkBehaviour
     public void TryToDropCurrentObject(GameObject player, Camera camera)
     {
         if (!inventoryList.Any()) return;
-        NetworkCommunicationManager.Instance.ActivateRigidBodyServerRpc(inventoryList[selectedItem].gameObject);
-        ActivateColliders(inventoryList[selectedItem].gameObject);
-        NetworkCommunicationManager.Instance.ActivatePhysicCollisionsServerRpc(inventoryList[selectedItem].gameObject);
+        NetworkCommunicationManager.Instance.ActivateRigidBodyServerRpc(currentHoldingItem.gameObject);
+        ActivateColliders(currentHoldingItem.gameObject);
+        NetworkCommunicationManager.Instance.ActivatePhysicCollisionsServerRpc(currentHoldingItem.gameObject);
+        Transform parentTrans = player.transform.parent;
+        if(parentTrans != null)
+        {
+            NetworkCommunicationManager.Instance.ReparentNetworkObjectServerRpc(currentHoldingItem.gameObject, parentTrans.gameObject);
+        }
         inventoryList[selectedItem].IsBeingHold = false;
         InputManager.Instance.ReleaseItemUsage(currentHoldingItem);
         inventoryList.RemoveAt(selectedItem);
@@ -153,6 +159,11 @@ public class PlayerInventory : NetworkBehaviour
         if (item != null && inventoryList[selectedItem] != item) return;
         inventoryList[selectedItem].IsBeingHold = false;
         InputManager.Instance.ReleaseItemUsage(currentHoldingItem);
+        Transform parentTrans = GameManager.Instance.ActualPlayer.transform.parent;
+        if (parentTrans != null)
+        {
+            NetworkCommunicationManager.Instance.ReparentNetworkObjectServerRpc(currentHoldingItem.gameObject, parentTrans.gameObject);
+        }
         inventoryList.RemoveAt(selectedItem);
         if (selectedItem > 0)
         {

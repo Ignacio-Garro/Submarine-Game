@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: -508403430164099357}
   - component: {fileID: 6873639656880237935}
   - component: {fileID: 7119893569528690846}
-  - component: {fileID: 2291584313202583464}
   - component: {fileID: 2957266252150314896}
   - component: {fileID: 4210628157723541597}
+  - component: {fileID: 8253968249255013746}
   m_Layer: 0
   m_Name: FuelRodItem
   m_TagString: Fuel
@@ -133,21 +133,6 @@ MonoBehaviour:
   energyFluid: {fileID: 4241627978489483398}
   currentReactor: {fileID: 0}
   IsInPlace: 0
---- !u!114 &2291584313202583464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1072683769042990653}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82040c547cd35d74fafd3be617b5a631, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventoryImage: {fileID: 0}
-  currentInventory: {fileID: 0}
-  IsBeingHold: 0
 --- !u!114 &2957266252150314896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,6 +176,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8253968249255013746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072683769042990653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f65f802a0bb6b241bdf1493b059c1a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryImage: {fileID: 0}
+  currentInventory: {fileID: 0}
+  IsBeingHold: 0
 --- !u!1001 &7164031164542974160
 PrefabInstance:
   m_ObjectHideFlags: 0

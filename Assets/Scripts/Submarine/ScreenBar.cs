@@ -21,11 +21,11 @@ public class ScreenBar : MonoBehaviour
 
     public void SetBarPercentage(float percentage)
     {
-        percentage = Mathf.Clamp(percentage, 0, 100);
+        percentage = Mathf.Clamp(percentage, 0, 1);
         this.percentage = percentage;
-        insideBar.fillAmount = percentage / 100f;
-        insideBar.color = colorGradient.Evaluate(percentage / 100);
-        percentageText.text = Mathf.RoundToInt(percentage) + "%";
+        insideBar.fillAmount = percentage;
+        insideBar.color = colorGradient.Evaluate(percentage);
+        percentageText.text = Mathf.RoundToInt(percentage * 100) + "%";
     }
 
     public void Break()

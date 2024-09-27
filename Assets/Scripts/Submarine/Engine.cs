@@ -46,7 +46,7 @@ public class Engine : NetworkBehaviour
     }
 
     private void Update(){
-        pressureBar.SetBarPercentage(pressureLevel.Value * 100);
+        pressureBar.SetBarPercentage(pressureLevel.Value);
     }
 
     void EngineHandeling()
