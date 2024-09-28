@@ -69,6 +69,9 @@ public class SubmarineMovement : NetworkBehaviour
     [Header("nav info")]
     [SerializeField] TextMeshProUGUI horizontalSpeedText;
     [SerializeField] TextMeshProUGUI energyText;
+    [SerializeField] TextMeshProUGUI verticalSpeedText;
+    [SerializeField] TextMeshProUGUI depthText;
+    [SerializeField] TextMeshProUGUI pressureText;
 
     [SerializeField] bool isMovingRight;
     [SerializeField] bool isMovingLeft;
@@ -166,8 +169,27 @@ public class SubmarineMovement : NetworkBehaviour
             verticalVelocity += acceleration * Time.fixedDeltaTime;
         }
         controller.collision.MakeDownMovementWithCollisions(verticalVelocity * Time.fixedDeltaTime);
-        //transform.position += transform.up * verticalVelocity * Time.fixedDeltaTime;
+        
+
+        //Update text in control screens
+        verticalSpeedText.text = Math.Round(verticalVelocity,1) + "<size=40%> m/s";
+        float depth = (float)Math.Round(-transform.position.y, 1);
+        depthText.text = depth + "<size=40%> m";
+        pressureText.text = CalculatePressure(depth) +  "<size=40%> kPa";
+
     }
+
+    public static double CalculatePressure(double depth)
+    {
+        const double gravity = 9.81;
+        const double waterDensity = 1000;
+        const double atmosphericPressure = 101325;
+
+        double pressure = atmosphericPressure * Math.Exp(-gravity * depth / (waterDensity * 287.05));
+
+        return pressure;
+    }
+
 
     /*
     void OldVerticalMovement()
@@ -188,17 +210,18 @@ public class SubmarineMovement : NetworkBehaviour
     }
     */
 
-  
-    public void SetworkingEngine(bool engineState){
-/*        if(!engineState){
-            isMovingForward = false;
-            isMovingBackWards = false;
-            isMovingRight = false;
-            isMovingLeft = false;
-        }*/
+
+    public void SetworkingEngine(bool engineState)
+    {
+        /*        if(!engineState){
+                    isMovingForward = false;
+                    isMovingBackWards = false;
+                    isMovingRight = false;
+                    isMovingLeft = false;
+                }*/
         //workingEngine = engineState;
     }
-    
+
     public void StopRightMovement()
     {
         isMovingRight = false;
