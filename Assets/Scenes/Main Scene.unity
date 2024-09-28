@@ -413,12 +413,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 92615484}
   m_CullTransparentMesh: 1
---- !u!4 &96518854 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5439526079665901136, guid: 5ce4154e109b756499b81c1147f03ad2,
-    type: 3}
-  m_PrefabInstance: {fileID: 833155077}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &131928585 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8888574808995734778, guid: b7de1055fcb3b3c4db1ae117f08ce86d,
@@ -1726,115 +1720,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 386066048}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &391928668
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 391928669}
-  - component: {fileID: 391928672}
-  - component: {fileID: 391928671}
-  - component: {fileID: 391928670}
-  m_Layer: 0
-  m_Name: Security camara screen back (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &391928669
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 391928668}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -23.33, y: 14.87, z: -1.7}
-  m_LocalScale: {x: 1.2906069, y: 1.3320353, z: 1.2906069}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 96518854}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &391928670
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 391928668}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &391928671
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 391928668}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 9c777260567d8b54eabca873a809e674, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &391928672
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 391928668}
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1001 &396100206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3639,6 +3524,62 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 1540385494
       objectReference: {fileID: 0}
+    - target: {fileID: 1282197989747038200, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: m_Name
+      value: Security camara screen up
+      objectReference: {fileID: 0}
+    - target: {fileID: 1386223498538536020, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickLocal.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1386223498538536020, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1386223498538536020, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1386223498538536020, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickLocal.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11500000, guid: df7bd720dc195284ab931461feb6d302,
+        type: 3}
+    - target: {fileID: 1386223498538536020, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2067035306}
+    - target: {fileID: 1386223498538536020, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickLocal.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1386223498538536020, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1386223498538536020, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: PreviousCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 1386223498538536020, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CamaraController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1386223498538536020, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1987670695345038285, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3689,6 +3630,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2408686179288368916, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: m_Name
+      value: Security camara screen main
+      objectReference: {fileID: 0}
+    - target: {fileID: 2654678108395040374, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2654678108395040374, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2654678108395040374, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2067035306}
+    - target: {fileID: 2654678108395040374, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2654678108395040374, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: NextCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 2654678108395040374, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CamaraController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2654678108395040374, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3918790019493061143, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
       propertyPath: GlobalObjectIdHash
@@ -3699,6 +3680,41 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 3997225073
       objectReference: {fileID: 0}
+    - target: {fileID: 4547180566446634806, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4547180566446634806, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4547180566446634806, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2067035306}
+    - target: {fileID: 4547180566446634806, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4547180566446634806, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ToggleCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 4547180566446634806, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: CamaraController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4547180566446634806, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: onClickServer.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4998708894126187184, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
       propertyPath: m_Name
@@ -3708,6 +3724,11 @@ PrefabInstance:
         type: 3}
       propertyPath: GlobalObjectIdHash
       value: 3305140210
+      objectReference: {fileID: 0}
+    - target: {fileID: 6039768731837540899, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: m_Name
+      value: Security camara screen down
       objectReference: {fileID: 0}
     - target: {fileID: 9040022454347285480, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
@@ -3721,11 +3742,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 27657074}
-    - targetCorrespondingSourceObject: {fileID: 5439526079665901136, guid: 5ce4154e109b756499b81c1147f03ad2,
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2408686179288368916, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 391928669}
-    m_AddedComponents: []
+      addedObject: {fileID: 2067035306}
   m_SourcePrefab: {fileID: 100100000, guid: 5ce4154e109b756499b81c1147f03ad2, type: 3}
 --- !u!1001 &840954169
 PrefabInstance:
@@ -9506,6 +9527,31 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2054823294}
   m_CullTransparentMesh: 1
+--- !u!1 &2067035301 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2408686179288368916, guid: 5ce4154e109b756499b81c1147f03ad2,
+    type: 3}
+  m_PrefabInstance: {fileID: 833155077}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2067035306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067035301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df7bd720dc195284ab931461feb6d302, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentCameraIndex: 0
+  cameraMaterials:
+  - {fileID: 2100000, guid: 471ae6e7dea86f049a79c2f3a9e4ff46, type: 2}
+  - {fileID: 2100000, guid: 6e765b486ac3abb41835a4094c2af6ef, type: 2}
+  - {fileID: 2100000, guid: 9363be17bb6544740b32f0ec85cb616b, type: 2}
+  offMaterial: {fileID: 2100000, guid: 9c777260567d8b54eabca873a809e674, type: 2}
+  monitorRenderer: {fileID: 0}
 --- !u!1 &2073241776
 GameObject:
   m_ObjectHideFlags: 0

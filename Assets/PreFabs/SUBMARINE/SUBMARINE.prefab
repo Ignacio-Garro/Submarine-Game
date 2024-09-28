@@ -939,105 +939,9 @@ MonoBehaviour:
   onClickServer:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2143710320975091213}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 96054257867262011}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 5612433369505961638}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 5263346624482928276}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 957414775618374147}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7143861753707227228}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 893347201587838102}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 3467716476668978836}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7470391212325451413}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
+      - m_Target: {fileID: 4379816848466893890}
+        m_TargetAssemblyTypeName: CamaraController, Assembly-CSharp
+        m_MethodName: PreviousCamera
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1864,7 +1768,7 @@ GameObject:
   - component: {fileID: 4194556949585096847}
   - component: {fileID: 7411616970398578418}
   m_Layer: 0
-  m_Name: Security camara screen left
+  m_Name: Security camara screen up
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3491,8 +3395,9 @@ GameObject:
   - component: {fileID: 2998280099037265181}
   - component: {fileID: 1604865545616619837}
   - component: {fileID: 4600051916355579370}
+  - component: {fileID: 4379816848466893890}
   m_Layer: 0
-  m_Name: Security camara screen back
+  m_Name: Security camara screen main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3588,6 +3493,25 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &4379816848466893890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2408686179288368916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df7bd720dc195284ab931461feb6d302, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentCameraIndex: 0
+  cameraMaterials:
+  - {fileID: 2100000, guid: 471ae6e7dea86f049a79c2f3a9e4ff46, type: 2}
+  - {fileID: 2100000, guid: 6e765b486ac3abb41835a4094c2af6ef, type: 2}
+  - {fileID: 2100000, guid: 9363be17bb6544740b32f0ec85cb616b, type: 2}
+  offMaterial: {fileID: 2100000, guid: 9c777260567d8b54eabca873a809e674, type: 2}
+  monitorRenderer: {fileID: 0}
 --- !u!1 &2506038459459697717
 GameObject:
   m_ObjectHideFlags: 0
@@ -9190,105 +9114,9 @@ MonoBehaviour:
   onClickServer:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2143710320975091213}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 96054257867262011}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 5612433369505961638}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 5263346624482928276}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 957414775618374147}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7143861753707227228}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 893347201587838102}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 3467716476668978836}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7470391212325451413}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
+      - m_Target: {fileID: 4379816848466893890}
+        m_TargetAssemblyTypeName: CamaraController, Assembly-CSharp
+        m_MethodName: NextCamera
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10816,105 +10644,9 @@ MonoBehaviour:
   onClickServer:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2143710320975091213}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 96054257867262011}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 5612433369505961638}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 5263346624482928276}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 957414775618374147}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7143861753707227228}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 893347201587838102}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 3467716476668978836}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 7470391212325451413}
-        m_TargetAssemblyTypeName: SpotlightController, Assembly-CSharp
-        m_MethodName: ToggleLight
+      - m_Target: {fileID: 4379816848466893890}
+        m_TargetAssemblyTypeName: CamaraController, Assembly-CSharp
+        m_MethodName: ToggleCamera
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11444,6 +11176,74 @@ MonoBehaviour:
     type: 3}
   m_ExclusionRenderer: {fileID: 6110763865980603339}
   version: 1
+--- !u!1 &4042113772652959084
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7101768838327069238}
+  - component: {fileID: 5640667916630838212}
+  m_Layer: 0
+  m_Name: videoplayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7101768838327069238
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4042113772652959084}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8447312040406773300}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!328 &5640667916630838212
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4042113772652959084}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 32900000, guid: baf48814a4a881f4988207c2726144a4, type: 3}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 8400000, guid: 9f378bffd52f9894e9a54267a28465dd, type: 2}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 1
+  m_SkipOnDrop: 1
+  m_Looping: 0
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
 --- !u!1 &4126774207288492322
 GameObject:
   m_ObjectHideFlags: 0
@@ -14587,7 +14387,7 @@ GameObject:
   - component: {fileID: 3631103624458348172}
   - component: {fileID: 8158514825215751603}
   m_Layer: 0
-  m_Name: Security camara screen right
+  m_Name: Security camara screen down
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16719,6 +16519,7 @@ Transform:
   - {fileID: 1279928956740230353}
   - {fileID: 1054238583248886801}
   - {fileID: 5607101006700949616}
+  - {fileID: 7101768838327069238}
   m_Father: {fileID: 3079305230680591999}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7381423133136486998
