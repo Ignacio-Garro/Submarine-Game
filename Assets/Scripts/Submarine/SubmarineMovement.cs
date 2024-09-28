@@ -53,7 +53,7 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] float verticalVelocity = 0;
     [SerializeField] float submarineHeigth = 5f;
     [SerializeField] float minDragVelocity = 0.1f;
-
+    [SerializeField] float waterMassFactor = 0.1f;
 
     Engine leftEngine => controller.leftEngine;
     Engine rightEngine => controller.rigthEngine;
@@ -61,7 +61,7 @@ public class SubmarineMovement : NetworkBehaviour
     float totalVolume => submarineInsideVolumeLitres + submarineTankVolumeLitres;
     float underWaterVolume => (1 - Mathf.Clamp((transform.position.y - waterHeigth) / submarineHeigth, 0, 1)) * totalVolume;
     float tankMass => tankPercentage / 100 * submarineTankVolumeLitres;
-    float sinkingMass => controller.sinking.WaterLevel / 100 * submarineInsideVolumeLitres;
+    float sinkingMass => controller.sinking.WaterLevel / 100 * submarineInsideVolumeLitres * waterMassFactor;
     float totalMass => submarineMass + tankMass + sinkingMass;
 
 
@@ -112,9 +112,16 @@ public class SubmarineMovement : NetworkBehaviour
 
     public void HorizontalMovement()
     {
-        float currentPercentage = (leftEngine.UseMotorPercentage(currentPowerPercent) + rightEngine.UseMotorPercentage(currentPowerPercent)) / 2;
-        float currentPowerWatt = maxEnginePowerWatt * currentPercentage / 100;
+        float currentPercentage = (leftEngine.GetMotorUsablePercentage(currentPowerPercent/100f) + rightEngine.GetMotorUsablePercentage(currentPowerPercent/100f)) / 2;
+        float currentPowerWatt = maxEnginePowerWatt * currentPercentage;
         float usableEnergy = controller.reactor.TryToExctractEnergy(Mathf.Abs(currentPowerWatt) * Time.fixedDeltaTime);
+        if(currentPowerWatt != 0)
+        {
+            float usedPercentage = usableEnergy / (Mathf.Abs(currentPowerWatt) * Time.fixedDeltaTime);
+            leftEngine.UseMotorPercentage(usedPercentage);
+            rightEngine.UseMotorPercentage(usedPercentage);
+        }
+        
         float horizontalForce = Mathf.Sign(currentPowerWatt) * (usableEnergy/Time.fixedDeltaTime) / Mathf.Max(Mathf.Abs(horizontalVelocity),3f); //fuerza que genera el motor
         float fixeddragVelocity = (horizontalVelocity < minDragHorizontalVelocity && horizontalVelocity > -minDragHorizontalVelocity) ? minDragHorizontalVelocity : horizontalVelocity;//
         float horizontalDrag = Mathf.Sign(-horizontalVelocity) * horizontalDragCoeficient * 0.5f * 1000 * horizontalSurface * fixeddragVelocity * fixeddragVelocity;

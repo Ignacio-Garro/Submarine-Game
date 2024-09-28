@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
@@ -6,8 +7,10 @@ public class ReaparableStructure : NetworkBehaviour, ItemInteractuableInterface
 {
     [SerializeField] Transform barPosition;
     [SerializeField] Canvas worldCanvas;
-
     [SerializeField] int repairRequired = 1;
+    public Action repairServer = () => { };
+    public Action repairClient = () => { };
+
     NetworkVariable<int> currentRepair = new NetworkVariable<int>(0);
     Bar progressBar = null;
     NetworkVariable<bool> isBroken = new NetworkVariable<bool>(false);
@@ -65,9 +68,13 @@ public class ReaparableStructure : NetworkBehaviour, ItemInteractuableInterface
         }
     }
 
-    public virtual void RepairServer() { }
-    public virtual void RepairClient() { }
-    public virtual void Break()
+    public void RepairServer() {
+        repairServer();
+    }
+    public void RepairClient() {
+        repairClient();
+    }
+    public void Break()
     {
         isBroken.Value = true;
     }

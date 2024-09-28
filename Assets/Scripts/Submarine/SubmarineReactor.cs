@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class SubmarineReactor : NetworkBehaviour
 {
@@ -13,85 +15,146 @@ public class SubmarineReactor : NetworkBehaviour
     [SerializeField] float averageCalculateTime = 1;
     [SerializeField] float lowOverheatLimit = 100000;
     [SerializeField] float highOverheatLimit = 200000;
-    List<FuelRod> centralRodList = new List<FuelRod>(); 
+    [SerializeField] float overheatTime = 10;
+    [SerializeField] ScreenBar pressureBar;
+    FuelRod upRod;
+    FuelRod downRod;
     float energyUsedPerSecond = 0;
-    float energyUsedPerSecondAverage = 0;
+    bool rodIsClimbing = false;
+    NetworkVariable<float> energyUsedPerSecondAverage = new NetworkVariable<float>(0f);
     
-    float secondTimer = 0;
+    bool isWorking = true;
+    ReaparableStructure reparableComponent;
+    RefrigerableStructure refrigerComponent;
 
-     
-    public void InsertNewFuelRod(GameObject player, ItemPickable fuelRod)
+    public override void OnNetworkSpawn()
+    {
+        reparableComponent = GetComponent<ReaparableStructure>();
+        if(reparableComponent != null)
+        {
+            reparableComponent.repairClient += () => isWorking = true;
+            reparableComponent.repairServer += () => pressureBar.Fix();
+        }
+        refrigerComponent = GetComponent<RefrigerableStructure>();
+        if (refrigerComponent != null)
+        {
+            refrigerComponent.RefrigerateServerAction += (ammount) => { energyUsedPerSecondAverage.Value = Mathf.Max(energyUsedPerSecondAverage.Value - highOverheatLimit * ammount, 0); };
+        }
+    }
+
+    public void TryToInsertFuelRod(GameObject player, ItemPickable fuelRod)
+    {
+        if (!IsServer) return;
+        FuelRod rod = fuelRod.GetComponent<FuelRod>();
+        if (rod == null) return;
+        if (downRod != null) return;
+        InsertNewFuelRodClientRpc(player, fuelRod.gameObject);
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void InsertNewFuelRodClientRpc(NetworkObjectReference playerThatInteracted, NetworkObjectReference item)
+    {
+        playerThatInteracted.TryGet(out NetworkObject player);
+        if (player == null) return;
+        item.TryGet(out NetworkObject fuelRodObj);
+        if (fuelRodObj == null) return;
+        ItemPickable fuelRod = fuelRodObj.GetComponent<ItemPickable>();
+        if (fuelRod == null) return;
+        if (GameManager.Instance.ActualPlayer != player.gameObject) return;
+        PlayerInventory inventory = player.GetComponent<PlayerInventory>();
+        if (inventory != null)
+        {
+            inventory.ExtractItemForcefully(fuelRod);
+        }
+        InsertNewFuelRodServerRpc(player, item);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    public void InsertNewFuelRodServerRpc(NetworkObjectReference playerThatInteracted, NetworkObjectReference item)
     {
 
         if (!IsServer) return;
-        
+        playerThatInteracted.TryGet(out NetworkObject player);
+        if (player == null) return;
+        item.TryGet(out NetworkObject fuelRodObj);
+        if (fuelRodObj == null) return;
+        ItemPickable fuelRod = fuelRodObj.GetComponent<ItemPickable>();
+        if (fuelRod == null) return;
         Collider collider = fuelRod.GetComponent<Collider>();
         if (collider != null) collider.enabled = false;
         FuelRod rod = fuelRod.GetComponent<FuelRod>();
-        if (rod == null) return;
         float targetHeight = CentreFuelColumnDownPosition.localPosition.y + rod.ySize/2;
-        if (centralRodList.Any())
-        {
-            if (centralRodList.Last().transform.localPosition.y - centralRodList.Last().ySize < targetHeight) return;
-        }
         fuelRod.GetComponent<Rigidbody>().isKinematic = true;
         fuelRod.transform.localPosition = new Vector3(CentreFuelColumnDownPosition.localPosition.x, targetHeight, CentreFuelColumnDownPosition.localPosition.z);
         fuelRod.transform.localRotation = CentreFuelColumnDownPosition.localRotation;
-        centralRodList.Add(rod);
+        downRod = rod;
         rod.currentReactor = this;
     }
 
     public float TryToExctractEnergy(float energyAmmount)
     {
-        if (isGodMode) return energyAmmount;
-        
-        if (!centralRodList.Any() || !centralRodList.First().IsInPlace) return 0;
-        float availableEnergy = centralRodList.First().TryToExtractEnergy(energyAmmount);
+        if (isGodMode)
+        {
+            energyUsedPerSecond += energyAmmount;
+            return energyAmmount;
+        }
+        if (!isWorking) return 0;
+        if (upRod == null) return 0;
+        float availableEnergy = upRod.TryToExtractEnergy(energyAmmount);
         energyUsedPerSecond += availableEnergy;
+        
         return availableEnergy;
     }
 
     public void ExtractFuelRod(FuelRod fuelRod)
     {
         if (!IsServer) return;
-        centralRodList.Remove(fuelRod);
-        foreach (var item in centralRodList)
-        {
-            item.IsInPlace = false;
-        }
+        if (fuelRod == downRod) downRod = null;
+        else if(fuelRod == upRod) upRod = null;
+    }
+
+    public void PushRodUp()
+    {
+        if (upRod != null) return;
+        if (downRod == null) return;
+        rodIsClimbing = true;
     }
 
     private void Update()
     {
+        pressureBar.SetBarPercentage(energyUsedPerSecondAverage.Value / highOverheatLimit);
         if (!IsServer) return;
-        if (centralRodList.Any())
+        if (rodIsClimbing)
         {
-            float objectiveHeigth = CentreFuelColumnUpPosition.localPosition.y;
-            foreach (FuelRod item in centralRodList)
+            downRod.transform.localPosition = Vector3.MoveTowards(downRod.transform.localPosition, CentreFuelColumnUpPosition.localPosition, rodClimbSpeed * Time.deltaTime);
+            if (downRod.transform.position == CentreFuelColumnUpPosition.position)
             {
-                objectiveHeigth -= item.ySize/2;
-                if(item.transform.localPosition.y < objectiveHeigth && !item.IsInPlace)
-                {
-                    item.transform.localPosition = Vector3.MoveTowards(item.transform.localPosition, new Vector3(CentreFuelColumnUpPosition.localPosition.x, objectiveHeigth, CentreFuelColumnUpPosition.localPosition.z), rodClimbSpeed * Time.deltaTime);
-                }
-                else if(!item.IsInPlace) 
-                {
-                    item.IsInPlace = true;
-                }
-                objectiveHeigth -= item.ySize / 2;
+                rodIsClimbing = false;
+                upRod = downRod;
+                downRod = null;
             }
+            
         }
-        secondTimer += Time.deltaTime;
-        if(secondTimer > averageCalculateTime)
+        
+        energyUsedPerSecondAverage.Value += ((energyUsedPerSecond / Time.deltaTime) - energyUsedPerSecondAverage.Value) * Time.deltaTime / overheatTime;
+        energyUsedPerSecond = 0;
+        if (energyUsedPerSecondAverage.Value >= highOverheatLimit && isWorking)
         {
-            secondTimer -= averageCalculateTime;
-            energyUsedPerSecondAverage = (energyUsedPerSecondAverage * (60 - averageCalculateTime) + energyUsedPerSecond * averageCalculateTime) / 60;
-            energyUsedPerSecond = 0;
-        }
-        if(energyUsedPerSecondAverage > lowOverheatLimit)
-        {
-
+            reparableComponent.Break();
+            isWorking = false;
+            pressureBar.Break();
         }
     }
 
+    public void RepairServer()
+    {
+        energyUsedPerSecondAverage.Value = 0;
+        isWorking = true;
+    }
+
+    public void RepairClient()
+    {
+        isWorking = true;
+        pressureBar.Fix();
+    }
 }

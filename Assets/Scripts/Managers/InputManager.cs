@@ -79,8 +79,8 @@ public class InputManager : MonoBehaviour
 
 
     private GameObject currentWatchingObject = null;
-    private ItemInteractuableInterface currentInteractingItemObject;
-
+    private bool changedWatchingObject = false;
+    private GameObject previousWatchingObject = null;
     private bool isUsingItem;
     
 
@@ -137,30 +137,31 @@ public class InputManager : MonoBehaviour
         //Call on interactuable objects when they are in range
         if (GameManager.Instance == null || ActualPlayer == null || PlayerCamera == null) return;
         
-            IInteractuableObject inter = GetWatchingComponent<IInteractuableObject>();
-            if(inter == null)
+            IInteractuableObject[] inters = GetAllComponents<IInteractuableObject>(currentWatchingObject);
+        IInteractuableObject inter = inters == null || !inters.Any() ? null : inters.First();
+        if (inter == null)
+        {
+            if (viewedActor != null)
             {
-                if(viewedActor != null)
-                {
-                    viewedActor.OnExitInRange();
-                    viewedActor = null;
-                }
+                viewedActor.OnExitInRange();
+                viewedActor = null;
             }
-            else
+        }
+        else
+        {
+            if (viewedActor == null)
             {
-                if(viewedActor == null)
-                {
-                    inter.OnEnterInRange();
-                    viewedActor = inter;
-                }
-                else if(viewedActor != inter)
-                {
-                    viewedActor.OnExitInRange();
-                    inter.OnEnterInRange();
-                    viewedActor = inter;
-                }
+                inter.OnEnterInRange();
+                viewedActor = inter;
             }
-        
+            else if (viewedActor != inter)
+            {
+                viewedActor.OnExitInRange();
+                inter.OnEnterInRange();
+                viewedActor = inter;
+            }
+        }
+
     }
 
     private void GetWatchingObject()
@@ -168,10 +169,25 @@ public class InputManager : MonoBehaviour
         if (PlayerCamera == null) return;
         if (Physics.Raycast(PlayerCamera.transform.position, PlayerCamera.transform.forward, out RaycastHit hit, interactionRange))
         {
-            currentWatchingObject = hit.collider.gameObject;
+            if(currentWatchingObject == hit.collider.gameObject)
+            {
+                changedWatchingObject = false;
+            }
+            else
+            {
+                previousWatchingObject = currentWatchingObject;
+                currentWatchingObject = hit.collider.gameObject;
+                changedWatchingObject = true;
+            }
+            
         }
         else
         {
+            if (currentWatchingObject != null)
+            {
+                previousWatchingObject = currentWatchingObject;
+                changedWatchingObject = true;
+            }
             currentWatchingObject = null;
         }
     }
@@ -179,42 +195,44 @@ public class InputManager : MonoBehaviour
     private void CheckForItemInteraction()
     {
         if (!isUsingItem) return;
-        ItemInteractuableInterface interactuableObject = GetWatchingComponent<ItemInteractuableInterface>();
-        if (interactuableObject != currentInteractingItemObject)
+        if (changedWatchingObject)
         {
             PlayerInventory inventory = ActualPlayer.GetComponent<PlayerInventory>();
-            currentInteractingItemObject?.OnStopInteracting(inventory == null ? null : inventory.currentHoldingItem);
-            interactuableObject?.OnEnterInteractionRange(inventory == null ? null : inventory.currentHoldingItem);
-            currentInteractingItemObject = interactuableObject; 
+            foreach(ItemInteractuableInterface i in GetAllComponents<ItemInteractuableInterface>(previousWatchingObject))
+            {
+                i?.OnStopInteracting(inventory == null ? null : inventory.currentHoldingItem);
+            }
+            foreach (ItemInteractuableInterface i in GetAllComponents<ItemInteractuableInterface>(currentWatchingObject))
+            {
+                i?.OnEnterInteractionRange(inventory == null ? null : inventory.currentHoldingItem);
+            }
         }
     }
 
-    private T GetWatchingComponent<T>()
+    private T[] GetAllComponents<T>(GameObject searchedObject)
     {
-        if (currentWatchingObject == null) return default(T);
-        GameObject aux = currentWatchingObject;
-        T searchedComponent = aux.GetComponent<T>();
-        while (searchedComponent == null && aux.transform.parent != null)
-        {
-            aux = aux.transform.parent.gameObject;
-            searchedComponent = aux.GetComponent<T>();
-        }
+        if (searchedObject == null) return Array.Empty<T>();
+        T[] searchedComponent = searchedObject.GetComponentsInParent<T>(true);
         return searchedComponent;
     }
 
     public void StopUsingItem(ItemPickable item)
     {
         item?.GetComponent<ItemFunctionInterface>()?.OnItemRemove();
-        currentInteractingItemObject?.OnStopInteracting(item);
-        currentInteractingItemObject = null;
+        foreach (ItemInteractuableInterface i in GetAllComponents<ItemInteractuableInterface>(currentWatchingObject))
+        {
+            i?.OnStopInteracting(item);
+        }
         isUsingItem = false;
     }
 
     public void ReleaseItemUsage(ItemPickable item)
     {
         item?.GetComponent<ItemFunctionInterface>()?.OnItemUnuse();
-        currentInteractingItemObject?.OnStopInteracting(item);
-        currentInteractingItemObject = null;
+        foreach (ItemInteractuableInterface i in GetAllComponents<ItemInteractuableInterface>(currentWatchingObject))
+        {
+            i?.OnStopInteracting(item);
+        }
         isUsingItem = false;
     }
 
@@ -375,10 +393,10 @@ public class InputManager : MonoBehaviour
 
     private void TryToInteractWithObject()
     {
-        IInteractuableObject interactuableObject = GetWatchingComponent<IInteractuableObject>();
-        if (interactuableObject != null)
+        IInteractuableObject[] interactuableObjects = GetAllComponents<IInteractuableObject>(currentWatchingObject);
+        foreach (IInteractuableObject i in interactuableObjects)
         {
-            interactuableObject.OnInteract(ActualPlayer);
+            i.OnInteract(ActualPlayer);
         }
     }
       
@@ -390,11 +408,11 @@ public class InputManager : MonoBehaviour
         if (currentItem == null) return;
         currentItem.gameObject.GetComponent<ItemFunctionInterface>()?.OnItemUse();
         isUsingItem = true;
-        ItemInteractuableInterface interactuableObject = GetWatchingComponent<ItemInteractuableInterface>();
-        if (interactuableObject != null)
+        ItemInteractuableInterface[] interactuableObjects = GetAllComponents<ItemInteractuableInterface>(currentWatchingObject);
+
+        foreach (ItemInteractuableInterface i in interactuableObjects)
         {
-            interactuableObject.OnInteract(currentItem);
-            currentInteractingItemObject = interactuableObject;
+            i.OnInteract(currentItem);
         }
     }
 

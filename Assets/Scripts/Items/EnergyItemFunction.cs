@@ -8,14 +8,22 @@ public class EnergyItemFunction : NetworkBehaviour, ItemFunctionInterface
     NetworkVariable<float> currentEnergy = new NetworkVariable<float>(0);
     protected int currentState = 0;
     protected int stateNumber = 2;
+    public ChargeStation currentChargeStation = null;
 
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
         if(IsServer) currentEnergy.Value = energyCapacity;
+        ItemPickable item = GetComponent<ItemPickable>();
+        if (item != null) item.OnPickItem += _ => ExtractFromChargeStation();
     }
 
-   
+    public void ExtractFromChargeStation()
+    {
+        if(currentChargeStation != null) currentChargeStation.ExtractCurrentItem();
+    }
+
+
     public void OnItemUse()
     {
         if (currentEnergy.Value <= 0) return;
@@ -55,6 +63,21 @@ public class EnergyItemFunction : NetworkBehaviour, ItemFunctionInterface
 
         }
 
+    }
+
+    public void Charge(float energyAmmount)
+    {
+        currentEnergy.Value += energyAmmount;
+    }
+
+    public float GetRemainingMaxCharge()
+    {
+        return energyCapacity - currentEnergy.Value;
+    }
+
+    public float GetRemainingEnergyPercentage()
+    {
+        return currentEnergy.Value / energyCapacity;
     }
 
     public void OnItemRemove()

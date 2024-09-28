@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -11,6 +12,7 @@ public class ItemPickable : NetworkBehaviour, IInteractuableObject
     public GameObject CurrentPlayer => GameManager.Instance.ActualPlayer;
     public PlayerInventory CurrentPlayerInventory => CurrentPlayer.GetComponent<PlayerInventory>();
     public bool IsBeingHold = false;
+    public Action<GameObject> OnPickItem = _ => { };
 
     //On interact picks the item
     public void OnInteract(GameObject playerThatInteracted)
@@ -23,6 +25,7 @@ public class ItemPickable : NetworkBehaviour, IInteractuableObject
         PlayerInventory inventory = playerThatInteracted.GetComponent<PlayerInventory>();
         if (inventory == null) return;
         inventory.PickupObject(this);
+        OnPickItem(playerThatInteracted);
     }
 
 

@@ -13,10 +13,14 @@ public class FuelRod : NetworkBehaviour
     public float ySize => GetYSize();
 
     float storedEnergy = 0;
+    Vector3 initialScale = Vector3.one;
 
     public void Start()
     {
         storedEnergy = initialStoredEnergy;
+        initialScale = energyFluid.localScale;
+        ItemPickable item = GetComponent<ItemPickable>();
+        if (item != null) item.OnPickItem += _ => RemoveFromReactor();
     }
 
     public float TryToExtractEnergy(float energy)
@@ -27,7 +31,7 @@ public class FuelRod : NetworkBehaviour
             energy = storedEnergy;
         }
         storedEnergy -= energy;
-        energyFluid.localScale =  new Vector3(1,storedEnergy / initialStoredEnergy,1);
+        energyFluid.localScale =  new Vector3(initialScale.x, initialScale.y, storedEnergy * initialScale.z / initialStoredEnergy);
         return energy;
     }
     
