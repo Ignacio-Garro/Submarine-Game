@@ -20,6 +20,7 @@ public class ItemPickable : NetworkBehaviour, IInteractuableObject
         PickItem(playerThatInteracted);
     }
 
+    //Local function
     public virtual void PickItem(GameObject playerThatInteracted)
     {
         PlayerInventory inventory = playerThatInteracted.GetComponent<PlayerInventory>();

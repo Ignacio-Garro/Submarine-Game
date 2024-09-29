@@ -15,10 +15,11 @@ public class EnergyItemFunction : NetworkBehaviour, ItemFunctionInterface
         base.OnNetworkSpawn();
         if(IsServer) currentEnergy.Value = energyCapacity;
         ItemPickable item = GetComponent<ItemPickable>();
-        if (item != null) item.OnPickItem += _ => ExtractFromChargeStation();
+        if (item != null) item.OnPickItem += _ => ExtractFromChargeStationServerRpc();
     }
 
-    public void ExtractFromChargeStation()
+    [ServerRpc(RequireOwnership = false)]
+    public void ExtractFromChargeStationServerRpc()
     {
         if(currentChargeStation != null) currentChargeStation.ExtractCurrentItem();
     }

@@ -13,7 +13,7 @@ public class ChargeStation : NetworkBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        screen.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -25,6 +25,7 @@ public class ChargeStation : NetworkBehaviour
         if(screen != null) screen.SetBarPercentage(currentItem.GetRemainingEnergyPercentage());
     }
 
+    //Comprueba en server si puede meter el item
     public void TryToInsertItem(GameObject player, ItemPickable fuelRod)
     {
         if (!IsServer) return;
@@ -34,6 +35,7 @@ public class ChargeStation : NetworkBehaviour
         InsertNewItemClientRpc(player, fuelRod.gameObject);
     }
 
+    //Jugador actualiza info si se puede meter el item y suelta el item
     [ClientRpc(RequireOwnership = false)]
     public void InsertNewItemClientRpc(NetworkObjectReference playerThatInteracted, NetworkObjectReference item)
     {
@@ -43,6 +45,7 @@ public class ChargeStation : NetworkBehaviour
         if (energyObj == null) return;
         ItemPickable energyItem = energyObj.GetComponent<ItemPickable>();
         if (energyItem == null) return;
+        screen.gameObject.SetActive(true);
         if (GameManager.Instance.ActualPlayer != player.gameObject) return;
         PlayerInventory inventory = player.GetComponent<PlayerInventory>();
         if (inventory != null)
@@ -52,6 +55,7 @@ public class ChargeStation : NetworkBehaviour
         InsertNewItemServerRpc(player, item);
     }
 
+    //Se actualiza info en el server, esto debe de ir despues del cliente porque el cliente tiene que soltar el item previamente
     [ServerRpc(RequireOwnership = false)]
     public void InsertNewItemServerRpc(NetworkObjectReference playerThatInteracted, NetworkObjectReference item)
     {
@@ -70,14 +74,22 @@ public class ChargeStation : NetworkBehaviour
         energyItem.transform.position = itemPosition.position;
         energyItem.transform.rotation = itemPosition.rotation;
         currentItem = energy;
+        energy.currentChargeStation = this;
     }
 
 
 
     public void ExtractCurrentItem()
     {
-        if (!IsServer) return;
         currentItem = null;
+        ExtractCurrentItemClientRpc();
     }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void ExtractCurrentItemClientRpc()
+    {
+        screen.gameObject.SetActive(false);
+    }
+
 
 }

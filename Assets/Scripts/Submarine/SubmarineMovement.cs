@@ -69,6 +69,9 @@ public class SubmarineMovement : NetworkBehaviour
     [Header("nav info")]
     [SerializeField] TextMeshProUGUI horizontalSpeedText;
     [SerializeField] TextMeshProUGUI energyText;
+    [SerializeField] TextMeshProUGUI verticalSpeedText;
+    [SerializeField] TextMeshProUGUI depthText;
+    [SerializeField] TextMeshProUGUI pressureText;
 
     [SerializeField] bool isMovingRight;
     [SerializeField] bool isMovingLeft;
@@ -166,7 +169,15 @@ public class SubmarineMovement : NetworkBehaviour
             verticalVelocity += acceleration * Time.fixedDeltaTime;
         }
         controller.collision.MakeDownMovementWithCollisions(verticalVelocity * Time.fixedDeltaTime);
-        //transform.position += transform.up * verticalVelocity * Time.fixedDeltaTime;
+        
+
+
+        //Update screen text
+        float depth = (float)Math.Round(-transform.position.y, 1);
+        verticalSpeedText.text = Math.Round(verticalVelocity,1) + " m/s";
+        depthText.text = depth + " m";
+        pressureText.text = CalculatePressure(depth) + " atm";
+
     }
 
     /*
@@ -216,7 +227,17 @@ public class SubmarineMovement : NetworkBehaviour
         isMovingLeft = false;
     }
 
-    
+    public static float CalculatePressure(double depth)
+    {
+        const double densityWater = 1000; // Densidad del agua en kg/m^3
+        const double gravity = 9.81; // Gravedad en m/s^2
+        const double atmosphericPressure = 1; // Presión atmosférica en atm
+        
+
+        double pressureAtDepth = atmosphericPressure + (densityWater * gravity * depth) / 101325;
+
+        return (float)Math.Round(pressureAtDepth, 3); // Convert from pascals to atmospheres
+    }
 
     public void BalanceTankWater()
     {
