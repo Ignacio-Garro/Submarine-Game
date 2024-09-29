@@ -3536,6 +3536,11 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 32076290
       objectReference: {fileID: 0}
+    - target: {fileID: 7425948024496623453, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: moveWithTransform
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9040022454347285480, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
       propertyPath: GlobalObjectIdHash
@@ -3544,6 +3549,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2068430422925565273, guid: 5ce4154e109b756499b81c1147f03ad2, type: 3}
+    - {fileID: 1067845357363389970, guid: 5ce4154e109b756499b81c1147f03ad2, type: 3}
+    - {fileID: 355690259771604251, guid: 5ce4154e109b756499b81c1147f03ad2, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1987670695345038285, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}

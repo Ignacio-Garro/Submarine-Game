@@ -81,6 +81,7 @@ public class PlayerMovement : NetworkBehaviour {
     [SerializeField] private LayerMask whatIsGround;
 
     [Header("Player Info")]
+    [SerializeField] private bool alive;
     [SerializeField] private float playerHeight;
     [SerializeField] private Transform orientation;
     [SerializeField] private Transform objectGrabPointTransfrom;
@@ -111,7 +112,8 @@ public class PlayerMovement : NetworkBehaviour {
         air,
         swimming,
         sprintswimming,
-        ladder
+        ladder,
+        dead
     }
     /*
     public override void OnNetworkSpawn(){
@@ -153,7 +155,7 @@ public class PlayerMovement : NetworkBehaviour {
 
     private void Update() {
         //Debug.Log(OwnerClientId + "; randomNumber: " + randomNumber.Value);
-        if(!IsOwner) return;
+        if(!IsOwner || !alive) return;
 
         StateHandler();
         showDebugLines();
@@ -191,7 +193,7 @@ public class PlayerMovement : NetworkBehaviour {
     }
 
     private void FixedUpdate() { // fisicas
-        if(!IsOwner) return;
+        if(!IsOwner || !alive) return;
         MovePlayer();
         ManualDrag();
         SwimControlUpDown();
@@ -200,8 +202,12 @@ public class PlayerMovement : NetworkBehaviour {
    
 
     private void StateHandler() {
+        if(!alive){
+            state = MovementState.dead;
+        }
+
         // Mode - ladder
-        if(inLadder){
+        else if(inLadder){
             state = MovementState.ladder;
             targetSpeed = ladderSpeed;
         }
@@ -419,6 +425,16 @@ public class PlayerMovement : NetworkBehaviour {
 
     public void IsInLadder(bool ladder){
         inLadder = ladder;
+    }
+
+    public void ToggleAlive(bool isAlive){
+        rb.useGravity = isAlive;
+        alive = isAlive;
+        rb.linearVelocity = Vector3.zero;
+    }
+
+    public bool getAlive(){
+        return alive;
     }
 
     //INPUT-------------------------------------------------------

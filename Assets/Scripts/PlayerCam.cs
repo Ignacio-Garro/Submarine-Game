@@ -11,6 +11,7 @@ public class PlayerCam : MonoBehaviour
     [SerializeField] private float mouseSensitivity;
     [SerializeField] Transform orientation;
     [SerializeField] Transform Player;
+    [SerializeField] private PlayerMovement playerMovement;
     float xRotation;
     float yRotation;
 
@@ -18,6 +19,8 @@ public class PlayerCam : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        playerMovement = GetComponentInParent<PlayerMovement>();
     }
     void Update()
     {
@@ -33,16 +36,25 @@ public class PlayerCam : MonoBehaviour
 
     private void MoveCamera()
     {
-        //rotate camera
-        transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
-        
-        //rotate orientation
-        orientation.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        if(playerMovement.getAlive()){
+            //rotate camera
+            transform.localRotation = Quaternion.Euler(xRotation, 0, 0);
+            //rotate orientation
+            orientation.localRotation = Quaternion.Euler(xRotation, 0, 0);
+        }
+        else{
+            //rotate camera
+            transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
+            //rotate orientation
+            orientation.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
+        }
     }
 
     private void FixedUpdate()
     {
-        //rotate player 
-        Player.localRotation = Quaternion.Euler(0, yRotation, 0);
+        //rotate player if not dead
+        if(playerMovement.getAlive()){
+            Player.localRotation = Quaternion.Euler(0, yRotation, 0);
+        }
     }
 }
