@@ -10,10 +10,10 @@ Shader "CustomRenderTexture/OutsideWaterShader"
 
      SubShader
      {
-        Tags { "Queue" = "Geometry" }
+        Tags { "Queue" = "Geometry"  "RenderPipeline" = "HDRenderPipeline"}
         Stencil {
             Ref 1
-            Comp NotEqual
+            Comp Equal
         }
 
         Pass

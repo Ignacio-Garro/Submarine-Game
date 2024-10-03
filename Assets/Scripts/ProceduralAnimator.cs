@@ -21,6 +21,7 @@ public class ProceduralAnimator : MonoBehaviour
             morphableMesh.SetBlendShapeWeight(0, morphableMesh.GetBlendShapeWeight(0) + (100 / morphTime) * Time.deltaTime);
             if(morphableMesh.GetBlendShapeWeight(0) >= 100)
             {
+                morphableMesh.SetBlendShapeWeight(0, 100);
                 isMorphing = false;
                 isMorphed = true;
                 onMorphed();
@@ -31,6 +32,7 @@ public class ProceduralAnimator : MonoBehaviour
             morphableMesh.SetBlendShapeWeight(0, morphableMesh.GetBlendShapeWeight(0) - (100 / morphTime) * Time.deltaTime);
             if (morphableMesh.GetBlendShapeWeight(0) <= 0)
             {
+                morphableMesh.SetBlendShapeWeight(0, 0);
                 isDemorphing = false;
                 isDemorphed = true;
                 onDemorphed();

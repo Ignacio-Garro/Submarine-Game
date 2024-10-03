@@ -3262,6 +3262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3069f0e1d099bf4583aa7b96da87b75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ragdollController: {fileID: 5656848860185317349}
   health: 100
 --- !u!1 &6699579356256445477
 GameObject:

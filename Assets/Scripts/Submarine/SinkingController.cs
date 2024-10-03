@@ -25,6 +25,7 @@ public class SinkingController : NetworkBehaviour
     void Update()
     {
         if (!IsServer) return;
+        if(waterMassThatRises == null) return;
         waterLevel += (controller.SinkingRate - controller.DrainRate) * sinkVelocityPerHole * Time.deltaTime;
         waterLevel = Mathf.Clamp(waterLevel, 0f, 100f);
         waterMassThatRises.transform.localPosition = Vector3.Lerp(initialWaterPosition.localPosition, finalWaterPosition.localPosition, waterLevel/100f);

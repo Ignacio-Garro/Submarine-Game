@@ -44,12 +44,18 @@ public class RagdollController : MonoBehaviour
             }
             else
             {
-                EnableRagdoll();
-                playerMovement.ToggleAlive(false);//dies
+                Die();
             }
 
             isRagdollActive = !isRagdollActive;  
         }
+    }
+
+    public void Die()
+    {
+        EnableRagdoll();
+        playerMovement.ToggleAlive(false);//dies
+        isRagdollActive = true;
     }
 
     public void EnableRagdoll()

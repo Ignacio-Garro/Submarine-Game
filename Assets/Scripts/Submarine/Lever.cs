@@ -59,7 +59,7 @@ public class Lever : NetworkBehaviour
             }
         }
         LeverMovable.position = leverTransformPosition;
-        Debug.Log(LeverPosition);
+       
     }
 
     public float ApproximateLeverToSegment()

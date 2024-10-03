@@ -8,14 +8,17 @@ using UnityEngine.EventSystems;
 
 public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
 {
-    [SerializeField] float speed = 1;
+    [SerializeField] float force = 3;
+    [SerializeField] float speed = 3;
     [SerializeField] float wallVisionDistance = 10;
     [SerializeField] Vector3 preferredDirection = Vector3.forward;
     [SerializeField] int damage = 35;
     [SerializeField] float farRange = 10;
     [SerializeField] float nearRange = 3;
     [SerializeField] float inflatedTime = 5f;
+    [SerializeField] float knockback = 15;
     [SerializeField] Animator animator;
+    [SerializeField] Collider bigCollider;
     Transform target = null;
     bool contactDamage = false;
     Vector3 PreferredDirection => target == null ? preferredDirection : target.position - transform.position;
@@ -34,6 +37,8 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
     {
         movementDirection = Vector3.forward * speed;
         posibleTargets = FindObjectsByType<PlayerHealth>(FindObjectsSortMode.None).ToList();
+        GetComponent<Rigidbody>().maxLinearVelocity = speed;
+        bigCollider.enabled = false;
     }
 
     // Update is called once per frame
@@ -52,7 +57,7 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
                     ProceduralAnimator animator = GetComponent<ProceduralAnimator>();
                     if (animator != null)
                     {
-                        animator.Demorph(() => { contactDamage = true; isInflated = false; target = null; });
+                        animator.Demorph(() => { contactDamage = true; isInflated = false; target = null; bigCollider.enabled = false; });
                     }
                     this.animator.SetBool("inflated", false);
                     isInflated = false; 
@@ -60,18 +65,11 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
                 }
                 
             }
-            movementDirection *= (1 - Time.deltaTime);
-            transform.Rotate(new Vector3(10, 10, 10) * Time.deltaTime);
-            transform.position += movementDirection * speed * Time.deltaTime;
+            
             return;
         }
 
-        if (isMoving)
-        {
-            transform.position += movementDirection * speed * Time.deltaTime;
-            transform.LookAt(transform.position + movementDirection);
-            CalculateTurns();
-        }
+        
         if(target == null)
         {
             Transform nearest = null;
@@ -112,6 +110,17 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (!IsServer) return;
+        if (isMoving && !isInflated)
+        {
+            CalculateTurns();
+            Rigidbody rb = GetComponent<Rigidbody>();
+            rb.rotation = Quaternion.LookRotation(rb.linearVelocity);
+        }
+    }
+
     void CalculateTurns()
     {
 
@@ -131,9 +140,9 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
             }
         }
         force += PreferredDirection * preferredDirectionWeigth;
-        movementDirection += force * Time.deltaTime;        
-        if(movementDirection.magnitude > 1) movementDirection.Normalize();
-
+        force *= this.force;
+        GetComponent<Rigidbody>()?.AddForce(force, ForceMode.Acceleration);
+        
     }
 
     void TouchPlayer(PlayerHealth health)
@@ -141,6 +150,7 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
         if (contactDamage)
         {
             health.TakeDamage(damage);
+            health.KnockBack(health.transform.position - transform.position, knockback);
         }
     }
 
@@ -150,15 +160,17 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
         if (animator != null)
         {
             animator.Morph(() => { contactDamage = true; });
+            bigCollider.enabled = true;
         }
         isInflated = true;
         this.animator.SetBool("inflated", true);
+        GetComponent<Rigidbody>()?.AddTorque(Vector3.right, ForceMode.Impulse);
     }
 
     void DetectPlayerFar(Transform player)
     {
         target = player;
-        preferredDirectionWeigth = 3;
+        preferredDirectionWeigth = 1f;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -167,26 +179,6 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
         {
             TouchPlayer(collision.gameObject.GetComponent<PlayerHealth>());
         }
-    }
-
-
-
-    Vector3 DecodeDirection(Vector3 direction)
-    {
-        if (direction == transform.right) return Vector3.right;
-        if (direction == -transform.right) return Vector3.left;
-        if (direction == transform.up) return Vector3.up;
-        if (direction == -transform.up)  return Vector3.down;
-        return Vector3.zero;
-    }
-
-    Vector3 EncodeDirection(Vector3 direction)
-    {
-        if (direction == Vector3.right) return transform.right;
-        if (direction == Vector3.left) return -transform.right;
-        if (direction == Vector3.up) return transform.up;
-        if (direction == Vector3.down) return -transform.up;
-        return Vector3.zero;
     }
 
     public float GetSpeed()

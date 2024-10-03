@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
+    [SerializeField] RagdollController ragdollController;
     [SerializeField] int health = 100;
     bool dead = false;
 
@@ -13,7 +14,8 @@ public class PlayerHealth : MonoBehaviour
 
     public void KnockBack(Vector3 direction, float force)
     {
-
+        if (dead) return;
+        GetComponent<Rigidbody>()?.AddForce(direction * force, ForceMode.Impulse);
     }
 
     public void PlayerRevives(int health)
@@ -26,6 +28,7 @@ public class PlayerHealth : MonoBehaviour
     void PlayerDies()
     {
         dead = true;
+        ragdollController.Die(); 
     }
 
     
