@@ -22,8 +22,8 @@ TagManager:
   - Ground
   - Post Processing
   - PlayerLayer
-  - 
-  - 
+  - insidePool
+  - outsidePool
   - 
   - 
   - 
