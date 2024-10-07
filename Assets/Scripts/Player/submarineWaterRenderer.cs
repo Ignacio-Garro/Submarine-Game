@@ -12,30 +12,22 @@ public class submarineWaterRenderer : MonoBehaviour{
         insideWaterLayer = LayerMask.NameToLayer("insidePool");
         outsideWaterLayer = LayerMask.NameToLayer("outsidePool");
 
-        camera = GetComponentInChildren<Camera>();
+        //camera = GetComponentInChildren<Camera>();
     }
+    public void EnterSubmarine(GameObject player){
 
-    void Update()
-    {
-        if (isInsideSubmarine)
-        {
-            camera.cullingMask |= (1 << insideWaterLayer); //render
+        camera = player.GetComponent<Camera>();
+        camera.cullingMask |= (1 << insideWaterLayer); //render
+        camera.cullingMask &= ~(1 << outsideWaterLayer);//dont render
 
-            camera.cullingMask &= ~(1 << outsideWaterLayer);//dont render
-        }
-        else
-        {
-            camera.cullingMask &= ~(1 << insideWaterLayer);//dont render
-
-            camera.cullingMask |= (1 << outsideWaterLayer);//render
-        }
-    }
-
-    public void EnterSubmarine(){
         isInsideSubmarine = true;
         Debug.Log("enter submarine");
     }
-    public void ExitSubmarine(){
+    public void ExitSubmarine(GameObject player){
+        camera = player.GetComponent<Camera>();
+        camera.cullingMask &= ~(1 << insideWaterLayer);//dont render
+        camera.cullingMask |= (1 << outsideWaterLayer);//render
+
         isInsideSubmarine = false;
         Debug.Log("exit submarine");
     }
