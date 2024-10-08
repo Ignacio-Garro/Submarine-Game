@@ -3762,7 +3762,7 @@ PrefabInstance:
     - target: {fileID: 1987670695345038285, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 30
+      value: 5.2
       objectReference: {fileID: 0}
     - target: {fileID: 1987670695345038285, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
@@ -3772,7 +3772,7 @@ PrefabInstance:
     - target: {fileID: 1987670695345038285, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -12.72
       objectReference: {fileID: 0}
     - target: {fileID: 1987670695345038285, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
@@ -3838,6 +3838,31 @@ PrefabInstance:
         type: 3}
       propertyPath: GlobalObjectIdHash
       value: 32076290
+      objectReference: {fileID: 0}
+    - target: {fileID: 8224933311424174968, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: screenLimit
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8224933311424174968, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: sensitivity
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 8224933311424174968, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: correctionForce
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8224933311424174968, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: maxRotationSpeed
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 8915435021947038531, guid: 5ce4154e109b756499b81c1147f03ad2,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.2
       objectReference: {fileID: 0}
     - target: {fileID: 9040022454347285480, guid: 5ce4154e109b756499b81c1147f03ad2,
         type: 3}
