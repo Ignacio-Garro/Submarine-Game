@@ -17,6 +17,8 @@ public class SubmarineMovement : NetworkBehaviour
     [SerializeField] float rotationAcceleration = 2f;
     [SerializeField] float maxRotateVelocity = 5f;
     [SerializeField] float rotationDeceleration = 2f;
+    
+ 
 
     [Header("Physic attributes")]
     [SerializeField] float submarineMass = 2100000f;
@@ -90,16 +92,8 @@ public class SubmarineMovement : NetworkBehaviour
     void Update()
     {
         if (!IsServer) return;
-        
-        if(isMovingRight) {
-            rotateVelocity = Mathf.Min(rotateVelocity + rotationAcceleration * Time.deltaTime, maxRotateVelocity);
-        }
-        else if(isMovingLeft) {
-            rotateVelocity = Mathf.Max(rotateVelocity - rotationAcceleration * Time.deltaTime, -maxRotateVelocity);
-        }
-        else {
-            rotateVelocity = Mathf.MoveTowards(rotateVelocity, 0, rotationDeceleration * Time.deltaTime);
-        }
+        float targetRotateVelocity = (controller.RotationLever.Progress * 2 - 1) * maxRotateVelocity;
+        rotateVelocity = Mathf.MoveTowards(rotateVelocity, targetRotateVelocity, rotationAcceleration * Time.deltaTime);
     }
 
     void FixedUpdate()
