@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 3233535644540902353}
   - component: {fileID: 1384238090577608030}
   - component: {fileID: 5162341547366197841}
+  - component: {fileID: 8295592162733488094}
   m_Layer: 0
   m_Name: PufferFish
   m_TagString: Untagged
@@ -50,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2173499330
+  GlobalObjectIdHash: 3416505189
   InScenePlacedSourceGlobalObjectIdHash: 3979419451
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -79,6 +80,7 @@ MonoBehaviour:
   farRange: 15
   nearRange: 6
   inflatedTime: 5
+  knockback: 15
   animator: {fileID: 5263982292342942255}
   bigCollider: {fileID: 7067595845778263709}
 --- !u!114 &1946960611788360490
@@ -165,6 +167,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8295592162733488094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226882456800015846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TransitionStateInfoList: []
+  m_Animator: {fileID: 5263982292342942255}
 --- !u!1 &4199295923274224079
 GameObject:
   m_ObjectHideFlags: 0

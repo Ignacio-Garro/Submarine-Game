@@ -443,7 +443,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &526942458588310988
 Transform:
   m_ObjectHideFlags: 0
@@ -3717,7 +3717,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 247
+    m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 052c873a69e7a2749ab122aa312dbb8c, type: 2}
   m_TargetDisplay: 0
@@ -4199,7 +4199,6 @@ GameObject:
   - component: {fileID: 6261327704578805771}
   - component: {fileID: 7285699869744747387}
   - component: {fileID: 2883662864569159717}
-  - component: {fileID: 1873212416026201503}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -4262,6 +4261,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 5332827090407162643}
+  body: {fileID: 8643973784284386901}
+  arms: {fileID: 872506402739484534}
 --- !u!54 &230219517771930971
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4494,20 +4495,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ragdollController: {fileID: 5656848860185317349}
   health: 100
---- !u!114 &1873212416026201503
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6646872831310050228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84322c69b4b814746b6ea3b71cf5c9f3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  camera: {fileID: 0}
-  isInsideSubmarine: 1
 --- !u!1 &6699579356256445477
 GameObject:
   m_ObjectHideFlags: 0

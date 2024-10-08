@@ -9,7 +9,6 @@ using UnityEngine.Events;
 public class ConditionalItemCompleteGameButton : NetworkBehaviour, IInteractuableObject
 {
 
-    public List<GameObject> acceptableGameObjects;
     public List<string> acceptableTags;
 
     public UnityEvent<GameObject, ItemPickable> onClickLocal = null;
@@ -23,11 +22,6 @@ public class ConditionalItemCompleteGameButton : NetworkBehaviour, IInteractuabl
         if (inventory == null) return;
         if (inventory.currentHoldingItem == null) return;
         ItemPickable item = inventory.currentHoldingItem;
-        if (acceptableGameObjects.Contains(PrefabUtility.GetCorrespondingObjectFromSource(inventory.currentHoldingItem.gameObject)) || acceptableTags.Contains(inventory.currentHoldingItem.gameObject.tag))
-        {
-                onClickLocal.Invoke(playerThatInteracted, item);
-                ClickServerRpc(playerThatInteracted, item.gameObject);
-        }
     }
 
     [ServerRpc(RequireOwnership = false)]

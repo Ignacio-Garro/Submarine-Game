@@ -149,8 +149,8 @@ public class Voxelization : MonoBehaviour
         }
 
         // Guardar el Texture2DArray como un asset
-        AssetDatabase.CreateAsset(textureArray, assetPath);
-        AssetDatabase.SaveAssets();
+        //AssetDatabase.CreateAsset(textureArray, assetPath);
+        //AssetDatabase.SaveAssets();
 
         Debug.Log("Texture2DArray guardado como asset en " + assetPath);
     }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 26062807340413818}
   - component: {fileID: 824750036001191489}
   m_Layer: 0
-  m_Name: Spot Light (1)
+  m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -255,6 +255,7 @@ GameObject:
   - component: {fileID: 1343808173876892514}
   - component: {fileID: 3126612132785741409}
   - component: {fileID: 5079699441452615747}
+  - component: {fileID: 4763503122434863256}
   m_Layer: 0
   m_Name: Linterna
   m_TagString: RechargableItem
@@ -299,7 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3867804459
+  GlobalObjectIdHash: 2774960162
   InScenePlacedSourceGlobalObjectIdHash: 1710102383
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -393,6 +394,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4763503122434863256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072683769042990653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0fd425583d0fc34d81f2358db318483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energyCapacity: 300000
+  consumptionRate: 1000
+  currentChargeStation: {fileID: 0}
+  luz: {fileID: 26062807340413818}
 --- !u!1001 &3183777100718404121
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -475,6 +492,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Linterna
+      objectReference: {fileID: 0}
+    - target: {fileID: 3451118302482216456, guid: bd846d4d76b9c6742a34137ac10763d5,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

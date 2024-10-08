@@ -1,7 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public class LinternaFunction : EnergyItemFunction
+public class LinternaFunction : StageEnergyItemFunction
 {
     [SerializeField] Light luz;
     public override void OnNetworkSpawn()

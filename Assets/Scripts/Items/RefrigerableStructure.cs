@@ -3,7 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class RefrigerableStructure : NetworkBehaviour, ItemInteractuableInterface
+public class RefrigerableStructure : NetworkBehaviour
 {
     [SerializeField] int refrigerRequired = 10;
     public Action<float> RefrigerateServerAction = _ => { };

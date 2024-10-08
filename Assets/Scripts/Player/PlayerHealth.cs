@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : NetworkBehaviour
 {
     [SerializeField] RagdollController ragdollController;
     [SerializeField] int health = 100;
@@ -22,6 +23,10 @@ public class PlayerHealth : MonoBehaviour
     {
         dead = false;
         this.health = health;
+        if (IsOwner)
+        {
+            ragdollController.Revive();
+        }
     }
 
 

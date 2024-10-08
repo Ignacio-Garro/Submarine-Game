@@ -33,30 +33,21 @@ public class RagdollController : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            if (isRagdollActive)
-            {
-                EnableAnimator();
-                playerMovement.ToggleAlive(true);//lives
-            }
-            else
-            {
-                Die();
-            }
-
-            isRagdollActive = !isRagdollActive;  
-        }
-    }
-
+    
     public void Die()
     {
         EnableRagdoll();
         playerMovement.ToggleAlive(false);//dies
         isRagdollActive = true;
     }
+
+    public void Revive()
+    {
+        EnableAnimator();
+        playerMovement.ToggleAlive(true);//lives
+        isRagdollActive = false;
+    }
+
 
     public void EnableRagdoll()
     {

@@ -2,9 +2,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
 {
@@ -20,7 +18,7 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
     [SerializeField] Animator animator;
     [SerializeField] Collider bigCollider;
     Transform target = null;
-    bool contactDamage = false;
+    NetworkVariable<bool> contactDamage = new NetworkVariable<bool>(false);
     Vector3 PreferredDirection => target == null ? preferredDirection : target.position - transform.position;
     float inflatedTimer = 0;
     float preferredDirectionWeigth = 1;
@@ -57,7 +55,7 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
                     ProceduralAnimator animator = GetComponent<ProceduralAnimator>();
                     if (animator != null)
                     {
-                        animator.Demorph(() => { contactDamage = true; isInflated = false; target = null; bigCollider.enabled = false; });
+                        animator.Demorph(() => { contactDamage.Value = true; isInflated = false; target = null; bigCollider.enabled = false; });
                     }
                     this.animator.SetBool("inflated", false);
                     isInflated = false; 
@@ -147,7 +145,7 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
 
     void TouchPlayer(PlayerHealth health)
     {
-        if (contactDamage)
+        if (contactDamage.Value)
         {
             health.TakeDamage(damage);
             health.KnockBack(health.transform.position - transform.position, knockback);
@@ -159,7 +157,7 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
         ProceduralAnimator animator = GetComponent<ProceduralAnimator>();
         if (animator != null)
         {
-            animator.Morph(() => { contactDamage = true; });
+            animator.Morph(() => { contactDamage.Value = true; });
             bigCollider.enabled = true;
         }
         isInflated = true;
@@ -175,7 +173,7 @@ public class EvadeObstacleMovement : NetworkBehaviour, IdleMovementInterface
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.GetComponent<PlayerHealth>() != null)
+         if(collision.gameObject.GetComponent<PlayerHealth>() != null)
         {
             TouchPlayer(collision.gameObject.GetComponent<PlayerHealth>());
         }

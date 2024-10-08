@@ -2,12 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 public class PlayerInventory : NetworkBehaviour
 {
@@ -183,7 +180,7 @@ public class PlayerInventory : NetworkBehaviour
     void Update(){  //THIS NEEDS TO BE OPTIMIZED
 
         // Change selected item with mouse scroll wheel
-        /*float scroll = Input.GetAxis("Mouse ScrollWheel");
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (scroll != 0f)
         {
             if (scroll > 0f)
@@ -205,7 +202,7 @@ public class PlayerInventory : NetworkBehaviour
                 }
             }
             newItemSelected();
-        }*/
+        }
 
         //UI
         /*

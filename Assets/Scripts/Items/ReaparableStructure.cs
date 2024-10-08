@@ -3,7 +3,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ReaparableStructure : NetworkBehaviour, ItemInteractuableInterface
+public class ReaparableStructure : NetworkBehaviour
 {
     [SerializeField] Transform barPosition;
     [SerializeField] Canvas worldCanvas;
@@ -34,11 +34,13 @@ public class ReaparableStructure : NetworkBehaviour, ItemInteractuableInterface
     {
         RepairFunction repairItem = item.GetComponent<RepairFunction>();
         if (repairItem == null) return;
-        if (!isBroken.Value) return;
-        RepairServerRpc(repairItem.RepairPower);
     }
 
-   
+    public void TryToRepair(int repairPower)
+    {
+        if (!isBroken.Value) return;
+        RepairServerRpc(repairPower);
+    }   
 
     [ServerRpc(RequireOwnership = false)]
     void RepairServerRpc(int repairPower)

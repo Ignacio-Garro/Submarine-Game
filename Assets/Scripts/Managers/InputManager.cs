@@ -81,7 +81,6 @@ public class InputManager : MonoBehaviour
     private GameObject currentWatchingObject = null;
     private bool changedWatchingObject = false;
     private GameObject previousWatchingObject = null;
-    private bool isUsingItem;
     
 
     private void Awake()
@@ -131,7 +130,7 @@ public class InputManager : MonoBehaviour
 
         GetWatchingObject();
         CheckForItemInteraction();
-
+        
 
 
         //Call on interactuable objects when they are in range
@@ -194,18 +193,11 @@ public class InputManager : MonoBehaviour
 
     private void CheckForItemInteraction()
     {
-        if (!isUsingItem) return;
         if (changedWatchingObject)
         {
             PlayerInventory inventory = ActualPlayer.GetComponent<PlayerInventory>();
-            foreach(ItemInteractuableInterface i in GetAllComponents<ItemInteractuableInterface>(previousWatchingObject))
-            {
-                i?.OnStopInteracting(inventory == null ? null : inventory.currentHoldingItem);
-            }
-            foreach (ItemInteractuableInterface i in GetAllComponents<ItemInteractuableInterface>(currentWatchingObject))
-            {
-                i?.OnEnterInteractionRange(inventory == null ? null : inventory.currentHoldingItem);
-            }
+            inventory.currentHoldingItem?.GetComponent<ItemFunctionInterface>()?.OnItemOutOfView(previousWatchingObject);
+            inventory.currentHoldingItem?.GetComponent<ItemFunctionInterface>()?.OnItemInView(currentWatchingObject);
         }
     }
 
@@ -218,22 +210,12 @@ public class InputManager : MonoBehaviour
 
     public void StopUsingItem(ItemPickable item)
     {
-        item?.GetComponent<ItemFunctionInterface>()?.OnItemRemove();
-        foreach (ItemInteractuableInterface i in GetAllComponents<ItemInteractuableInterface>(currentWatchingObject))
-        {
-            i?.OnStopInteracting(item);
-        }
-        isUsingItem = false;
+        item?.GetComponent<ItemFunctionInterface>()?.OnItemRemove(currentWatchingObject);
     }
 
     public void ReleaseItemUsage(ItemPickable item)
     {
-        item?.GetComponent<ItemFunctionInterface>()?.OnItemUnuse();
-        foreach (ItemInteractuableInterface i in GetAllComponents<ItemInteractuableInterface>(currentWatchingObject))
-        {
-            i?.OnStopInteracting(item);
-        }
-        isUsingItem = false;
+        item?.GetComponent<ItemFunctionInterface>()?.OnItemUnuse(currentWatchingObject);
     }
 
     private void OnJumpPressedFunction(InputAction.CallbackContext context)
@@ -406,14 +388,7 @@ public class InputManager : MonoBehaviour
         if(ActualPlayer == null || PlayerCamera == null) return;
         ItemPickable currentItem = ActualPlayer.GetComponent<PlayerInventory>() != null ? ActualPlayer.GetComponent<PlayerInventory>().currentHoldingItem : null;
         if (currentItem == null) return;
-        currentItem.gameObject.GetComponent<ItemFunctionInterface>()?.OnItemUse();
-        isUsingItem = true;
-        ItemInteractuableInterface[] interactuableObjects = GetAllComponents<ItemInteractuableInterface>(currentWatchingObject);
-
-        foreach (ItemInteractuableInterface i in interactuableObjects)
-        {
-            i.OnInteract(currentItem);
-        }
+        currentItem.gameObject.GetComponent<ItemFunctionInterface>()?.OnItemUse(currentWatchingObject);
     }
 
 

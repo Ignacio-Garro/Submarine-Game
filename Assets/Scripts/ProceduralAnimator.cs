@@ -1,7 +1,8 @@
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
-public class ProceduralAnimator : MonoBehaviour
+public class ProceduralAnimator : NetworkBehaviour
 {
 
     [SerializeField] SkinnedMeshRenderer morphableMesh;
@@ -21,10 +22,15 @@ public class ProceduralAnimator : MonoBehaviour
             morphableMesh.SetBlendShapeWeight(0, morphableMesh.GetBlendShapeWeight(0) + (100 / morphTime) * Time.deltaTime);
             if(morphableMesh.GetBlendShapeWeight(0) >= 100)
             {
-                morphableMesh.SetBlendShapeWeight(0, 100);
-                isMorphing = false;
-                isMorphed = true;
-                onMorphed();
+                if (IsServer)
+                {
+                    StopMorphClientRpc();
+                    onMorphed();
+                }
+                else
+                {
+                    morphableMesh.SetBlendShapeWeight(0, 100);
+                }
             }
         }
         if (isDemorphing)
@@ -32,30 +38,58 @@ public class ProceduralAnimator : MonoBehaviour
             morphableMesh.SetBlendShapeWeight(0, morphableMesh.GetBlendShapeWeight(0) - (100 / morphTime) * Time.deltaTime);
             if (morphableMesh.GetBlendShapeWeight(0) <= 0)
             {
-                morphableMesh.SetBlendShapeWeight(0, 0);
-                isDemorphing = false;
-                isDemorphed = true;
-                onDemorphed();
+                if (IsServer)
+                {
+                    StopDemorphClientRpc();
+                    onDemorphed();
+                }
+                else
+                {
+                    morphableMesh.SetBlendShapeWeight(0, 0);
+                }
             }
         }
+    }
+    [ClientRpc(RequireOwnership = false)]
+    public void StartMorphClientRpc()
+    {
+        isMorphing = true;
+        isDemorphed = false;
+    }
+    [ClientRpc(RequireOwnership = false)]
+    public void StopMorphClientRpc()
+    {
+        morphableMesh.SetBlendShapeWeight(0, 100);
+        isMorphing = false;
+        isMorphed = true;
+    }
+
+    [ClientRpc(RequireOwnership = false)]
+    public void StartDemorphClientRpc()
+    {
+        isDemorphing = true;
+        isMorphed = false;
+    }
+    [ClientRpc(RequireOwnership = false)]
+    public void StopDemorphClientRpc()
+    {
+        morphableMesh.SetBlendShapeWeight(0, 0);
+        isDemorphing = false;
+        isDemorphed = true;
     }
 
     public void Morph(Action onMorphed)
     {
         if (!isDemorphed) return;
         this.onMorphed = onMorphed;
-        isMorphing = true;
-        isDemorphed = false;
+        StartMorphClientRpc();
     }
 
     public void Demorph(Action onDemorphed)
     {
         if (!isMorphed) return;
         this.onDemorphed = onDemorphed;
-        isDemorphing = true;
-        isMorphed = false;
+        StartDemorphClientRpc();
     }
 
-
-    
 }

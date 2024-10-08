@@ -1,7 +1,8 @@
+using System;
 using Unity.Netcode;
 using UnityEngine;
 
-public class WeldableStructure : NetworkBehaviour, ItemInteractuableInterface
+public class WeldableStructure : NetworkBehaviour
 {
 
     [SerializeField] Transform barPosition;
@@ -21,49 +22,29 @@ public class WeldableStructure : NetworkBehaviour, ItemInteractuableInterface
         progressBar.transform.position = barPosition.position;
     }
 
-    public void OnEnterInteractionRange(ItemPickable item)
+    public void StartWelding(int weldPower)
     {
-        WeldFunction welder = item.GetComponent<WeldFunction>();
-        if (welder != null)
-        {
-            StartWeldingServerRpc(welder.WeldPower);
-        }
+        StartWeldingServerRpc(weldPower);
     }
 
-    public void OnInteract(ItemPickable item)
+    public void StopWelding(int weldPower)
     {
-        WeldFunction welder = item.GetComponent<WeldFunction>();
-        if (welder != null)
-        {
-            StartWeldingServerRpc(welder.WeldPower);
-        }
-    }
-
-    public void OnStopInteracting(ItemPickable item)
-    {
-        WeldFunction welder = item.GetComponent<WeldFunction>();
-        if (welder != null)
-        {
-            StopWeldingServerRpc(welder.WeldPower);
-        }
+        StopWeldingServerRpc(weldPower);
     }
 
     [ServerRpc(RequireOwnership =false)]
     public void StartWeldingServerRpc(int wieldPower)
     {
         currentWeldPower += wieldPower;
+        Debug.Log("Added: " + currentWeldPower);
     }
     [ServerRpc(RequireOwnership = false)]
     public void StopWeldingServerRpc(int wieldPower)
     {
         currentWeldPower -= wieldPower;
+        Debug.Log("Released: " + currentWeldPower);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -91,12 +72,9 @@ public class WeldableStructure : NetworkBehaviour, ItemInteractuableInterface
         }
     }
 
-    public virtual void Weld()
-    {
+    public virtual void Weld() { }
 
-    }
-
-    [ClientRpc(RequireOwnership =false)]
+    [ClientRpc(RequireOwnership = false)]
     public void WeldClientRpc()
     {
         progressBar.gameObject.SetActive(false);
