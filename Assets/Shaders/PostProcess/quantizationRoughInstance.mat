@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: test_robado_1
-  m_Shader: {fileID: 4800000, guid: f5aac20385cac21438a440bf4cca6879, type: 3}
+  m_Name: quantizationRoughInstance
+  m_Shader: {fileID: 4800000, guid: 4380d582403a84f4885245ea2926843d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -25,10 +25,7 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _EdgeWidth: 0.9
-    - _Val: 0
-    m_Colors:
-    - _Color1: {r: 1, g: 1, b: 1, a: 1}
-    - _Color2: {r: 1, g: 1, b: 1, a: 1}
+    - _RoughSteps: 11.7
+    m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

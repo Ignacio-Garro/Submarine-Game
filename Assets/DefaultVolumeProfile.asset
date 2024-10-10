@@ -1715,6 +1715,7 @@ MonoBehaviour:
   - {fileID: 522973322745568868}
   - {fileID: 5028622108639015455}
   - {fileID: 107671558830043147}
+  - {fileID: 7686643151961690783}
 --- !u!114 &107671558830043147
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -3191,6 +3192,22 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
   m_SelectedCurve: 0
+--- !u!114 &7686643151961690783
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a918c2c7bba3c4ca0a7298f77e0ce2, type: 3}
+  m_Name: OutLinePostprocess
+  m_EditorClassIdentifier: 
+  active: 1
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0
 --- !u!114 &7892467598519224423
 MonoBehaviour:
   m_ObjectHideFlags: 3
